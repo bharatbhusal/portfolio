@@ -30,7 +30,7 @@ const Contact = () => {
             <AiFillMail className="contact__option-icon" />
             <h4>Email</h4>
             <h5>bharatbhusal78@gmail.com</h5>
-            <a href="mailto:bharatbhusal78@gmail.com" target="_blank">
+            <a href="mailto:bharatbhusal78@gmail.com" target="_blank" rel="noreferrer">
               Send a message
             </a>
           </article>
@@ -38,7 +38,7 @@ const Contact = () => {
             <FaFacebookMessenger className="contact__option-icon" />
             <h4>Messanger</h4>
             <h5>Bharat Bhusal</h5>
-            <a href="https://m.me/bharatbhusal78" target="_blank">
+            <a href="https://m.me/bharatbhusal78" target="_blank" rel="noreferrer">
               Send a message
             </a>
           </article>
@@ -48,7 +48,7 @@ const Contact = () => {
             <h5>+917416476507</h5>
             <a
               href="https://api.whatsapp.com/send?phone=+917416476507"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               Send a message
             </a>
