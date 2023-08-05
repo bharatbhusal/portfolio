@@ -8,19 +8,19 @@ import { FiInstagram } from "react-icons/fi";
 const HeaderSocials = () => {
   return (
     <div className="header__socials">
-      <a href="https://www.linkedin.com/in/bharatbhusal78" target="_blank">
+      <a href="https://www.linkedin.com/in/bharatbhusal" target="_blank" rel="noreferrer">
         <BsLinkedin />
       </a>
-      <a href="https://www.facebook.com/bharatbhusal78" target="_blank">
+      <a href="https://www.facebook.com/bharatbhusal78" target="_blank" rel="noreferrer">
         <BsFacebook />
       </a>
-      <a href="https://github.com/bharatbhusal" target="_blank">
+      <a href="https://github.com/bharatbhusal" target="_blank" rel="noreferrer">
         <BsGithub />
       </a>
-      <a href="https://twitter.com/0petermartin0" target="_blank">
+      <a href="https://twitter.com/bharatbhusal02" target="_blank" rel="noreferrer">
         <IoLogoTwitter />
       </a>
-      <a href="https://www.instagram.com/bharatbhusal/" target="_blank">
+      <a href="https://www.instagram.com/bharatbhusal/" target="_blank" rel="noreferrer">
         <FiInstagram />
       </a>
     </div>

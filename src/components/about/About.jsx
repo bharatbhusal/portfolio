@@ -24,7 +24,7 @@ const About = () => {
             <article className="about__card">
               <FaMedal className="about__icon" />
               <h5>Experience</h5>
-              <small>1+ Years Wroking</small>
+              <small>2+ Years Wroking</small>
             </article>
 
             <article className="about__card">
@@ -40,14 +40,17 @@ const About = () => {
             </article>
           </div>
           <p>
-            I am an IT enthusiast. I love all tech stuffs. I actually want to
-            become a successful blockchain engineer. Apart from that I have huge
-            interest in web developmnet also. It's been more then a year for me
-            working for Terra Network as a Community Moderator. I am in my 2nd
-            year of Graduation. I am doing my B.Tech in CSE. I have been making
-            many fun projects before I started my graduation. Projects like
-            messeging bot, portfolio site, projects on raspberry pi. I have
-            pretty good knowledge about linux OS and commands.
+            Hey there! Are you on the lookout for a full-stack web3 development guru with a rich arsenal of skills and experience? Search no more!
+
+            With a strong foundation in RUST, TypeScript, React, Express, MongoDB, I'm a seasoned developer with the knack for crafting innovative and efficient solutions.<br />
+
+            Currently serving as a ambassador moderator at <a href="https://www.routerprotocol.com/">Router Protocol</a> after two years of experience at <a href="https://www.terra.money/">Terra Networks</a>, where for the past four years, I've been contributing my expertise and making a mark in the world of technology.
+
+            Pursuing my Bachelor's degree with a focus on computer science, I'm passionate about leveraging my technical know-how to create impactful software that resonates with users.
+
+            With a keen eye for detail and a commitment to excellence, I'm dedicated to delivering high-quality results and raising the bar in software development.<br />
+
+            If you're looking for someone to bring fresh ideas, innovation, and a positive impact to your team, let's connect! I'm eager to explore new opportunities that will allow me to expand my expertise and make waves in the software development space.
           </p>
 
           <a href="#contact" className="btn btn-primary">
