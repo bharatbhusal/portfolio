@@ -1,9 +1,11 @@
+/* Styling for the header */
 header {
     height: 100vh;
     padding-top: 7rem;
     overflow: hidden;
 }
 
+/* Container within the header for content */
 .header__container {
     text-align: center;
     justify-content: center;
@@ -11,8 +13,7 @@ header {
     position: relative;
 }
 
-/* ================ CTA ================= */
-
+/* Call to Action (CTA) styling */
 .cta {
     margin-top: 2.5rem;
     display: flex;
@@ -20,8 +21,7 @@ header {
     justify-content: center;
 }
 
-/* ================ HeaderSocials ================= */
-
+/* Social media icons styling */
 .header__socials {
     display: flex;
     flex-direction: column;
@@ -29,20 +29,19 @@ header {
     gap: 0.8rem;
     position: absolute;
     left: 0;
-    bottom: 3rem ;
+    bottom: 3rem;
 }
 
+/* Vertical line after social media icons */
 .header__socials::after {
     content: "";
-    width:  1px;
+    width: 1px;
     height: 2rem;
     background: var(--color-primary);
 }
 
-
-/* ================ ME ================= */
-
-.me{
+/* Styling for the "ME" section */
+.me {
     background: linear-gradient(var(--color-primary), transparent);
     width: 22rem;
     height: 30rem;
@@ -52,11 +51,9 @@ header {
     border-radius: 12rem 12rem 0 0;
     overflow: hidden;
     padding: 5rem 1.5rem 1.5rem 1.5rem;
-
 }
 
-/* ================ SCORLL DOWN ================= */
-
+/* Styling for the scroll down link */
 .scroll__down {
     position: absolute;
     right: -2.3rem;
@@ -66,25 +63,22 @@ header {
     font-size: 0.9rem;
 }
 
-
-/* ================== MEDIA QUERIES (MEDIUM DEVICES)  ==============*/
-
+/* Media query for medium-sized devices */
 @media screen and (max-width: 1024px) {
     header {
         height: 68vh;
     }
 }
 
-/* ================== MEDIA QUERIES (MEDIUM DEVICES)  ==============*/
-
+/* Media query for small-sized devices */
 @media screen and (max-width: 600px) {
     header {
         height: 100vh;
     }
-     
-    .header__socials, .scroll__down{
-        display: none;
 
+    /* Hide socials and scroll down link on small devices */
+    .header__socials,
+    .scroll__down {
+        display: none;
     }
-    
 }

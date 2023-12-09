@@ -6,9 +6,12 @@ import { IoMdContact } from "react-icons/io";
 import { useState } from "react";
 
 const Nav = () => {
+  // State to manage active navigation item
   const [activeNav, setActiveNav] = useState("#");
+
   return (
     <nav>
+      {/* Home link with onClick event and dynamic class based on activeNav state */}
       <a
         onClick={() => setActiveNav("#home")}
         className={activeNav === "#home" ? "active" : ""}
@@ -17,6 +20,7 @@ const Nav = () => {
         <AiFillHome />
       </a>
 
+      {/* About link with onClick event and dynamic class based on activeNav state */}
       <a
         onClick={() => setActiveNav("#about")}
         className={activeNav === "#about" ? "active" : ""}
@@ -24,6 +28,8 @@ const Nav = () => {
       >
         <AiOutlineUser />
       </a>
+
+      {/* Contact link with onClick event and dynamic class based on activeNav state */}
       <a
         onClick={() => setActiveNav("#contact")}
         className={activeNav === "#contact" ? "active" : ""}
