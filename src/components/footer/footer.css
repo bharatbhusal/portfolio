@@ -1,3 +1,4 @@
+/* Styling for the entire footer section */
 #footer {
     background: var(--color-primary);
     padding: 3rem 0;
@@ -6,10 +7,12 @@
     margin-top: 7rem;
 }
 
-#footer a{
+/* Styling for links within the footer */
+#footer a {
     color: var(--color-bg);
 }
 
+/* Styling for the footer logo */
 .footer__logo {
     font-size: 2rem;
     font-weight: 500;
@@ -17,6 +20,7 @@
     display: inline-block;
 }
 
+/* Styling for the permalinks (navigation links) */
 .permalinks {
     display: flex;
     flex-wrap: wrap;
@@ -25,6 +29,7 @@
     margin: 0 auto 3rem;
 }
 
+/* Styling for the social media icons */
 .footer__socials {
     display: flex;
     justify-content: center;
@@ -37,27 +42,26 @@
     border-radius: 0.7rem;
     display: flex;
     border: 1px solid var(--color-bg);
-
 }
 
-.footer__socials a:hover{
+.footer__socials a:hover {
     background: var(--color-light);
 }
 
+/* Styling for the copyright notice */
 .footer__copyright {
     margin-bottom: 4rem;
     color: var(--color-bg);
 }
 
+/* Media query for small-sized devices */
 @media screen and (max-width = 600px) {
     .permalinks {
         flex-direction: column;
         gap: 1.5rem;
-        
     }
+
     .footer__socials {
         margin-bottom: 2.6rem;
-
     }
-    
 }

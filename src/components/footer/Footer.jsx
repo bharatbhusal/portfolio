@@ -10,9 +10,12 @@ import { FiInstagram } from "react-icons/fi";
 const Footer = () => {
   return (
     <section id="footer">
+      {/* Footer logo linking to the home section */}
       <a href="#home" className="footer__logo">
         BHARAT
       </a>
+
+      {/* List of permalinks for navigation */}
       <ul className="permalinks">
         <li>
           <a href="#home">Home</a>
@@ -24,6 +27,8 @@ const Footer = () => {
           <a href="#contact">Contacts</a>
         </li>
       </ul>
+
+      {/* Social media icons */}
       <div className="footer__socials">
         <a href="https://www.linkedin.com/in/bharatbhusal78" target="_blank" rel="noreferrer">
           <BsLinkedin />
@@ -41,6 +46,8 @@ const Footer = () => {
           <FiInstagram />
         </a>
       </div>
+
+      {/* Copyright notice */}
       <div className="footer__copyright">
         <small>&copy; Bharat Bhusal. All rights reserved.</small>
       </div>

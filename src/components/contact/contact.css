@@ -1,18 +1,19 @@
+/* Styling for the container of the contact section */
 .container.contact__container {
   width: 58%;
   display: grid;
   grid-template-columns: 30% 58%;
   grid: 12%;
-  /* justify-content: space-between; */
 }
 
+/* Styling for the contact options */
 .contact__options {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  /* justify-content: space-between; */
 }
 
+/* Styling for each contact option */
 .contact__option {
   background: var(--color-bg-variant);
   padding: 1.2rem;
@@ -27,19 +28,20 @@
   border-color: var(--color-primary-variant);
 }
 
+/* Styling for the icon in each contact option */
 .contact__option-icon {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
+/* Styling for the link in each contact option */
 .contact__option a {
   margin-top: 0.7rem;
   display: inline-block;
   font-size: 0.8rem;
 }
 
-/* ================== FORM ==================  */
-
+/* Styling for the contact form */
 form {
   padding-left: 5%;
   display: flex;
@@ -47,6 +49,7 @@ form {
   gap: 1.7rem;
 }
 
+/* Styling for input and textarea in the contact form */
 input,
 textarea {
   width: 100%;
@@ -59,11 +62,12 @@ textarea {
   font-size: 1.3rem;
 }
 
+/* Styling for textarea in the contact form */
 textarea {
   height: 100%;
 }
 
-/* ===================== MEDIA QUERIES (MEDIUM DEVICES) ================= */
+/* Media query for medium-sized devices */
 @media screen and (max-width: 1024px) {
   .container.contact__container {
     grid-template-columns: 1fr;
@@ -71,8 +75,7 @@ textarea {
   }
 }
 
-/* ===================== MEDIA QUERIES (SMALL DEVICES ======================= */
-
+/* Media query for small-sized devices */
 @media screen and (max-width: 600px) {
   .container.contact__container {
     width: var(--container-width-sm);

@@ -8,9 +8,10 @@ import emailjs from "emailjs-com";
 
 const Contact = () => {
   const form = useRef();
+
+  // Function to send an email using emailjs
   const sendEmail = (e) => {
     e.preventDefault();
-
     emailjs.sendForm(
       "service_m3wu7bl",
       "template_6l6yfnl",
@@ -25,6 +26,7 @@ const Contact = () => {
       <h5>Get in Touch</h5>
       <h2>Contact Me</h2>
       <div className="container contact__container">
+        {/* Contact options */}
         <div className="contact__options">
           <article className="contact__option">
             <AiFillMail className="contact__option-icon" />
@@ -36,7 +38,7 @@ const Contact = () => {
           </article>
           <article className="contact__option">
             <FaFacebookMessenger className="contact__option-icon" />
-            <h4>Messanger</h4>
+            <h4>Messenger</h4>
             <h5>Bharat Bhusal</h5>
             <a href="https://m.me/bharatbhusal78" target="_blank" rel="noreferrer">
               Send a message
@@ -56,6 +58,7 @@ const Contact = () => {
         </div>
         {/* END OF CONTACT OPTIONS */}
 
+        {/* Contact form */}
         <form ref={form} onSubmit={sendEmail}>
           <input
             type="text"
