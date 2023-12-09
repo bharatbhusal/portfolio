@@ -1,5 +1,7 @@
+/* Importing Poppins font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
+/* Resetting default styles for all elements */
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +12,7 @@
   text-decoration: none;
 }
 
+/* Root level CSS variables for easy theming */
 :root {
   --color-bg: #1f1f38;
   --color-bg-variant: #2c2c6c;
@@ -17,21 +20,23 @@
   --color-primary-variant: rgba(77, 181, 255, 0.4);
   --color-white: #fff;
   --color-light: rgba(255, 255, 255, 0.6);
-
   --container-width-lg: 75%;
   --container-width-md: 86%;
   --container-width-sm: 90%;
   --transition: all 400ms ease;
 }
 
+/* HTML and body styles */
 html {
   scroll-behavior: smooth;
 }
 
+/* Removing scrollbar */
 ::-webkit-scrollbar {
   display: none;
 }
 
+/* Body styles */
 body {
   font-family: "Poppins", sans-serif;
   background: var(--color-bg);
@@ -41,18 +46,14 @@ body {
   background-size: 3%;
 }
 
-/* ============== GENERAL STYLE ================== */
-
+/* General styles for common elements */
 .container {
   width: var(--container-width-lg);
   margin: 0 auto;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
+/* Heading styles */
+h1, h2, h3, h4, h5 {
   font-weight: 500;
 }
 
@@ -60,12 +61,12 @@ h1 {
   font-size: 2.5rem;
 }
 
+/* Styles for sections */
 section {
   margin-top: 8rem;
 }
 
-section > h2,
-section > h5 {
+section > h2, section > h5 {
   text-align: center;
   color: var(--color-light);
 }
@@ -75,10 +76,12 @@ section > h2 {
   margin-bottom: 3rem;
 }
 
+/* Text color class */
 .text-light {
   color: var(--color-light);
 }
 
+/* Link styles */
 a {
   color: var(--color-primary);
   transition: var(--transition);
@@ -88,6 +91,7 @@ a:hover {
   color: var(--color-white);
 }
 
+/* Button styles */
 .btn {
   width: max-content;
   display: inline-block;
@@ -110,31 +114,34 @@ a:hover {
   color: var(--color-bg);
 }
 
+/* Image styles */
 img {
   display: block;
   width: 100%;
   object-fit: cover;
 }
 
-/* ================== MEDIA QUERIES (MEDIUM DEVICES)  ==============*/
-
+/* Media queries for medium-sized devices */
 @media screen and (max-width: 1024px) {
-  .cointainer {
+  /* Adjusting container width for medium-sized devices */
+  .container {
     width: var(--container-width-md);
   }
 
+  /* Adjusting section margin for medium-sized devices */
   section {
     margin-top: 6rem;
   }
 }
 
-/* ================== MEDIA QUERIES (SMALL DEVICES)  ==============*/
-
+/* Media queries for small-sized devices */
 @media screen and (max-width: 600px) {
-  .cointainer {
+  /* Adjusting container width for small-sized devices */
+  .container {
     width: var(--container-width-sm);
   }
 
+  /* Adjusting heading margin for small-sized devices */
   section > h2 {
     margin-bottom: 2rem;
   }
