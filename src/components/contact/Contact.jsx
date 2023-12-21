@@ -5,6 +5,7 @@ import { FaFacebookMessenger } from "react-icons/fa";
 import { AiOutlineWhatsApp } from "react-icons/ai";
 import { useRef } from "react";
 import emailjs from "emailjs-com";
+import env from "../../utils/validateEnv"
 
 const Contact = () => {
   const form = useRef();
@@ -13,10 +14,10 @@ const Contact = () => {
   const sendEmail = (e) => {
     e.preventDefault();
     emailjs.sendForm(
-      "service_m3wu7bl",
-      "template_6l6yfnl",
+      env.REACT_APP_SERVICE_ID,
+      env.REACT_APP_TEMPLATE_ID,
       form.current,
-      "oAhpWmo5fmrXEm-Aw"
+      env.REACT_APP_USER_ID
     );
     e.target.reset();
   };
