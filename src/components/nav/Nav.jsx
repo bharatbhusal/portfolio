@@ -3,6 +3,11 @@ import "./nav.css";
 import { AiFillHome } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
 import { IoMdContact } from "react-icons/io";
+import { MdCastForEducation } from "react-icons/md";
+import { GoProjectSymlink } from "react-icons/go";
+
+
+
 import { useState } from "react";
 
 const Nav = () => {
@@ -27,6 +32,20 @@ const Nav = () => {
         href="#about"
       >
         <AiOutlineUser />
+      </a>
+      <a
+        onClick={() => setActiveNav("#education")}
+        className={activeNav === "#education" ? "active" : ""}
+        href="#education"
+      >
+        <MdCastForEducation />
+      </a>
+      <a
+        onClick={() => setActiveNav("#projects")}
+        className={activeNav === "#projects" ? "active" : ""}
+        href="#projects"
+      >
+        <GoProjectSymlink />
       </a>
 
       {/* Contact link with onClick event and dynamic class based on activeNav state */}

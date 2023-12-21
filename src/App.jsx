@@ -17,9 +17,9 @@ const App = () => {
       <Nav />
       {/* About component */}
       <About />
-      {/* Contact component */}
-      <Projects />
       <Education />
+      <Projects />
+      {/* Contact component */}
       <Contact />
       {/* Footer component */}
       <Footer />
