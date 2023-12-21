@@ -1,7 +1,7 @@
 import React from 'react'
-import "./skills.css"
+import "./projects.css"
 
-const Skills = () => {
+const Projects = () => {
 
     const Card = ({ title, source, host }) => {
         return (
@@ -47,4 +47,4 @@ const Skills = () => {
     )
 }
 
-export default Skills
+export default Projects
