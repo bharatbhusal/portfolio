@@ -30,7 +30,7 @@ const Projects = () => {
         )
     }
     return (
-        <section className="skills">
+        <section id="projects">
             <h5>Checkout</h5>
             <h2>My Projects</h2>
             <div class="ag-format-container">
