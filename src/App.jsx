@@ -5,6 +5,7 @@ import Nav from "./components/nav/Nav";
 import About from "./components/about/About";
 import Contact from "./components/contact/Contact";
 import Footer from "./components/footer/Footer";
+import Skills from "./components/skills/Skills";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       {/* About component */}
       <About />
       {/* Contact component */}
+      <Skills />
       <Contact />
       {/* Footer component */}
       <Footer />
