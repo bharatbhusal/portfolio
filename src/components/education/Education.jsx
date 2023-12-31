@@ -5,16 +5,16 @@ const Education = () => {
 
     const Card = ({ name, image, year, description }) => {
         return (
-            <div class="cards_item">
-                <div class="card" tabindex="0">
-                    <div class="card_image">
+            <div className="cards_item">
+                <div className="card" tabIndex="0">
+                    <div className="card_image">
                         <img src={image} />
                     </div>
-                    <div class="card_content">
-                        <h2 class="card_title">{name}</h2>
-                        <div class="card_text">
+                    <div className="card_content">
+                        <h2 className="card_title">{name}</h2>
+                        <div className="card_text">
                             {description}
-                            <p class="upcharge">{year}</p>
+                            <p className="upcharge">{year}</p>
                         </div>
                     </div>
                 </div>
@@ -25,8 +25,8 @@ const Education = () => {
     return (
         <section id='education'>
             <h2>My Education</h2>
-            <div class="container education__container">
-                <div class="cards">
+            <div className="container education__container">
+                <div className="cards">
                     <Card
                         name={"Gitam University"}
                         image={"https://static.zollege.in/public/college_data/images/campusimage/1473061213Untitled.png?tr=h-590,w-1048,c-force"}
