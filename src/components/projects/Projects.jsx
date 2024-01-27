@@ -2,33 +2,29 @@ import React from 'react'
 import "./projects.css"
 
 const Projects = () => {
-
     const Card = ({ title, source, host }) => {
         return (
-
             <div className="ag-courses_item">
-                <a href={source} className="ag-courses-item_link" target='_blank'>
+                <a href={source} className="ag-courses-item_link" target="_blank">
                     <div className="ag-courses-item_bg"></div>
 
-                    <div className="ag-courses-item_title">
-                        {title}
-                    </div>
+                    <div className="ag-courses-item_title">{title}</div>
 
-                    {host &&
+                    {host && (
                         <div className="ag-courses-item_date-box">
                             Host:
-                            <a href={host} target='_blank'>
-
+                            <a className='inner-anchor' href={host} target="_blank">
                                 <span className="ag-courses-item_date">
                                     {" "}{host.slice(31, -1)}
                                 </span>
                             </a>
                         </div>
-                    }
+                    )}
                 </a>
             </div>
-        )
-    }
+        );
+    };
+
     return (
         <section id="projects">
             <h5>Checkout</h5>
