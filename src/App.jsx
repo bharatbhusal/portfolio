@@ -26,7 +26,7 @@ function App() {
 
 	return (
 		<div
-			className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${
+			className={`min-h-screen p-5 flex flex-col items-center justify-center transition-colors duration-300 ${
 				darkMode
 					? "bg-[#1a1a1a] text-white"
 					: "bg-gray-100 text-black"
