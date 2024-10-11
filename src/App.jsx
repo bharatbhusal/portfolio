@@ -3,6 +3,7 @@ import IMAGE from "./assets/bharatbhusal.jpeg"; // Ensure this image path is cor
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import SocialLinks from "./components/SocialLinks";
 import useTheme from "./hooks/useTheme";
+import Explore from "./components/Explore";
 
 function App() {
 	const { darkMode } = useTheme(); // Get the darkMode state from the hook
@@ -33,6 +34,7 @@ function App() {
 			}`}
 		>
 			<div className="text-center">
+				<Explore />
 				<img
 					src={IMAGE}
 					alt="Profile"
