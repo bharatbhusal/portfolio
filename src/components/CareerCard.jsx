@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Card from "./Card"; // Adjust the path if needed
+import Button from "./Button";
+import useTheme from "../hooks/useTheme";
 
 const CareerCard = ({
 	company,
@@ -9,7 +11,9 @@ const CareerCard = ({
 	address,
 	description,
 	achievements,
+	links,
 }) => {
+	const { darkMode } = useTheme();
 	return (
 		<Card title={company} description={role}>
 			<div className="flex flex-col gap-2 mb-3 text-center">
@@ -31,6 +35,26 @@ const CareerCard = ({
 					))}
 				</ul>
 			</div>
+			{/* Render social links */}
+			<div className="flex justify-center mt-4">
+				{links.map((link, idx) => (
+					<Button
+						key={idx}
+						label={link.icon}
+						onClick={() =>
+							window.open(
+								link.link,
+								"_blank",
+								"noopener,noreferrer"
+							)
+						}
+						variant="outline"
+						className={`p-3 border ml-5 ${
+							darkMode ? "border-white" : "border-black"
+						}`}
+					/>
+				))}
+			</div>
 		</Card>
 	);
 };
@@ -43,6 +67,13 @@ CareerCard.propTypes = {
 	description: PropTypes.string.isRequired,
 	achievements: PropTypes.arrayOf(PropTypes.string)
 		.isRequired,
+	links: PropTypes.arrayOf(
+		PropTypes.shape({
+			link: PropTypes.string.isRequired,
+			icon: PropTypes.element.isRequired,
+			type: PropTypes.string.isRequired,
+		})
+	).isRequired,
 };
 
 export default CareerCard;

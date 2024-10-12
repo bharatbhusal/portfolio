@@ -1,16 +1,15 @@
 import React from "react";
 import CareerCard from "../components/CareerCard"; // Adjust the path if needed
-import Slider from "react-slick";
+import {
+	FaGithub,
+	FaLinkedin,
+	FaTelegram,
+	FaInstagram,
+} from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { CgWebsite } from "react-icons/cg";
 
 const Career = () => {
-	const settings = {
-		dots: true,
-		infinite: true,
-		speed: 500,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-	};
-
 	const data = [
 		{
 			company: "0xCommit",
@@ -22,6 +21,23 @@ const Career = () => {
 			achievements: [
 				"Auditing client's smart contracts - Solo and Teamed.",
 				"Preparing Audit report with simpler explanation of the issues found.",
+			],
+			links: [
+				{
+					link: "https://0xcommit.com",
+					icon: <CgWebsite />,
+					type: "website",
+				},
+				{
+					link: "https://x.com/0xcommitaudits",
+					icon: <FaSquareXTwitter />,
+					type: "twitter",
+				},
+				{
+					link: "https://t.me/OxCommitAudits",
+					icon: <FaTelegram />,
+					type: "telegram",
+				},
 			],
 		},
 		{
@@ -37,6 +53,23 @@ const Career = () => {
 				"Prepare weekly and monthly Hack tracks and analysis.",
 				"Conducting AMA sessions with the community and partners.",
 			],
+			links: [
+				{
+					link: "https://0xcommit.com",
+					icon: <CgWebsite />,
+					type: "website",
+				},
+				{
+					link: "https://x.com/0xcommitaudits",
+					icon: <FaSquareXTwitter />,
+					type: "twitter",
+				},
+				{
+					link: "https://t.me/OxCommitAudits",
+					icon: <FaTelegram />,
+					type: "telegram",
+				},
+			],
 		},
 		{
 			company: "Router Protocol",
@@ -50,6 +83,23 @@ const Career = () => {
 				"Research and presentation about interoperability news in the web3 space.",
 				"Discord & Telegram bot optimization & task automation.",
 				"Community Guidelines Enforcement.",
+			],
+			links: [
+				{
+					link: "https://www.routerprotocol.com/",
+					icon: <CgWebsite />,
+					type: "website",
+				},
+				{
+					link: "https://x.com/routerprotocol",
+					icon: <FaSquareXTwitter />,
+					type: "twitter",
+				},
+				{
+					link: "https://t.me/routerprotocol",
+					icon: <FaTelegram />,
+					type: "telegram",
+				},
 			],
 		},
 		{
@@ -65,6 +115,23 @@ const Career = () => {
 				"Telegram bot optimization and task automation.",
 				"Keeping users updated with the company's upcoming ecosystem and development decisions.",
 			],
+			links: [
+				{
+					link: "https://www.terra.money/",
+					icon: <CgWebsite />,
+					type: "website",
+				},
+				{
+					link: "https://x.com/terra_money",
+					icon: <FaSquareXTwitter />,
+					type: "twitter",
+				},
+				{
+					link: "https://t.me/TerraNetworkLobby",
+					icon: <FaTelegram />,
+					type: "telegram",
+				},
+			],
 		},
 	];
 
@@ -78,6 +145,7 @@ const Career = () => {
 				address={item.address}
 				description={item.description}
 				achievements={item.achievements}
+				links={item.links}
 			/>
 		));
 	};
@@ -88,8 +156,6 @@ const Career = () => {
 				Career
 			</h1>
 			<div className="flex flex-col gap-5 items-center w-full">
-				{" "}
-				{/* Center items */}
 				{renderCareerCards()}
 			</div>
 		</div>

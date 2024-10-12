@@ -48,7 +48,7 @@ const Explore = () => {
 					{[
 						[<FaHome />, ""],
 						[<PiBagSimpleFill />, "career"],
-						[<FaGraduationCap />, "education"],
+						[<FaGraduationCap />, "coming-soon"],
 					].map((item, index) => (
 						<li key={index} className="pb-2">
 							<Button
