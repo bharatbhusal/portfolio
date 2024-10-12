@@ -4,38 +4,33 @@ import Card from "./Card"; // Adjust the path if needed
 import Button from "./Button";
 import useTheme from "../hooks/useTheme";
 
-const CareerCard = ({
-	company,
-	role,
+const EducationCard = ({
+	institution,
+	courses,
+	cgpa,
 	duration,
 	address,
-	description,
-	achievements,
 	links,
 }) => {
 	const { darkMode } = useTheme();
 	return (
-		<Card title={company} description={role}>
+		<Card title={institution} description={`CGPA: ${cgpa}`}>
 			<div className="flex flex-col gap-2 mb-3 text-center">
 				<div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-					<span className="italic">{duration}</span>
 					<span className="italic">{address}</span>
+					<span className="italic">{duration}</span>
 				</div>
-				<p className="text-lg text-gray-700 dark:text-gray-300 text-left">
-					{description}
-				</p>
 			</div>
 			<div>
 				<h3 className="text-md font-semibold mb-2">
-					Key Achievements/Tasks:
+					Key Courses:
 				</h3>
 				<ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
-					{achievements.map((achievement, idx) => (
-						<li key={idx}>{achievement}</li>
+					{courses.map((course, idx) => (
+						<li key={idx}>{course}</li>
 					))}
 				</ul>
 			</div>
-			{/* Render social links */}
 			<div className="flex justify-center mt-4">
 				{links.map((link, idx) => (
 					<Button
@@ -59,14 +54,11 @@ const CareerCard = ({
 	);
 };
 
-CareerCard.propTypes = {
-	company: PropTypes.string.isRequired,
-	role: PropTypes.string.isRequired,
+EducationCard.propTypes = {
+	institution: PropTypes.string.isRequired,
 	duration: PropTypes.string.isRequired,
 	address: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired,
-	achievements: PropTypes.arrayOf(PropTypes.string)
-		.isRequired,
+	courses: PropTypes.arrayOf(PropTypes.string).isRequired,
 	links: PropTypes.arrayOf(
 		PropTypes.shape({
 			link: PropTypes.string.isRequired,
@@ -76,4 +68,4 @@ CareerCard.propTypes = {
 	).isRequired,
 };
 
-export default CareerCard;
+export default EducationCard;

@@ -5,7 +5,7 @@ import {
 	FaTelegram,
 	FaInstagram,
 } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaXTwitter } from "react-icons/fa6";
 import { SiSubstack } from "react-icons/si";
 import Button from "./Button";
 
@@ -17,7 +17,7 @@ const socialLinks = [
 	},
 	{
 		href: "https://twitter.com/bharatbhusal02",
-		icon: <FaSquareXTwitter className="text-2xl" />,
+		icon: <FaXTwitter className="text-2xl" />,
 		label: "Twitter",
 	},
 	{
