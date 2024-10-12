@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { SiSubstack } from "react-icons/si";
+import Button from "./Button";
 
 const socialLinks = [
 	{
@@ -43,17 +44,21 @@ const socialLinks = [
 
 function SocialLinks() {
 	return (
-		<div className="mt-4 flex justify-center space-x-6">
-			{socialLinks.map((link) => (
-				<a
-					key={link.label}
-					href={link.href}
-					target="_blank"
-					rel="noreferrer"
-					className="hover:text-green-600 transition duration-200"
-				>
-					{link.icon}
-				</a>
+		<div className="mt-4 flex justify-center space-x-2">
+			{socialLinks.map((link, index) => (
+				<Button
+					key={index}
+					label={link.icon}
+					onClick={() =>
+						window.open(
+							link.href,
+							"_blank",
+							"noopener,noreferrer"
+						)
+					}
+					variant="outline"
+					className={"p-3"}
+				/>
 			))}
 		</div>
 	);
