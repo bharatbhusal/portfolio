@@ -4,6 +4,7 @@ import ThemeSwitcher from "./components/ThemeSwitcher";
 import SocialLinks from "./components/SocialLinks";
 import useTheme from "./hooks/useTheme";
 import Explore from "./components/Explore";
+import { Outlet } from "react-router-dom";
 
 function App() {
 	const { darkMode } = useTheme(); // Get the darkMode state from the hook
@@ -23,7 +24,7 @@ function App() {
 				"text-white"
 			);
 		}
-	}, [darkMode]); // Run this effect whenever darkMode changes
+	}, [darkMode]);
 
 	return (
 		<div
@@ -33,21 +34,8 @@ function App() {
 					: "bg-gray-100 text-black"
 			}`}
 		>
-			<div className="text-center">
-				<Explore />
-				<img
-					src={IMAGE}
-					alt="Profile"
-					className="w-65 h-60 rounded-full mx-auto mb-4"
-				/>
-				<h1 className="text-4xl font-bold">Bharat Bhusal</h1>
-				<p className="text-gray-400 mt-2">
-					Security Auditor | MERN Stack Developer | Community
-					Manager
-				</p>
-
-				<SocialLinks />
-			</div>
+			<Explore />
+			<Outlet />
 
 			<ThemeSwitcher />
 		</div>
