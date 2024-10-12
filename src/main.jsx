@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import App from "./App";
 import Home from "./pages/Home";
-// import Career from "./pages/Career"; // Import the career page
+import Career from "./pages/Career"; // Import the career page
 // import Education from "./pages/Education"; // Import the education page
 import ComingSoon from "./pages/ComingSoon";
 import PageNotFound from "./pages/PageNotFound"; // Page not found
@@ -25,7 +25,7 @@ root.render(
 				<Route path="/" element={<App />}>
 					<Route path="/" element={<Home />} />
 					{/* Nested Routes - These will render inside the Outlet in App */}
-					{/* <Route path="/career" element={<Career />} /> */}
+					<Route path="/career" element={<Career />} />
 					{/* <Route path="/education" element={<Education />} /> */}
 					<Route path="/coming-soon" element={<ComingSoon />} />
 					<Route path="*" element={<PageNotFound />} />{" "}

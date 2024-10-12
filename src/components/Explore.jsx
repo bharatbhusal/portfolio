@@ -6,6 +6,7 @@ import { PiBagSimpleFill } from "react-icons/pi";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { FaHome } from "react-icons/fa";
 
 const Explore = () => {
 	const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Explore = () => {
 	};
 
 	return (
-		<div className="fixed top-5 right-5">
+		<div className="fixed top-5 right-5 z-50">
 			{!isOpen ? (
 				<Button
 					label={<LuMenuSquare />}
@@ -45,6 +46,7 @@ const Explore = () => {
 			>
 				<ul className="px-0 py-3">
 					{[
+						[<FaHome />, ""],
 						[<PiBagSimpleFill />, "career"],
 						[<FaGraduationCap />, "education"],
 					].map((item, index) => (
@@ -52,7 +54,10 @@ const Explore = () => {
 							<Button
 								label={item[0]}
 								// onClick={() => navigate(`/${item[1]}`)}
-								onClick={() => navigate(`/coming-soon`)}
+								onClick={() => {
+									navigate(`${item[1]}`);
+									setIsOpen(!isOpen);
+								}}
 								variant="outline"
 								className={`p-3 border ${
 									darkMode ? "border-white" : "border-black"
