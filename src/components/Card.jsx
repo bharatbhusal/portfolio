@@ -12,7 +12,7 @@ const Card = ({
 
 	return (
 		<div
-			className={`p-6 rounded-lg shadow-md transition-all transform duration-300 ${
+			className={`p-5 rounded-lg shadow-md transition-all transform duration-300 ${
 				darkMode
 					? "bg-gray-800 text-white hover:bg-gray-700"
 					: "bg-white text-black hover:bg-gray-100"

@@ -11,7 +11,7 @@ function ThemeSwitcher() {
 			label={<VscColorMode />}
 			onClick={toggleTheme}
 			variant="filled"
-			className={"fixed bottom-5 right-5 p-3"}
+			className={"fixed bottom-5 right-5 p-3 z-1"}
 		/>
 	);
 }

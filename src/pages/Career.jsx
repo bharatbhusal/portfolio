@@ -9,11 +9,11 @@ import careerData from "../data/careerData";
 
 const Career = () => {
 	return (
-		<div className="p-6 flex flex-col justify-between w-full h-screen">
+		<div className="flex flex-col justify-around w-full h-[90vh] z-0">
 			<h1 className="text-4xl font-bold text-center">
 				Career
 			</h1>
-			<div className="flex w-full h-[100%]">
+			<div className="flex justify-between w-full h-[90%]">
 				<Swiper
 					spaceBetween={2}
 					slidesPerView={1}
@@ -26,7 +26,7 @@ const Career = () => {
 					{careerData.map((item, index) => (
 						<SwiperSlide
 							key={index}
-							className="p-5 flex flex-col justify-center items-center"
+							className="px-2 flex flex-col justify-center items-center"
 						>
 							<CareerCard
 								company={item.company}

@@ -44,7 +44,7 @@ const socialLinks = [
 
 function SocialLinks() {
 	return (
-		<div className="mt-4 flex justify-center space-x-2">
+		<div className="mt-4 flex justify-center flex-wrap space-x-2">
 			{socialLinks.map((link, index) => (
 				<Button
 					key={index}
