@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Swiper pagination bullets */
+.swiper-pagination-bullet {
+	background-color: #4ade80 !important; /* Tailwind's green-400 */
+}
+
+/* Active bullet */
+.swiper-pagination-bullet-active {
+	background-color: #16a34a !important; /* Tailwind's green-600 */
+}
+
+/* Swiper navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+	color: #4ade80 !important; /* Tailwind's green-400 */
+}
+
+/* Add this in your global CSS file or in the same CSS file */
+@media (max-width: 1080px) {
+	.swiper-button-prev,
+	.swiper-button-next {
+		display: none; /* Hide the navigation buttons */
+	}
+}
