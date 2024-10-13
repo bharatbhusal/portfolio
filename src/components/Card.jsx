@@ -12,11 +12,11 @@ const Card = ({
 
 	return (
 		<div
-			className={`p-6 rounded-lg shadow-md transition-all transform duration-300 hover:scale-105 ${
+			className={`p-6 rounded-lg shadow-md transition-all transform duration-300 ${
 				darkMode
 					? "bg-gray-800 text-white hover:bg-gray-700"
 					: "bg-white text-black hover:bg-gray-100"
-			} ${className} w-full md:w-full lg:w-4/5`}
+			} ${className} w-full max-w-screen-md md:max-w-screen-lg lg:max-w-4xl mx-auto`}
 		>
 			<h2 className="text-2xl font-semibold mb-3">{title}</h2>
 			<p
