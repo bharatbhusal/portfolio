@@ -1,13 +1,12 @@
 import React from "react";
-import IMAGE from "../assets/bharatbhusal.jpeg";
+
 import SocialLinks from "../components/SocialLinks";
-import useTheme from "../hooks/useTheme";
 
 function Home() {
 	return (
 		<div className="text-center">
 			<img
-				src={IMAGE}
+				src={`/bharatbhusal.jpeg`}
 				alt="Profile"
 				className="w-65 h-60 rounded-full mx-auto mb-4"
 			/>
