@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
-import IMAGE from "./assets/bharatbhusal.jpeg"; // Ensure this image path is correct
 import ThemeSwitcher from "./components/ThemeSwitcher";
-import SocialLinks from "./components/SocialLinks";
 import useTheme from "./hooks/useTheme";
 import Explore from "./components/Explore";
 import { Outlet } from "react-router-dom";
 
 function App() {
-	const { darkMode } = useTheme(); // Get the darkMode state from the hook
+	const { darkMode } = useTheme();
 
-	// Effect to apply body classes based on darkMode
 	useEffect(() => {
 		if (darkMode) {
 			document.body.classList.add("bg-gray-900", "text-white");
@@ -36,7 +33,6 @@ function App() {
 		>
 			<Explore />
 			<Outlet />
-
 			<ThemeSwitcher />
 		</div>
 	);
