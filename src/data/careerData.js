@@ -4,9 +4,40 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const careerData = [
 	{
+		company: "Router Protocol",
+		role: "Community Manager",
+		duration: "08/2023 - Present",
+		address: "Remote",
+		description:
+			"Onboarding the next billion users to web3 by destroying blockchain segregation.",
+		achievements: [
+			"Community Engagement, Support, and Troubleshooting.",
+			"Research and presentation about interoperability news in the web3 space.",
+			"Discord & Telegram bot optimization & task automation.",
+			"Community Guidelines Enforcement.",
+		],
+		links: [
+			{
+				link: "https://www.routerprotocol.com/",
+				icon: CgWebsite,
+				type: "website",
+			},
+			{
+				link: "https://x.com/routerprotocol",
+				icon: FaXTwitter,
+				type: "twitter",
+			},
+			{
+				link: "https://t.me/routerprotocol",
+				icon: FaTelegram,
+				type: "telegram",
+			},
+		],
+	},
+	{
 		company: "0xCommit",
 		role: "Security Auditor",
-		duration: "02/2024 - Present",
+		duration: "02/2024 - 10/2024",
 		address: "Remote",
 		description:
 			"Smart Contract Security Audits to fortify decentralized systems and ensure the integrity of blockchain networks.",
@@ -35,7 +66,7 @@ const careerData = [
 	{
 		company: "0xCommit",
 		role: "Community Manager",
-		duration: "07/2024 - Present",
+		duration: "07/2024 - 10/2024",
 		address: "Remote",
 		description:
 			"Smart Contract Security Audits to fortify decentralized systems and ensure the integrity of blockchain networks.",
@@ -58,37 +89,6 @@ const careerData = [
 			},
 			{
 				link: "https://t.me/OxCommitAudits",
-				icon: FaTelegram,
-				type: "telegram",
-			},
-		],
-	},
-	{
-		company: "Router Protocol",
-		role: "Community Manager",
-		duration: "08/2023 - Present",
-		address: "Remote",
-		description:
-			"Onboarding the next billion users to web3 by destroying blockchain segregation.",
-		achievements: [
-			"Community Engagement, Support, and Troubleshooting.",
-			"Research and presentation about interoperability news in the web3 space.",
-			"Discord & Telegram bot optimization & task automation.",
-			"Community Guidelines Enforcement.",
-		],
-		links: [
-			{
-				link: "https://www.routerprotocol.com/",
-				icon: CgWebsite,
-				type: "website",
-			},
-			{
-				link: "https://x.com/routerprotocol",
-				icon: FaXTwitter,
-				type: "twitter",
-			},
-			{
-				link: "https://t.me/routerprotocol",
 				icon: FaTelegram,
 				type: "telegram",
 			},
