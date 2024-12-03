@@ -45,7 +45,7 @@ const projectsData = [
 				icon: FaGithub,
 			},
 			{
-				link: "https://router-protocol-newsletter.vercel.app/",
+				link: "https://newsletter.bharatbhusal.com/",
 				icon: CgWebsite,
 			},
 		],
