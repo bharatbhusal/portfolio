@@ -36,22 +36,26 @@
 	user-select: none;
 }
 .embla__controls {
+	position: fixed;
+	bottom: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
 	display: grid;
 	grid-template-columns: auto 1fr;
-	justify-content: space-between;
+	justify-content: center;
 	gap: 1.2rem;
-	margin-top: 1.8rem;
+	margin-top: 0;
+	z-index: 10;
 }
 .embla__dots {
-	margin-left: 1rem;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-end;
+	justify-content: center;
 	align-items: center;
 	margin-right: calc((2.6rem - 1.4rem) / 2 * -1);
 	--text-high-contrast-rgb-value: 0, 0, 0;
 	--detail-medium-contrast: gray;
-	--text-body: black;
+	--text-body: green;
 }
 .embla__dot {
 	-webkit-tap-highlight-color: rgba(
