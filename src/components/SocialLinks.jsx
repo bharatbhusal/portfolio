@@ -6,6 +6,8 @@ import {
 	FaInstagram,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { HiOutlineMail } from "react-icons/hi";
+
 import { SiSubstack } from "react-icons/si";
 import Button from "./Button";
 
@@ -24,6 +26,11 @@ const socialLinks = [
 		href: "https://t.me/petermartin0",
 		icon: <FaTelegram className="text-2xl" />,
 		label: "Telegram",
+	},
+	{
+		href: "mailto:bharatbhusal78@gmail.com",
+		icon: <HiOutlineMail className="text-2xl" />,
+		label: "Email",
 	},
 	{
 		href: "https://substack.com/@bharatbhusal",
