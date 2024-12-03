@@ -6,6 +6,7 @@ import { PiBagSimpleFill } from "react-icons/pi";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { GrProjects } from "react-icons/gr";
 import { FaHome } from "react-icons/fa";
 
 const Explore = () => {
@@ -49,6 +50,7 @@ const Explore = () => {
 						[<FaHome />, ""],
 						[<PiBagSimpleFill />, "career"],
 						[<FaGraduationCap />, "education"],
+						[<GrProjects />, "projects"],
 					].map((item, index) => (
 						<li key={index} className="pb-2">
 							<Button

@@ -6,6 +6,7 @@ import App from "./App";
 import Home from "./pages/Home";
 import Career from "./pages/Career";
 import Education from "./pages/Education";
+import Projects from "./pages/Projects";
 import ComingSoon from "./pages/ComingSoon";
 import PageNotFound from "./pages/PageNotFound";
 import {
@@ -26,6 +27,7 @@ root.render(
 					<Route path="/" element={<Home />} />
 					<Route path="/career" element={<Career />} />
 					<Route path="/education" element={<Education />} />
+					<Route path="/projects" element={<Projects />} />
 					<Route path="/coming-soon" element={<ComingSoon />} />
 					<Route path="*" element={<PageNotFound />} />
 				</Route>
