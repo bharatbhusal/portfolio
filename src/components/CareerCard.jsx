@@ -21,15 +21,15 @@ const CareerCard = ({
 					<span className="italic">{duration}</span>
 					<span className="italic">{address}</span>
 				</div>
-				<p className="text-lg text-gray-700 dark:text-gray-300 text-left">
+				<p className="text-sm font-normal text-gray-700 dark:text-gray-300 text-left">
 					{description}
 				</p>
 			</div>
 			<div>
-				<h3 className="text-md font-semibold mb-2">
+				<h3 className="text-sm font-semibold mb-2">
 					Key Achievements/Tasks:
 				</h3>
-				<ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
+				<ul className="list-disc list-inside text-xs font-normal text-gray-600 dark:text-gray-400">
 					{achievements.map((achievement, idx) => (
 						<li key={idx}>{achievement}</li>
 					))}
@@ -49,7 +49,7 @@ const CareerCard = ({
 							)
 						}
 						variant="outline"
-						className={`p-3 border ml-5 ${
+						className={`p-3 border ml-5 text-sm ${
 							darkMode ? "border-white" : "border-black"
 						}`}
 					/>

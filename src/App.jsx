@@ -25,15 +25,31 @@ function App() {
 
 	return (
 		<div
-			className={`p-5 min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${
+			className={`h-screen grid grid-rows-[10%_80%_10%] transition-colors duration-300 ${
 				darkMode
 					? "bg-[#1a1a1a] text-white"
 					: "bg-gray-100 text-black"
-			}`}
+			} `}
 		>
-			<Explore />
-			<Outlet />
-			<ThemeSwitcher />
+			<div className="flex items-center">
+				<div className="flex-grow text-center"></div>
+				<div className="w-1/10 text-center">
+					<Explore />
+				</div>
+			</div>
+
+			<div className="flex items-center justify-center">
+				<div className="text-2xl overflow-y-auto">
+					<Outlet />
+				</div>
+			</div>
+
+			<div className="flex items-center">
+				<div className="flex-grow text-center"></div>
+				<div className="w-1/10 text-center">
+					<ThemeSwitcher />
+				</div>
+			</div>
 		</div>
 	);
 }

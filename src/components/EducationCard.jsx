@@ -22,16 +22,16 @@ const EducationCard = ({
 				</div>
 			</div>
 			<div>
-				<h3 className="text-md font-semibold mb-2">
+				<h3 className="text-sm font-semibold mb-2">
 					Key Courses:
 				</h3>
-				<ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
+				<ul className="list-disc list-inside text-gray-600 dark:text-gray-400 text-xs font-normal">
 					{courses.map((course, idx) => (
 						<li key={idx}>{course}</li>
 					))}
 				</ul>
 			</div>
-			<div className="flex justify-center mt-4">
+			<div className="flex justify-center mt-4 text-sm">
 				{links.map((link, idx) => (
 					<Button
 						key={idx}

@@ -20,7 +20,7 @@ const Card = ({
 		>
 			<h2 className="text-2xl font-semibold mb-3">{title}</h2>
 			<p
-				className={`${
+				className={`text-xl font-normal ${
 					darkMode ? "text-gray-300" : "text-gray-500"
 				} mb-4 text-green-600`}
 			>
