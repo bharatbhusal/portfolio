@@ -24,7 +24,7 @@ const Education = () => {
 			<h1 className="text-4xl font-bold text-center">
 				Education
 			</h1>
-			<div className="flex justify-between w-full h-[90%]">
+			<div className="flex justify-between w-full h-[90%] overflow-view">
 				<Carousel slides={SLIDES} options={OPTIONS} />
 			</div>
 		</div>
