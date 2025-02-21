@@ -18,17 +18,17 @@ const careerData = [
 		],
 		links: [
 			{
-				link: "https://www.routerprotocol.com/",
+				link: "https://www.jaisriram.io/",
 				icon: CgWebsite,
 				type: "website",
 			},
 			{
-				link: "https://x.com/routerprotocol",
+				link: "https://x.com/jsr_coin",
 				icon: FaXTwitter,
 				type: "twitter",
 			},
 			{
-				link: "https://t.me/routerprotocol",
+				link: "https://t.me/jaisriram_io_community",
 				icon: FaTelegram,
 				type: "telegram",
 			},
