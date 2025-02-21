@@ -1,20 +1,58 @@
-import { FaTelegram } from "react-icons/fa";
+import { FaGamepad, FaTelegram } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { FaXTwitter } from "react-icons/fa6";
 
 const careerData = [
 	{
+		company: "jaisriram",
+		role: "Tech Lead",
+		duration: "10/2024 - Present",
+		address: "Remote",
+		description: `Embark on a transformative journey with $JSR, evolving from a devoted seeker to the enlightened master of "Chant-to-Earn."`,
+		achievements: [
+			"Led the development and successful launch of the company website within 30 days of joining.",
+			"Directed a team of developers to deliver a Telegram mini-game within 60 days, ensuring smooth deployment and timely execution.",
+			"Streamlined and structured the company's technical operations by consolidating scattered development efforts.",
+			"Supervised bug fixes, feature enhancements, retention strategies, DevOps, and continuous game monitoring.",
+			"Independently integrated Ouroboro Chain and account abstraction using the Thirdweb SDK, enhancing blockchain interoperability and user experience.",
+		],
+		links: [
+			{
+				link: "https://www.routerprotocol.com/",
+				icon: CgWebsite,
+				type: "website",
+			},
+			{
+				link: "https://x.com/routerprotocol",
+				icon: FaXTwitter,
+				type: "twitter",
+			},
+			{
+				link: "https://t.me/routerprotocol",
+				icon: FaTelegram,
+				type: "telegram",
+			},
+
+
+			{
+				link: "https://t.me/jaisriram_io_bot/game",
+				icon: FaGamepad,
+				type: "game",
+			},
+		],
+	},
+	{
 		company: "Router Protocol",
 		role: "Community Manager",
-		duration: "08/2023 - Present",
+		duration: "08/2023 - 02/2025",
 		address: "Remote",
 		description:
-			"Onboarding the next billion users to web3 by destroying blockchain segregation.",
+			"Bridging blockchain ecosystems to onboard the next billion users into Web3 by eliminating blockchain fragmentation.",
 		achievements: [
-			"Community Engagement, Support, and Troubleshooting.",
-			"Research and presentation about interoperability news in the web3 space.",
-			"Discord & Telegram bot optimization & task automation.",
-			"Community Guidelines Enforcement.",
+			"Managed community engagement, provided support, and resolved technical queries.",
+			"Researched and presented key updates on interoperability within the Web3 space.",
+			"Optimized Discord and Telegram bots to enhance automation and efficiency.",
+			"Enforced community guidelines to maintain a healthy and engaging environment.",
 		],
 		links: [
 			{
@@ -40,10 +78,10 @@ const careerData = [
 		duration: "02/2024 - 10/2024",
 		address: "Remote",
 		description:
-			"Smart Contract Security Audits to fortify decentralized systems and ensure the integrity of blockchain networks.",
+			"Enhancing the security of decentralized systems through comprehensive smart contract audits.",
 		achievements: [
-			"Auditing client's smart contracts - Solo and Teamed.",
-			"Preparing Audit report with simpler explanation of the issues found.",
+			"Conducted independent and collaborative audits of client smart contracts.",
+			"Prepared detailed audit reports with clear, concise explanations of identified vulnerabilities.",
 		],
 		links: [
 			{
@@ -69,12 +107,12 @@ const careerData = [
 		duration: "07/2024 - 10/2024",
 		address: "Remote",
 		description:
-			"Smart Contract Security Audits to fortify decentralized systems and ensure the integrity of blockchain networks.",
+			"Building a security-focused community around smart contract auditing and blockchain integrity.",
 		achievements: [
-			"Establish a brand new community around security and smart contract audits.",
-			"Consistently frame and post articles, tweets, and articles on various social media platforms.",
-			"Prepare weekly and monthly Hack tracks and analysis.",
-			"Conducting AMA sessions with the community and partners.",
+			"Established a new community centered on smart contract security and audits.",
+			"Consistently created and shared educational content, including articles and social media updates.",
+			"Curated weekly and monthly hack analysis reports.",
+			"Organized and hosted AMA sessions with the community and industry partners.",
 		],
 		links: [
 			{
@@ -100,12 +138,12 @@ const careerData = [
 		duration: "09/2021 - 08/2023",
 		address: "Remote",
 		description:
-			"Fueled by a passionate community and deep developer talent pool, the Terra blockchain is built to enable the next generation of Web3 products and services.",
+			"Supporting a passionate community and developer ecosystem to drive innovation within the Terra blockchain network.",
 		achievements: [
-			"Community Engagement, Support, and Troubleshooting.",
-			"Community Guidelines Enforcement.",
-			"Telegram bot optimization and task automation.",
-			"Keeping users updated with the company's upcoming ecosystem and development decisions.",
+			"Facilitated community engagement, provided user support, and addressed technical queries.",
+			"Maintained community guidelines to foster a safe and productive environment.",
+			"Optimized Telegram bots and automated tasks for improved efficiency.",
+			"Kept users informed about upcoming ecosystem developments and company decisions.",
 		],
 		links: [
 			{
@@ -126,5 +164,4 @@ const careerData = [
 		],
 	},
 ];
-
 export default careerData;
