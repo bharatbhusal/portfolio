@@ -2,7 +2,7 @@
 import React, { JSX, useState } from "react";
 import { LuSquareMenu } from "react-icons/lu";
 import { Button } from "./Button";
-import useTheme from "../hooks/useTheme";
+
 import { PiBagSimpleFill } from "react-icons/pi";
 import { FaGraduationCap } from "react-icons/fa6";
 import { GrProjects } from "react-icons/gr";
@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 const Explore = (): JSX.Element => {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
-	const { darkMode } = useTheme();
 
 	const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -36,9 +35,8 @@ const Explore = (): JSX.Element => {
 					isOpen ? <IoArrowBackCircle /> : <LuSquareMenu />
 				}
 				onClick={isOpen ? () => router.back() : toggleMenu}
-				variant="filled"
+				variant="outline"
 				className="p-3"
-				aria-label={isOpen ? "Close menu" : "Open menu"}
 			/>
 
 			<div
@@ -53,10 +51,7 @@ const Explore = (): JSX.Element => {
 								label={icon}
 								onClick={() => handleNavigation(path)}
 								variant="outline"
-								className={`p-3 ${
-									darkMode ? "border-white" : "border-black"
-								}`}
-								aria-label={`Navigate to ${path || "home"}`}
+								className={`p-3 rounded-full`}
 							/>
 						</li>
 					))}

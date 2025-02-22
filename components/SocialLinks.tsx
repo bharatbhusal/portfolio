@@ -65,7 +65,7 @@ function SocialLinks() {
 						)
 					}
 					variant="outline"
-					className={"p-3"}
+					className={"p-2 rounded-full"}
 				/>
 			))}
 		</div>

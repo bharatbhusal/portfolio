@@ -3,8 +3,6 @@ import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from "@/components/ui/carousel";
 import EducationCard from "@/components/cards/EducationCard";
 import educationData from "@/data/educationData";
@@ -15,8 +13,8 @@ const Education = () => {
 			<h1 className="text-4xl font-bold text-center">
 				Education
 			</h1>
-			<div className="flex justify-between w-full h-[90%] px-4">
-				<Carousel opts={{ loop: true }} className="w-full">
+			<div className="flex w-full lg:w-[60%] lg:mx-auto h-[90%] px-4 justify-center">
+				<Carousel orientation="vertical" className="w-fit">
 					<CarouselContent>
 						{educationData.map((item, index) => (
 							<CarouselItem
@@ -27,8 +25,6 @@ const Education = () => {
 							</CarouselItem>
 						))}
 					</CarouselContent>
-					<CarouselPrevious className="left-2" />
-					<CarouselNext className="right-2" />
 				</Carousel>
 			</div>
 		</div>
