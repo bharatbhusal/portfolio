@@ -1,8 +1,9 @@
+"use client";
 import CustomCard from "@/components/cards";
 import Link from "next/link";
 import { FaGamepad, FaTelegram } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaXTwitter, FaMapLocation } from "react-icons/fa6";
 import { CareerItem } from "@/types";
 
 const CareerCard = ({
@@ -20,14 +21,17 @@ const CareerCard = ({
 				<div className="space-y-2">
 					<h3 className="text-2xl font-bold">{company}</h3>
 					<div className="flex justify-between items-center">
-						<span className="text-lg font-semibold">{role}</span>
+						<span className="text-lg font-semibold text-primary">
+							{role}
+						</span>
 						<span className="text-sm text-muted-foreground">
 							{duration}
 						</span>
 					</div>
-					<p className="text-sm text-muted-foreground">
+					<div className="text-sm text-muted-foreground inline-flex">
+						<FaMapLocation className="mr-1" />
 						{address}
-					</p>
+					</div>
 				</div>
 			}
 			content={

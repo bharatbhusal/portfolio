@@ -1,3 +1,4 @@
+"use client";
 import CustomCard from "@/components/cards";
 import Link from "next/link";
 import {
@@ -6,8 +7,10 @@ import {
 	FaFacebook,
 } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaMapLocation, FaXTwitter } from "react-icons/fa6";
 import { EducationItem } from "@/types";
+
+import { cn } from "@/lib/utils";
 
 const EducationCard = ({
 	institution,
@@ -21,7 +24,9 @@ const EducationCard = ({
 		<CustomCard
 			header={
 				<div className="space-y-2">
-					<h3 className="text-2xl font-bold">{institution}</h3>
+					<h3 className="text-2xl font-bold text-primary">
+						{institution}
+					</h3>
 					<div className="flex justify-between items-center">
 						<span className="text-lg font-semibold">
 							{duration}
@@ -30,20 +35,26 @@ const EducationCard = ({
 							CGPA: {cgpa}
 						</span>
 					</div>
-					<p className="text-sm text-muted-foreground">
+					<div className="text-sm text-muted-foreground inline-flex">
+						<FaMapLocation className="mr-1" />
 						{address}
-					</p>
+					</div>
 				</div>
 			}
 			content={
 				<div className="space-y-4">
-					<ul className="list-disc pl-6 space-y-2">
+					<div className="flex flex-wrap gap-2">
 						{courses.map((course, index) => (
-							<li key={index} className="text-sm">
+							<span
+								key={index}
+								className={cn(
+									"px-2 py-1 rounded-full text-sm bg-primary/50 dark:bg-primary/80"
+								)}
+							>
 								{course}
-							</li>
+							</span>
 						))}
-					</ul>
+					</div>
 				</div>
 			}
 			footer={

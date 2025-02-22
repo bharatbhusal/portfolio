@@ -9,7 +9,7 @@ function Home() {
 				<img
 					src={`/bharatbhusal.jpeg`}
 					alt="Profile"
-					className="w-65 h-60 rounded-full mx-auto mb-4"
+					className="w-65 h-60 rounded-full mx-auto mb-4 border-4 border-primary/50"
 				/>
 				<h1 className="text-4xl font-bold">Bharat Bhusal</h1>
 				<p className="text-gray-400 text-[16px] mt-2 leading-[24px]">

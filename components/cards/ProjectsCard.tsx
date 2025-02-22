@@ -1,8 +1,10 @@
+"use client";
 import CustomCard from "@/components/cards";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { ProjectItem } from "@/types";
+import { cn } from "@/lib/utils";
 
 const ProjectsCard = ({
 	project,
@@ -13,7 +15,9 @@ const ProjectsCard = ({
 	return (
 		<CustomCard
 			header={
-				<h3 className="text-2xl font-bold">{project}</h3>
+				<h3 className="text-2xl font-bold text-primary">
+					{project}
+				</h3>
 			}
 			content={
 				<div className="space-y-4">
@@ -21,8 +25,11 @@ const ProjectsCard = ({
 					<div className="flex flex-wrap gap-2">
 						{technologies.map((tech, index) => (
 							<span
+								suppressHydrationWarning
 								key={index}
-								className="px-2 py-1 bg-muted rounded-full text-sm"
+								className={cn(
+									"px-2 py-1 rounded-full text-sm bg-primary/50 dark:bg-primary/80"
+								)}
 							>
 								{tech}
 							</span>
