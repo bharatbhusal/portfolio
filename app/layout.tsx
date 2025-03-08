@@ -10,7 +10,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className="h-screen grid grid-rows-[10%_80%_10%] transition-colors duration-300">
+			<body className="h-screen grid grid-rows-[8%_84%_8%] transition-colors duration-300">
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="dark"
