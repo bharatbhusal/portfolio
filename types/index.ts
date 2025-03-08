@@ -1,11 +1,10 @@
 import { IconType } from "react-icons";
-import { CgWebsite } from "react-icons/cg";
-import { FaGithub } from "react-icons/fa";
 
 // Common link type used across multiple interfaces
 export interface Link {
 	link: string;
 	icon: IconType;
+	type: string;
 }
 
 // Career Data Types
@@ -43,9 +42,8 @@ export interface EducationItem {
 }
 
 // Projects Data Types
-export interface ProjectLink {
-	link: string;
-	icon: typeof FaGithub | typeof CgWebsite;
+export interface ProjectLink extends Link {
+	type: "website" | "github";
 }
 
 export interface ProjectItem {
@@ -53,4 +51,16 @@ export interface ProjectItem {
 	description: string;
 	technologies: string[];
 	links: ProjectLink[];
+}
+
+// Social Media Links Data Types
+export interface SocialLink extends Link {
+	type:
+		| "github"
+		| "twitter"
+		| "telegram"
+		| "email"
+		| "substack"
+		| "linkedin"
+		| "instagram";
 }
