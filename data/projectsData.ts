@@ -19,10 +19,12 @@ const projectsData: ProjectItem[] = [
 			{
 				link: "https://github.com/bharatbhusal/portfolio",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://bharatbhusal.com",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -45,10 +47,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/router-newsletter",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://newsletter.bharatbhusal.com/",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -68,10 +72,12 @@ const projectsData: ProjectItem[] = [
 			{
 				link: "https://github.com/bharatbhusal/car-parking",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://bharatbhusal.com/coming-soon",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -91,10 +97,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/blockchain-learning-week-6",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://bharatbhusal.com/coming-soon",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -112,10 +120,12 @@ const projectsData: ProjectItem[] = [
 			{
 				link: "https://github.com/bharatbhusal/lecal",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://bharatbhusal.com/coming-soon",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -129,10 +139,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/semester-routine",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://semester-routine.vercel.app/",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -152,10 +164,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/whale-game-dashboard",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://bharatbhusal.com/coming-soon",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -174,10 +188,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/ai-image-generator",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://imagine-image.vercel.app",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -196,10 +212,12 @@ const projectsData: ProjectItem[] = [
 				link:
 					"https://github.com/bharatbhusal/function_selector",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://solidity-function-selector.vercel.app",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -213,6 +231,7 @@ const projectsData: ProjectItem[] = [
 	// 			link:
 	// 				"https://github.com/bharatbhusal/router-admin-saviour",
 	// 			icon: FaGithub,
+	//			type: "github",
 	// 		},
 	// 	],
 	// },
@@ -230,10 +249,12 @@ const projectsData: ProjectItem[] = [
 			{
 				link: "https://github.com/bharatbhusal/stopwatch",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://meow-stopwatch.vercel.app/",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
@@ -246,10 +267,12 @@ const projectsData: ProjectItem[] = [
 			{
 				link: "https://github.com/bharatbhusal/truth-or-dare",
 				icon: FaGithub,
+				type: "github",
 			},
 			{
 				link: "https://truth-and-dare.vercel.app",
 				icon: CgWebsite,
+				type: "website",
 			},
 		],
 	},
