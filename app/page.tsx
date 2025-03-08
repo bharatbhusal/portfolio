@@ -7,7 +7,6 @@ const Home: React.FC = () => {
 	return (
 		<main className="flex items-center justify-center overflow-y-auto">
 			<div className="text-center p-5 w-full max-w-2xl relative">
-				{/* Toggle Profile/QR Component */}
 				<ToggleProfileQR
 					profileUrl="/bharatbhusal.jpeg"
 					qrValue="https://bharatbhusal.com"

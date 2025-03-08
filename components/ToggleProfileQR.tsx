@@ -14,10 +14,8 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
 	const toggleQR = () => setShowQR((prev) => !prev);
 
 	return (
-		<div className="relative inline-block w-[260px] h-[260px]">
-			{/* Main Box: Image or QR */}
+		<div className="relative inline-block w-[260px] h-[260px] mb-5">
 			<div className="w-full h-full flex items-center justify-center rounded-full mx-auto mb-4 relative">
-				{/* Profile Image */}
 				<Image
 					src={profileUrl}
 					alt="Profile"
@@ -30,7 +28,6 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
 					} rounded-full object-cover border-4 border-primary/50`}
 				/>
 
-				{/* QR Code */}
 				<div
 					className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ease-in-out ${
 						showQR
@@ -47,7 +44,6 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
 				</div>
 			</div>
 
-			{/* Toggle Button */}
 			<button
 				className="absolute bottom-0 right-0 bg-background rounded-full border-2 border-primary/50 cursor-pointer w-[50px] h-[50px] flex items-center justify-center shadow-lg transition-all duration-300 ease-in-out hover:scale-105"
 				onClick={toggleQR}
