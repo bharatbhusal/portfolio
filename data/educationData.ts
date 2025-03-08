@@ -38,9 +38,7 @@ const educationData: EducationItem[] = [
 				type: "instagram",
 			},
 		],
-		courses: [
-			"Bachelor of Technology in Computer Science and Engineering",
-		],
+		courses: ["B.Tech CSE (Cybersecurity)"],
 	},
 	{
 		institution: "Kathmandu World School",
