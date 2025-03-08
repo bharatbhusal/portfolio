@@ -64,3 +64,8 @@ export interface SocialLink extends Link {
 		| "linkedin"
 		| "instagram";
 }
+
+export interface ToggleProfileQRProps {
+	profileUrl: string;
+	qrValue: string;
+}
