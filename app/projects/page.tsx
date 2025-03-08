@@ -9,7 +9,7 @@ import projectsData from "@/data/projectsData";
 
 const Projects = () => {
 	return (
-		<div className="flex flex-col justify-around w-full h-[90vh] z-0">
+		<div className="flex flex-col justify-around w-full h-[85vh] z-0 overflow-hidden overflow-y-scroll">
 			<h1 className="text-4xl font-bold text-center">
 				Projects
 			</h1>
