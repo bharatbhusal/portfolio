@@ -43,8 +43,7 @@ export interface EducationItem {
 }
 
 // Projects Data Types
-export interface ProjectLink {
-	link: string;
+export interface ProjectLink extends Link {
 	icon: typeof FaGithub | typeof CgWebsite;
 }
 
@@ -53,4 +52,23 @@ export interface ProjectItem {
 	description: string;
 	technologies: string[];
 	links: ProjectLink[];
+}
+
+// Social Media Links Data Types
+export interface SocialLink extends Link {
+	type:
+		| "github"
+		| "twitter"
+		| "telegram"
+		| "email"
+		| "substack"
+		| "linkedin"
+		| "instagram";
+}
+
+export interface SocialItem {
+	label: string;
+	link: string;
+	icon: IconType;
+	type: SocialLink["type"];
 }
