@@ -1,7 +1,6 @@
 "use client";
 import {
 	Carousel,
-	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
 import EducationCard from "@/components/cards/EducationCard";
@@ -15,16 +14,14 @@ const Education = () => {
 			</h1>
 			<div className="flex w-full lg:w-[60%] lg:mx-auto h-[90%] px-4 justify-center">
 				<Carousel orientation="vertical" className="w-fit">
-					<CarouselContent>
-						{educationData.map((item, index) => (
-							<CarouselItem
-								key={index}
-								className="basis-11/12 md:basis-1/2 lg:basis-1/3"
-							>
-								<EducationCard {...item} />
-							</CarouselItem>
-						))}
-					</CarouselContent>
+					{educationData.map((item, index) => (
+						<CarouselItem
+							key={index}
+							className="basis-11/12 md:basis-1/2 lg:basis-1/3"
+						>
+							<EducationCard {...item} />
+						</CarouselItem>
+					))}
 				</Carousel>
 			</div>
 		</div>
