@@ -75,7 +75,7 @@ const careerData: CareerItem[] = [
 	},
 	{
 		company: "0xCommit",
-		role: "Security Auditor",
+		role: "Security Auditor and Community Manager",
 		duration: "02/2024 - 10/2024",
 		address: "Remote",
 		description:
@@ -83,33 +83,6 @@ const careerData: CareerItem[] = [
 		achievements: [
 			"Conducted independent and collaborative audits of client smart contracts.",
 			"Prepared detailed audit reports with clear, concise explanations of identified vulnerabilities.",
-		],
-		links: [
-			{
-				link: "https://0xcommit.com",
-				icon: CgWebsite,
-				type: "website",
-			},
-			{
-				link: "https://x.com/0xcommitaudits",
-				icon: FaXTwitter,
-				type: "twitter",
-			},
-			{
-				link: "https://t.me/OxCommitAudits",
-				icon: FaTelegram,
-				type: "telegram",
-			},
-		],
-	},
-	{
-		company: "0xCommit",
-		role: "Community Manager",
-		duration: "07/2024 - 10/2024",
-		address: "Remote",
-		description:
-			"Building a security-focused community around smart contract auditing and blockchain integrity.",
-		achievements: [
 			"Established a new community centered on smart contract security and audits.",
 			"Consistently created and shared educational content, including articles and social media updates.",
 			"Curated weekly and monthly hack analysis reports.",
