@@ -16,8 +16,7 @@ const Home: React.FC = () => {
 					Bharat Bhusal
 				</h1>
 				<p className="text-gray-400 text-[16px] mt-2 leading-[24px]">
-					Security Auditor | MERN Stack Developer | Community
-					Manager
+					HMU for anything Tech. Fullstack, Web3 and Execution.
 				</p>
 
 				<SocialLinks />
