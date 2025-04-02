@@ -1,11 +1,34 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SocialLinks from "@/components/SocialLinks";
 import ToggleProfileQR from "@/components/ToggleProfileQR";
+import { useTheme } from "next-themes";
 
 const Home: React.FC = () => {
+	const { theme } = useTheme();
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
 	return (
 		<main className="flex items-center justify-center overflow-y-auto">
+			{mounted && theme === "dark" && (
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					className="absolute left-0 top-0 h-full w-full object-cover opacity-30"
+				>
+					<source
+						src="/videos/background.mov"
+						type="video/mp4"
+					/>
+				</video>
+			)}
+
 			<div className="text-center p-5 w-full max-w-2xl relative">
 				<ToggleProfileQR
 					profileUrl="/bharatbhusal.jpeg"
