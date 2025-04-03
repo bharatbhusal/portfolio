@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 					className="absolute left-0 top-0 h-full w-full object-cover opacity-30"
 				>
 					<source
-						src="/videos/background.mov"
+						src="/videos/background.webm"
 						type="video/mp4"
 					/>
 				</video>
