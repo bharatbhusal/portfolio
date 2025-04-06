@@ -6,9 +6,39 @@ import { CareerItem } from "@/types";
 
 const careerData: CareerItem[] = [
 	{
+		company: "Kanine Klans",
+		role: "Lead Blockchain Engineer",
+		duration: "04/2024 - present",
+		address: "Remote",
+		description: `MASTER THE ELEMENTS, DOMINATE MARS! Strategize Your Moves. Explore Uncharted Land, And Rise To Supremacy On The Red Planet.`,
+		achievements: [
+			"Single handedly building the main website.",
+			"Integrating Diamante Blockchain in the game.",
+			"Managing and optimizing the cloud services.",
+			"Managing Linear workspace. Creating projects, issues and assigning to fellow colleagues.",
+		],
+		links: [
+			{
+				link: "https://www.kaninekalns.com/",
+				icon: CgWebsite,
+				type: "website",
+			},
+			{
+				link: "https://x.com/KanineKlans",
+				icon: FaXTwitter,
+				type: "twitter",
+			},
+			{
+				link: "https://t.me/Kanineklans",
+				icon: FaTelegram,
+				type: "telegram",
+			},
+		],
+	},
+	{
 		company: "jaisriram",
 		role: "Tech Lead",
-		duration: "10/2024 - Present",
+		duration: "10/2024 - 04/2025",
 		address: "Remote",
 		description: `Embark on a transformative journey with $JSR, evolving from a devoted seeker to the enlightened master of "Chant-to-Earn."`,
 		achievements: [
