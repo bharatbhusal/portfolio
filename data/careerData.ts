@@ -12,10 +12,9 @@ const careerData: CareerItem[] = [
 		address: "Remote",
 		description: `MASTER THE ELEMENTS, DOMINATE MARS! Strategize Your Moves. Explore Uncharted Land, And Rise To Supremacy On The Red Planet.`,
 		achievements: [
-			"Single handedly building the main website.",
-			"Integrating Diamante Blockchain in the game.",
-			"Managing and optimizing the cloud services.",
-			"Managing Linear workspace. Creating projects, issues and assigning to fellow colleagues.",
+			"Single handedly built the main website in 1 week using Next.js.",
+			"Built a robust system(Postgresql, Node.js, AWS EC2, Github Actions, AWS ECR) that helps integrate Diamante Blockchain with any web2 projects. A system with multiple authentication options, dashboard stats and multiple clients support.",
+			"Managed and optimized the AWS cloud services like route53, ec2, amplify, IAM, SSL, Cloudfront, etc.",
 		],
 		links: [
 			{
@@ -43,10 +42,11 @@ const careerData: CareerItem[] = [
 		description: `Embark on a transformative journey with $JSR, evolving from a devoted seeker to the enlightened master of "Chant-to-Earn."`,
 		achievements: [
 			"Led the development and successful launch of the company website within 30 days of joining.",
-			"Directed a team of developers to deliver a Telegram mini-game within 60 days, ensuring smooth deployment and timely execution.",
+			"Directed a team of developers to deliver a Telegram mini-game(Next.js, Node.js, Postgresql, Github Actions, AWS Amplify) within 60 days, ensuring smooth deployment and timely execution.",
 			"Streamlined and structured the company's technical operations by consolidating scattered development efforts.",
-			"Supervised bug fixes, feature enhancements, retention strategies, DevOps, and continuous game monitoring.",
-			"Independently integrated Ouroboro Chain and account abstraction using the Thirdweb SDK, enhancing blockchain interoperability and user experience.",
+			"Independently integrated Ouroboro blockchain(Layer 3 deployed through conduit)  and account abstraction using the Thirdweb SDK, enhancing blockchain interoperability and user experience.",
+			"Built a telegram bot in typescript for moderation and user engagement.",
+			"Built and deployed over 10 smart contracts on Ourboro chain. Smart contracts like Lottery System, NFT, Token, etc.",
 		],
 		links: [
 			{
@@ -80,10 +80,9 @@ const careerData: CareerItem[] = [
 		description:
 			"Bridging blockchain ecosystems to onboard the next billion users into Web3 by eliminating blockchain fragmentation.",
 		achievements: [
-			"Managed community engagement, provided support, and resolved technical queries.",
-			"Researched and presented key updates on interoperability within the Web3 space.",
-			"Optimized Discord and Telegram bots to enhance automation and efficiency.",
-			"Enforced community guidelines to maintain a healthy and engaging environment.",
+			"Research and weekly presentation about interoperability news on the web3 space.",
+			"Discord & Telegram bot optimisation & task automation along with smooth community engagement.",
+			"Built websites and tools to help fellow moderators and community managers.",
 		],
 		links: [
 			{
@@ -111,12 +110,11 @@ const careerData: CareerItem[] = [
 		description:
 			"Enhancing the security of decentralized systems through comprehensive smart contract audits.",
 		achievements: [
-			"Conducted independent and collaborative audits of client smart contracts.",
-			"Prepared detailed audit reports with clear, concise explanations of identified vulnerabilities.",
-			"Established a new community centered on smart contract security and audits.",
-			"Consistently created and shared educational content, including articles and social media updates.",
-			"Curated weekly and monthly hack analysis reports.",
-			"Organized and hosted AMA sessions with the community and industry partners.",
+			"Conducted independent and collaborative audits of over 20 client’s smart contracts.",
+			"Prepared more than 20 detailed audit reports with clear, concise explanations of identified vulnerabilities.",
+			"Established a new community centered on smart contract security and audits. In 1 week successfully gathered 20+ genuine security enthusiasts.",
+			"Consistently created and shared around 21 educational content per week, including articles and social media updates.",
+			"Curated weekly and monthly web3 security hack analysis reports.",
 		],
 		links: [
 			{
@@ -144,10 +142,9 @@ const careerData: CareerItem[] = [
 		description:
 			"Supporting a passionate community and developer ecosystem to drive innovation within the Terra blockchain network.",
 		achievements: [
-			"Facilitated community engagement, provided user support, and addressed technical queries.",
-			"Maintained community guidelines to foster a safe and productive environment.",
-			"Optimized Telegram bots and automated tasks for improved efficiency.",
-			"Kept users informed about upcoming ecosystem developments and company decisions.",
+			"Discord & Telegram bot optimisation & task automation along with smooth community engagement.",
+			"Consistent watch to the community to maintain code of conduct.",
+			"Help new members of the community to understand TFL tech better.",
 		],
 		links: [
 			{

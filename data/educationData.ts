@@ -11,9 +11,9 @@ import { EducationItem } from "@/types";
 const educationData: EducationItem[] = [
 	{
 		institution: "GITAM University",
-		duration: "10/2021 - Present",
+		duration: "November 2021 - April 2025",
 		address: "Hyderabad, India",
-		cgpa: "9.14/10",
+		cgpa: "9.11/10",
 		links: [
 			{
 				link: "https://www.gitam.edu/",
