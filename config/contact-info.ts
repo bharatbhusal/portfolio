@@ -16,17 +16,8 @@ export const contactInfo = {
   phone: "+917416476507",
 
   // Website & URLs
-  website: "https://bharatbhusal.com",
-  portfolio: "https://bharatbhusal.com",
-
-  // Physical Address (Update with actual details)
-  address: {
-    street: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "USA",
-  },
+  website: "https://23q5tz2n-3000.inc1.devtunnels.ms",
+  portfolio: "https://23q5tz2n-3000.inc1.devtunnels.ms",
 
   // Social Media Links
   social: {
