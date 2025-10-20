@@ -1,23 +1,31 @@
 "use client";
-import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import CareerCard from "@/components/cards/CareerCard";
 import careerData from "@/data/careerData";
+import { useMemo } from "react";
 
 const Career = () => {
+  // Sort career: pinned (current) first, then rest
+  const sortedCareer = useMemo(() => {
+    return [...careerData].sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      return 0;
+    });
+  }, []);
+
   return (
-    <div className="flex flex-col justify-around w-full min-h-screen py-8 z-0 overflow-hidden overflow-y-scroll">
-      <h1 className="text-4xl font-bold text-center">Career</h1>
-      <div className="flex w-full lg:w-[70%] xl:w-[60%] lg:mx-auto px-4 sm:px-6 md:px-8 justify-center">
-        <Carousel orientation="vertical" className="w-full">
-          {careerData.map((item, index) => (
-            <CarouselItem
-              key={index}
-              className="basis-11/12 sm:basis-10/12 md:basis-1/2 lg:basis-1/3 pb-4"
-            >
-              <CareerCard {...item} />
-            </CarouselItem>
-          ))}
-        </Carousel>
+    <div className="flex flex-col w-full min-h-screen py-8 z-0 overflow-y-auto space-y-8">
+      {/* Header */}
+      <div className="space-y-2 px-4 sm:px-6 md:px-8 text-center">
+        <h1 className="text-4xl font-bold">Career</h1>
+        <p className="text-muted-foreground text-sm">My professional journey</p>
+      </div>
+
+      {/* Grid Layout: 1 column (sm), 2 columns (md), 3 columns (lg+) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-8">
+        {sortedCareer.map((item, index) => (
+          <CareerCard key={index} {...item} />
+        ))}
       </div>
     </div>
   );

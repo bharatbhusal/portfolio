@@ -25,8 +25,8 @@ const GitHubStats = ({ username }: GitHubStatsProps) => {
   const themeParam = isDark ? "dark" : "default";
 
   return (
-    <div className="w-full space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* GitHub Stats Card */}
         <div className="flex justify-center">
           <Image
@@ -50,18 +50,6 @@ const GitHubStats = ({ username }: GitHubStatsProps) => {
             unoptimized
           />
         </div>
-      </div>
-
-      {/* Top Languages */}
-      <div className="flex justify-center">
-        <Image
-          src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=${themeParam}&hide_border=true&bg_color=00000000`}
-          alt="Top Languages"
-          width={495}
-          height={195}
-          className="rounded-lg"
-          unoptimized
-        />
       </div>
     </div>
   );

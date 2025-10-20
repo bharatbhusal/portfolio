@@ -65,7 +65,6 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
               value={qrValue}
               size={220}
               level="H"
-              includeMargin={false}
               className="rounded-lg"
             />
           </div>

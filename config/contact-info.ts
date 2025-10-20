@@ -16,8 +16,8 @@ export const contactInfo = {
   phone: "+917416476507",
 
   // Website & URLs
-  website: "https://23q5tz2n-3000.inc1.devtunnels.ms",
-  portfolio: "https://23q5tz2n-3000.inc1.devtunnels.ms",
+  website: "https://bharatbhusal.com",
+  portfolio: "https://bharatbhusal.com",
 
   // Physical Address (Update with actual details)
   address: {
@@ -33,7 +33,7 @@ export const contactInfo = {
     github: "https://github.com/bharatbhusal",
     twitter: "https://twitter.com/bharatbhusal02",
     linkedin: "https://linkedin.com/in/bharatbhusal/",
-    telegram: "https://t.me/petermartin0",
+    telegram: "https://t.me/bharatbhusal",
     instagram: "https://www.instagram.com/bharatbhusal",
     substack: "https://substack.com/@bharatbhusal",
   },

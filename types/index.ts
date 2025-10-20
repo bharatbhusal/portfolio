@@ -38,6 +38,7 @@ export interface EducationItem {
   courses: string[];
   isPinned?: boolean;
   degree?: string; // Degree name
+  description?: string; // Education description
 }
 
 // Projects Data Types
@@ -52,6 +53,11 @@ export interface ProjectItem {
   links: ProjectLink[];
   isPinned?: boolean;
   stars?: number; // GitHub stars
+  lastCommit?: {
+    message: string;
+    timestamp: string;
+    date: string; // Human readable date
+  };
 }
 
 // Social Media Links Data Types

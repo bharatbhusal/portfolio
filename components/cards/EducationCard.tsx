@@ -15,61 +15,83 @@ const EducationCard = ({
   address,
   links,
   isPinned = false,
+  description,
+  degree,
 }: EducationItem) => {
+  // Create bookmark ID - use "latest" for pinned, otherwise institution name
+  const bookmarkId = isPinned
+    ? "latest"
+    : institution.toLowerCase().replace(/\s+/g, "-");
+
   return (
-    <MacWindow title={institution} isPinned={isPinned}>
-      <div className="space-y-4 p-6">
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-lg font-semibold">{duration}</span>
-            <span className="text-sm text-muted-foreground">CGPA: {cgpa}</span>
+    <div id={bookmarkId} className="scroll-mt-20">
+      <MacWindow title={institution} isPinned={isPinned}>
+        <div className="space-y-4 p-6">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-lg font-semibold">
+                {degree || duration}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                CGPA: {cgpa}
+              </span>
+            </div>
+            <div className="text-sm text-muted-foreground inline-flex items-center">
+              <FaMapLocation className="mr-2" />
+              {address}
+            </div>
+            {duration && degree && (
+              <div className="text-sm text-muted-foreground">{duration}</div>
+            )}
           </div>
-          <div className="text-sm text-muted-foreground inline-flex items-center">
-            <FaMapLocation className="mr-2" />
-            {address}
+
+          {/* Description */}
+          {description && (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          )}
+
+          <div className="flex flex-wrap gap-2">
+            {courses.map((course, index) => (
+              <span
+                key={index}
+                className={cn(
+                  "px-3 py-1 rounded-full text-sm",
+                  "bg-primary/10 dark:bg-primary/20",
+                  "border border-primary/20",
+                  "text-foreground"
+                )}
+              >
+                {course}
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-4 pt-4 border-t border-border/50">
+            {links.map((link, index) => (
+              <Link
+                key={index}
+                href={link.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+                aria-label={`Visit ${link.type} link`}
+              >
+                {link.icon === CgWebsite ? (
+                  <CgWebsite className="h-5 w-5" />
+                ) : link.icon === FaLinkedin ? (
+                  <FaLinkedin className="h-5 w-5" />
+                ) : link.icon === FaXTwitter ? (
+                  <FaXTwitter className="h-5 w-5" />
+                ) : link.icon === FaInstagram ? (
+                  <FaInstagram className="h-5 w-5" />
+                ) : (
+                  <FaFacebook className="h-5 w-5" />
+                )}
+              </Link>
+            ))}
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {courses.map((course, index) => (
-            <span
-              key={index}
-              className={cn(
-                "px-3 py-1 rounded-full text-sm",
-                "bg-primary/10 dark:bg-primary/20",
-                "border border-primary/20",
-                "text-foreground"
-              )}
-            >
-              {course}
-            </span>
-          ))}
-        </div>
-        <div className="flex gap-4 pt-4 border-t border-border/50">
-          {links.map((link, index) => (
-            <Link
-              key={index}
-              href={link.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
-              aria-label={`Visit ${link.type} link`}
-            >
-              {link.icon === CgWebsite ? (
-                <CgWebsite className="h-5 w-5" />
-              ) : link.icon === FaLinkedin ? (
-                <FaLinkedin className="h-5 w-5" />
-              ) : link.icon === FaXTwitter ? (
-                <FaXTwitter className="h-5 w-5" />
-              ) : link.icon === FaInstagram ? (
-                <FaInstagram className="h-5 w-5" />
-              ) : (
-                <FaFacebook className="h-5 w-5" />
-              )}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </MacWindow>
+      </MacWindow>
+    </div>
   );
 };
 export default EducationCard;

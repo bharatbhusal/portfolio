@@ -22,15 +22,22 @@ const MacWindow: React.FC<MacWindowProps> = ({
   isPinned = false,
 }) => {
   const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use class-based approach to avoid hydration mismatch
+  const isDark = mounted ? resolvedTheme === "dark" : false;
 
   return (
     <div
       className={cn(
         "relative rounded-lg overflow-hidden shadow-2xl border transition-all duration-300",
-        isDark
-          ? "bg-gray-800/90 border-gray-700/50 backdrop-blur-xl"
-          : "bg-white/90 border-gray-300/50 backdrop-blur-xl",
+        "bg-white/90 dark:bg-gray-800/90",
+        "border-gray-300/50 dark:border-gray-700/50",
+        "backdrop-blur-xl",
         isPinned && "ring-2 ring-primary/50",
         className
       )}
@@ -39,9 +46,8 @@ const MacWindow: React.FC<MacWindowProps> = ({
       <div
         className={cn(
           "flex items-center px-4 py-3 border-b",
-          isDark
-            ? "bg-gray-900/50 border-gray-700/50"
-            : "bg-gray-100/50 border-gray-200/50"
+          "bg-gray-100/50 dark:bg-gray-900/50",
+          "border-gray-200/50 dark:border-gray-700/50"
         )}
       >
         {/* Traffic Light Buttons */}
@@ -56,18 +62,19 @@ const MacWindow: React.FC<MacWindowProps> = ({
           <div
             className={cn(
               "flex-1 text-center text-sm font-medium",
-              isDark ? "text-gray-300" : "text-gray-700"
+              "text-gray-700 dark:text-gray-300"
             )}
           >
             {title}
           </div>
         )}
 
-        {/* Pinned Indicator */}
+        {/* Pinned Indicator - More Obvious */}
         {isPinned && (
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-1 px-2 py-1 rounded-md bg-primary/20 border border-primary/30">
+            <span className="text-xs font-semibold text-primary">PINNED</span>
             <svg
-              className="w-8 h-8 text-primary"
+              className="w-4 h-4 text-primary"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -78,7 +85,7 @@ const MacWindow: React.FC<MacWindowProps> = ({
       </div>
 
       {/* Window Content */}
-      <div className="p-6">{children}</div>
+      <div>{children}</div>
     </div>
   );
 };

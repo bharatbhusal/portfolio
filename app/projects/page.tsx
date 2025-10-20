@@ -1,5 +1,4 @@
 "use client";
-import { Carousel, CarouselItem } from "@/components/ui/carousel";
 import ProjectsCard from "@/components/cards/ProjectsCard";
 import projectsData from "@/data/projectsData";
 import GitHubStats from "@/components/features/GitHubStats";
@@ -16,29 +15,23 @@ const Projects = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full min-h-screen py-8 z-0 overflow-hidden overflow-y-scroll space-y-12">
+    <div className="flex flex-col w-full min-h-screen py-8 z-0 overflow-y-auto space-y-12">
       {/* Projects Section */}
-      <div className="space-y-6">
-        <h1 className="text-4xl font-bold text-center">Projects</h1>
-        <p className="text-center text-muted-foreground text-sm">
-          📌 Top 3 pinned projects
-        </p>
-      </div>
-      <div className="flex w-full lg:w-[70%] xl:w-[60%] lg:mx-auto px-4 sm:px-6 md:px-8 justify-center pb-8">
-        <Carousel orientation="vertical" className="w-full">
+      <div className="space-y-6 px-4 sm:px-6 md:px-8">
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-bold">Projects</h1>
+        </div>
+
+        {/* Grid Layout: 1 column (sm), 2 columns (md), 3 columns (lg+) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto pb-8">
           {sortedProjects.map((project, index) => (
-            <CarouselItem
-              key={index}
-              className="basis-11/12 sm:basis-10/12 md:basis-1/2 lg:basis-1/3 pb-4"
-            >
-              <ProjectsCard {...project} />
-            </CarouselItem>
+            <ProjectsCard key={index} {...project} />
           ))}
-        </Carousel>
+        </div>
       </div>
 
-      {/* GitHub Stats Section */}
-      <div className="w-full px-4 sm:px-6 md:px-8">
+      {/* GitHub Stats Section with Bookmark */}
+      <div id="stats" className="w-full px-4 sm:px-6 md:px-8 scroll-mt-20">
         <h2 className="text-3xl font-bold text-center mb-6">
           GitHub Statistics
         </h2>
