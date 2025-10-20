@@ -61,7 +61,7 @@ const Explore = (): JSX.Element => {
               variant="outline"
               size="icon"
               onClick={isOpen ? () => router.back() : toggleMenu}
-              className="rounded-full transition-all duration-300 hover:scale-110"
+              // className="rounded-full transition-all duration-300 hover:scale-110"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               {isOpen ? (
@@ -83,7 +83,7 @@ const Explore = (): JSX.Element => {
         }`}
       >
         <nav
-          className="flex flex-col gap-2 bg-card border border-border rounded-lg p-2 shadow-lg backdrop-blur-md"
+          className="flex flex-col gap-2 rounded-lg shadow-lg backdrop-blur-sm bg-card border p-1"
           role="navigation"
           aria-label="Main navigation"
         >
@@ -95,7 +95,6 @@ const Explore = (): JSX.Element => {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleNavigation(path)}
-                    className="rounded-full hover:bg-accent transition-all duration-200"
                     aria-label={label}
                   >
                     {icon}

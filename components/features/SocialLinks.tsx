@@ -90,7 +90,7 @@ function SocialLinks() {
                 variant="outline"
                 size="icon"
                 onClick={() => handleClick(social.link)}
-                className="rounded-full hover:scale-110 transition-all duration-300 hover:bg-primary/10 hover:border-primary/50"
+                // className="rounded-full hover:scale-110 transition-all duration-300 hover:bg-primary/10 hover:border-primary/50"
                 aria-label={`Visit ${social.label}`}
               >
                 <social.icon className="h-5 w-5" />

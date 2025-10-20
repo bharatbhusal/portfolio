@@ -44,7 +44,7 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
               : "opacity-100 scale-100"
           }`}
         >
-          <Avatar className="w-full h-full border-4 border-primary/30 shadow-xl hover:border-primary/50 transition-all duration-300">
+          <Avatar className="w-full h-full shadow-xl transition-all duration-300">
             <AvatarImage src={profileUrl} alt={name} className="object-cover" />
             <AvatarFallback className="text-6xl bg-muted">
               {name.charAt(0)}
@@ -60,7 +60,7 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
               : "opacity-0 scale-90 pointer-events-none"
           }`}
         >
-          <div className="bg-white p-4 rounded-2xl shadow-2xl border-4 border-primary/30 hover:border-primary/50 transition-all duration-300">
+          <div className="bg-white p-4 rounded-2xl shadow-2xl transition-all duration-300">
             <QRCodeSVG
               value={qrValue}
               size={220}
@@ -79,7 +79,7 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
               variant="outline"
               size="icon"
               onClick={toggleQR}
-              className="absolute bottom-0 right-0 rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl border-2 border-primary/30 hover:border-primary/50 bg-background"
+              className="absolute bottom-0 right-0 rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
               aria-label={showQR ? "Show profile" : "Show QR code"}
             >
               {showQR ? (
