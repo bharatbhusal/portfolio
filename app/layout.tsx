@@ -53,26 +53,19 @@ export default function RootLayout({
         {/* Favicon */}
         <link rel="icon" type="image/jpeg" href={siteConfig.ogImage} />
       </head>
-      <body className="h-screen grid grid-rows-[8%_84%_8%] transition-colors duration-300 bg-background text-foreground">
+      <body className="min-h-screen transition-colors duration-300 bg-background text-foreground overflow-x-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme={siteConfig.defaultTheme}
           enableSystem
           disableTransitionOnChange={false}
         >
-          <div className="flex items-center">
-            <div className="flex-grow text-center"></div>
-            <div className="w-1/10 text-center">
-              <Explore />
-            </div>
-          </div>
-          {children}
-          <div className="flex items-center">
-            <div className="flex-grow text-center"></div>
-            <div className="w-1/10 text-center">
-              <ThemeSwitcher />
-            </div>
-          </div>
+          {/* Navigation and Theme controls - Fixed position */}
+          <Explore />
+          <ThemeSwitcher />
+
+          {/* Main content - Full screen */}
+          <main className="min-h-screen">{children}</main>
         </ThemeProvider>
       </body>
     </html>
