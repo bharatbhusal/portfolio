@@ -28,21 +28,19 @@ const EducationCard = ({
       <MacWindow title={institution} isPinned={isPinned}>
         <div className="space-y-4 p-6">
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between flex-col lg:flex-row lg:items-center gap-2">
               <span className="text-lg font-semibold">
                 {degree || duration}
               </span>
-              <span className="text-sm text-muted-foreground">
-                CGPA: {cgpa}
-              </span>
+              {duration && degree && (
+                <div className="text-xs text-muted-foreground">{duration}</div>
+              )}
             </div>
+            <div className="text-sm text-muted-foreground">CGPA: {cgpa}</div>
             <div className="text-sm text-muted-foreground inline-flex items-center">
               <FaMapLocation className="mr-2" />
               {address}
             </div>
-            {duration && degree && (
-              <div className="text-sm text-muted-foreground">{duration}</div>
-            )}
           </div>
 
           {/* Description */}

@@ -7,8 +7,8 @@ import { CareerItem } from "@/types";
 const careerData: CareerItem[] = [
   {
     company: "Kanine Klans",
-    role: "Lead Blockchain Engineer",
-    duration: "04/2024 - present",
+    role: "Blockchain Engineer",
+    duration: "Apr 2025 - Aug 2025",
     address: "Remote",
     description: `MASTER THE ELEMENTS, DOMINATE MARS! Strategize Your Moves. Explore Uncharted Land, And Rise To Supremacy On The Red Planet.`,
     achievements: [
@@ -33,12 +33,12 @@ const careerData: CareerItem[] = [
         type: "telegram",
       },
     ],
-    isPinned: true,
+    isPinned: false,
   },
   {
     company: "jaisriram",
-    role: "Tech Lead",
-    duration: "10/2024 - 04/2025",
+    role: "Fullstack Blockchain Developer",
+    duration: "Oct 2024 - Apr 2025",
     address: "Remote",
     description: `Embark on a transformative journey with $JSR, evolving from a devoted seeker to the enlightened master of "Chant-to-Earn."`,
     achievements: [
@@ -76,7 +76,7 @@ const careerData: CareerItem[] = [
   {
     company: "Router Protocol",
     role: "Community Manager",
-    duration: "08/2023 - 02/2025",
+    duration: "Oct 2023 - Feb 2025",
     address: "Remote",
     description:
       "Bridging blockchain ecosystems to onboard the next billion users into Web3 by eliminating blockchain fragmentation.",
@@ -106,7 +106,7 @@ const careerData: CareerItem[] = [
   {
     company: "0xCommit",
     role: "Security Auditor and Community Manager",
-    duration: "02/2024 - 10/2024",
+    duration: "Feb 2024 - Oct 2024",
     address: "Remote",
     description:
       "Enhancing the security of decentralized systems through comprehensive smart contract audits.",
@@ -134,11 +134,12 @@ const careerData: CareerItem[] = [
         type: "telegram",
       },
     ],
+    isPinned: true,
   },
   {
     company: "Terraform Labs",
     role: "Community Moderator",
-    duration: "09/2021 - 08/2023",
+    duration: "Sept 2021 - Aug 2023",
     address: "Remote",
     description:
       "Supporting a passionate community and developer ecosystem to drive innovation within the Terra blockchain network.",

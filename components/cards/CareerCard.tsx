@@ -23,12 +23,12 @@ const CareerCard = ({
 
   return (
     <div id={bookmarkId} className="scroll-mt-20">
-      <MacWindow title={`${company} - ${role}`} isPinned={isPinned}>
+      <MacWindow title={`Organization - ${company}`} isPinned={isPinned}>
         <div className="space-y-4 p-6">
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between flex-col lg:flex-row lg:items-center">
               <span className="text-lg font-semibold text-primary">{role}</span>
-              <span className="text-sm text-muted-foreground">{duration}</span>
+              <span className="text-xs text-muted-foreground">{duration}</span>
             </div>
             <div className="text-sm text-muted-foreground inline-flex items-center">
               <FaMapLocation className="mr-2" />
