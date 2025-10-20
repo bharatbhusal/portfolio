@@ -1,51 +1,35 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import SocialLinks from "@/components/SocialLinks";
-import ToggleProfileQR from "@/components/ToggleProfileQR";
-import { useTheme } from "next-themes";
+
+import React from "react";
+import SocialLinks from "@/components/features/SocialLinks";
+import ToggleProfileQR from "@/components/features/ToggleProfileQR";
+import VideoBackground from "@/components/common/VideoBackground";
+import { contactInfo, siteConfig } from "@/config";
 
 const Home: React.FC = () => {
-	const { theme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+  return (
+    <main className="flex items-center justify-center overflow-y-auto relative">
+      {/* Background Video - only shows in dark mode */}
+      <VideoBackground videoSrc="/videos/background.webm" />
 
-	useEffect(() => {
-		setMounted(true);
-	}, []);
+      <div className="text-center p-5 w-full max-w-2xl relative z-10">
+        <ToggleProfileQR
+          profileUrl="/bharatbhusal.jpeg"
+          qrValue={`${siteConfig.url}/api/contact/vcard`}
+          name={contactInfo.name.full}
+        />
 
-	return (
-		<main className="flex items-center justify-center overflow-y-auto">
-			{mounted && theme === "dark" && (
-				<video
-					autoPlay
-					loop
-					muted
-					playsInline
-					className="absolute left-0 top-0 h-full w-full object-cover opacity-30"
-				>
-					<source
-						src="/videos/background.webm"
-						type="video/mp4"
-					/>
-				</video>
-			)}
+        <h1 className="text-4xl font-bold mt-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+          {contactInfo.name.full}
+        </h1>
+        <p className="text-muted-foreground text-base mt-2 leading-relaxed max-w-xl mx-auto">
+          {contactInfo.tagline}
+        </p>
 
-			<div className="text-center p-5 w-full max-w-2xl relative">
-				<ToggleProfileQR
-					profileUrl="/bharatbhusal.jpeg"
-					qrValue="https://bharatbhusal.com"
-				/>
-
-				<h1 className="text-4xl font-bold mt-4">
-					Bharat Bhusal
-				</h1>
-				<p className="text-gray-400 text-[16px] mt-2 leading-[24px]">
-					HMU for anything Tech. Fullstack, Web3 and Execution.
-				</p>
-
-				<SocialLinks />
-			</div>
-		</main>
-	);
+        <SocialLinks />
+      </div>
+    </main>
+  );
 };
 
 export default Home;

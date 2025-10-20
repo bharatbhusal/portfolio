@@ -18,54 +18,88 @@
 
 @layer base {
 	:root {
+		/* Light Mode - Clean and Professional */
 		--background: 0 0% 100%;
-		--foreground: 224 71.4% 4.1%;
+		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
-		--card-foreground: 224 71.4% 4.1%;
+		--card-foreground: 240 10% 3.9%;
 		--popover: 0 0% 100%;
-		--popover-foreground: 224 71.4% 4.1%;
+		--popover-foreground: 240 10% 3.9%;
+		
+		/* Primary - Vibrant Green (Brand Color) */
 		--primary: 142.1 76.2% 36.3%;
-		--primary-foreground: 210 20% 98%;
-		--secondary: 220 14.3% 95.9%;
-		--secondary-foreground: 220.9 39.3% 11%;
-		--muted: 220 14.3% 95.9%;
-		--muted-foreground: 220 8.9% 46.1%;
-		--accent: 220 14.3% 95.9%;
-		--accent-foreground: 220.9 39.3% 11%;
+		--primary-foreground: 0 0% 100%;
+		
+		/* Secondary - Subtle Gray */
+		--secondary: 240 4.8% 95.9%;
+		--secondary-foreground: 240 5.9% 10%;
+		
+		/* Muted - For less important text */
+		--muted: 240 4.8% 95.9%;
+		--muted-foreground: 240 3.8% 46.1%;
+		
+		/* Accent - Highlight color */
+		--accent: 240 4.8% 95.9%;
+		--accent-foreground: 240 5.9% 10%;
+		
+		/* Destructive - Error states */
 		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 210 20% 98%;
-		--border: 220 13% 91%;
-		--input: 220 13% 91%;
-		--ring: 224 71.4% 4.1%;
-		--chart-1: 12 76% 61%;
+		--destructive-foreground: 0 0% 98%;
+		
+		/* Borders and Inputs */
+		--border: 240 5.9% 90%;
+		--input: 240 5.9% 90%;
+		--ring: 142.1 76.2% 36.3%;
+		
+		/* Chart colors */
+		--chart-1: 142.1 76.2% 36.3%;
 		--chart-2: 173 58% 39%;
 		--chart-3: 197 37% 24%;
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
+		
 		--radius: 0.5rem;
 	}
+	
 	.dark {
-		/* --background: 0 0% 100%; */
-		--background: 0 0% 10.2%;
-		--foreground: 210 40% 98%;
-		--card: 224 71.4% 4.1%;
-		--card-foreground: 210 20% 98%;
-		--popover: 224 71.4% 4.1%;
-		--popover-foreground: 210 20% 98%;
-		--primary: 142.1 76.2% 36.3%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 215 27.9% 16.9%;
-		--secondary-foreground: 210 20% 98%;
-		--muted: 215 27.9% 16.9%;
-		--muted-foreground: 217.9 10.6% 64.9%;
-		--accent: 215 27.9% 16.9%;
-		--accent-foreground: 210 20% 98%;
+		/* Dark Mode - Deep and Vibrant */
+		--background: 240 10% 3.9%;
+		--foreground: 0 0% 98%;
+		
+		/* Cards with slight elevation */
+		--card: 240 10% 8%;
+		--card-foreground: 0 0% 98%;
+		
+		--popover: 240 10% 8%;
+		--popover-foreground: 0 0% 98%;
+		
+		/* Primary - More vibrant green in dark mode */
+		--primary: 142.1 70.6% 45.3%;
+		--primary-foreground: 240 10% 3.9%;
+		
+		/* Secondary - Lighter background for contrast */
+		--secondary: 240 3.7% 15.9%;
+		--secondary-foreground: 0 0% 98%;
+		
+		/* Muted - Better readability */
+		--muted: 240 3.7% 15.9%;
+		--muted-foreground: 240 5% 64.9%;
+		
+		/* Accent - Stands out in dark mode */
+		--accent: 240 3.7% 15.9%;
+		--accent-foreground: 0 0% 98%;
+		
+		/* Destructive */
 		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 210 20% 98%;
-		--border: 215 27.9% 16.9%;
-		--input: 215 27.9% 16.9%;
-		--ring: 216 12.2% 83.9%;
-		--chart-1: 220 70% 50%;
+		--destructive-foreground: 0 0% 98%;
+		
+		/* Borders - Subtle but visible */
+		--border: 240 3.7% 15.9%;
+		--input: 240 3.7% 15.9%;
+		--ring: 142.1 70.6% 45.3%;
+		
+		/* Chart colors - Adjusted for dark mode */
+		--chart-1: 142.1 70.6% 45.3%;
 		--chart-2: 160 60% 45%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
