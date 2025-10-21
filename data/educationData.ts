@@ -42,7 +42,7 @@ const educationData: EducationItem[] = [
       "Web Development",
       "Blockchain",
     ],
-    isPinned: true,
+    highlight: "LATEST",
   },
   {
     institution: "Kathmandu World School",

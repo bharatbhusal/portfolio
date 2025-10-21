@@ -14,16 +14,16 @@ const CareerCard = ({
   description,
   achievements,
   links,
-  isPinned = false,
+  highlight,
 }: CareerItem) => {
   // Create bookmark ID - use "current" for pinned, otherwise company name
-  const bookmarkId = isPinned
+  const bookmarkId = highlight
     ? "current"
     : company.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <div id={bookmarkId} className="scroll-mt-20">
-      <MacWindow title={`Organization - ${company}`} isPinned={isPinned}>
+      <MacWindow title={`Organization - ${company}`} highlight={highlight}>
         <div className="space-y-4 p-6">
           <div className="space-y-2">
             <div className="flex justify-between flex-col lg:flex-row lg:items-center">

@@ -4,11 +4,11 @@ import careerData from "@/data/careerData";
 import { useMemo } from "react";
 
 const Career = () => {
-  // Sort career: pinned (current) first, then rest
+  // Sort career: highlighted first, then rest
   const sortedCareer = useMemo(() => {
     return [...careerData].sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
+      if (a.highlight && !b.highlight) return -1;
+      if (!a.highlight && b.highlight) return 1;
       return 0;
     });
   }, []);

@@ -33,7 +33,6 @@ const careerData: CareerItem[] = [
         type: "telegram",
       },
     ],
-    isPinned: false,
   },
   {
     company: "jaisriram",
@@ -134,7 +133,7 @@ const careerData: CareerItem[] = [
         type: "telegram",
       },
     ],
-    isPinned: true,
+    highlight: "PINNED",
   },
   {
     company: "Terraform Labs",

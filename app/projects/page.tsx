@@ -5,11 +5,11 @@ import GitHubStats from "@/components/features/GitHubStats";
 import { useMemo } from "react";
 
 const Projects = () => {
-  // Sort projects: pinned first, then rest
+  // Sort projects: highlighted first, then rest
   const sortedProjects = useMemo(() => {
     return [...projectsData].sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
+      if (a.highlight && !b.highlight) return -1;
+      if (!a.highlight && b.highlight) return 1;
       return 0;
     });
   }, []);

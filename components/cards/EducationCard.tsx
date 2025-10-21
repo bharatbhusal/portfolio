@@ -14,18 +14,18 @@ const EducationCard = ({
   duration,
   address,
   links,
-  isPinned = false,
+  highlight,
   description,
   degree,
 }: EducationItem) => {
   // Create bookmark ID - use "latest" for pinned, otherwise institution name
-  const bookmarkId = isPinned
+  const bookmarkId = highlight
     ? "latest"
     : institution.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <div id={bookmarkId} className="scroll-mt-20">
-      <MacWindow title={institution} isPinned={isPinned}>
+      <MacWindow title={institution} highlight={highlight}>
         <div className="space-y-4 p-6">
           <div className="space-y-2">
             <div className="flex justify-between flex-col lg:flex-row lg:items-center gap-2">

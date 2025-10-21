@@ -20,8 +20,7 @@ export interface CareerItem {
   description: string;
   achievements: string[];
   links: CareerLink[];
-  isPinned?: boolean;
-  highlight?: string; // Special achievement or highlight
+  highlight?: string;
 }
 
 // Education Data Types
@@ -36,9 +35,9 @@ export interface EducationItem {
   cgpa: string;
   links: EducationLink[];
   courses: string[];
-  isPinned?: boolean;
-  degree?: string; // Degree name
-  description?: string; // Education description
+  degree?: string;
+  description?: string;
+  highlight?: string;
 }
 
 // Projects Data Types
@@ -51,25 +50,14 @@ export interface ProjectItem {
   description: string;
   technologies: string[];
   links: ProjectLink[];
-  isPinned?: boolean;
-  stars?: number; // GitHub stars
-  lastCommit?: {
-    message: string;
-    timestamp: string;
-    date: string; // Human readable date
-  };
+  highlight?: string;
 }
 
-// Social Media Links Data Types
-export interface SocialLink extends Link {
-  type:
-    | "github"
-    | "twitter"
-    | "telegram"
-    | "email"
-    | "substack"
-    | "linkedin"
-    | "instagram";
+export interface SocialLink {
+  link: string;
+  icon: React.ComponentType<{ className?: string }>;
+  type: string;
+  label: string;
 }
 
 export interface ToggleProfileQRProps {

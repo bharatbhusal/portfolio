@@ -27,7 +27,7 @@ const projectsData: ProjectItem[] = [
         type: "website",
       },
     ],
-    isPinned: true,
+    highlight: "PINNED",
   },
   {
     project: "Router Newsletter Website",
@@ -55,7 +55,7 @@ const projectsData: ProjectItem[] = [
         type: "website",
       },
     ],
-    isPinned: true,
+    highlight: "PINNED",
   },
   {
     project: "Car Parking System",
@@ -81,7 +81,7 @@ const projectsData: ProjectItem[] = [
         type: "website",
       },
     ],
-    isPinned: true,
+    highlight: "PINNED",
   },
   {
     project: "Stader Staking Platform",

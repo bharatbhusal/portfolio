@@ -6,42 +6,47 @@ import { SiSubstack } from "react-icons/si";
 import { SocialLink } from "@/types";
 import { contactInfo } from "@/config/contact-info";
 
-const aboutMe: SocialLink[] = [
+export const socialLinks: SocialLink[] = [
   {
     link: contactInfo.social.github,
     icon: FaGithub,
     type: "github",
+    label: "GitHub",
   },
   {
     link: contactInfo.social.twitter,
     icon: FaXTwitter,
     type: "twitter",
+    label: "Twitter/X",
   },
   {
     link: contactInfo.social.telegram,
     icon: FaTelegram,
     type: "telegram",
+    label: "Telegram",
   },
   {
     link: `mailto:${contactInfo.email}`,
     icon: HiOutlineMail,
     type: "email",
+    label: "Email",
   },
   {
     link: contactInfo.social.substack,
     icon: SiSubstack,
     type: "substack",
+    label: "Substack",
   },
   {
     link: contactInfo.social.linkedin,
     icon: FaLinkedin,
     type: "linkedin",
+    label: "LinkedIn",
   },
   {
     link: contactInfo.social.instagram,
     icon: FaInstagram,
     type: "instagram",
+    label: "Instagram",
   },
 ];
-
-export default aboutMe;

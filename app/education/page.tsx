@@ -4,11 +4,11 @@ import educationData from "@/data/educationData";
 import { useMemo } from "react";
 
 const Education = () => {
-  // Sort education: pinned (latest) first, then rest
+  // Sort education: highlighted first, then rest
   const sortedEducation = useMemo(() => {
     return [...educationData].sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
+      if (a.highlight && !b.highlight) return -1;
+      if (!a.highlight && b.highlight) return 1;
       return 0;
     });
   }, []);

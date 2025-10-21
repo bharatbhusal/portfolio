@@ -12,14 +12,14 @@ interface MacWindowProps {
   children: React.ReactNode;
   title?: string;
   className?: string;
-  isPinned?: boolean;
+  highlight?: string;
 }
 
 const MacWindow: React.FC<MacWindowProps> = ({
   children,
   title,
   className,
-  isPinned = false,
+  highlight,
 }) => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
@@ -38,7 +38,7 @@ const MacWindow: React.FC<MacWindowProps> = ({
         "bg-white/90 dark:bg-gray-800/90",
         "border-gray-300/50 dark:border-gray-700/50",
         "backdrop-blur-xl",
-        isPinned && "ring-2 ring-primary/50",
+        highlight && "ring-2 ring-primary/50",
         className
       )}
     >
@@ -69,10 +69,11 @@ const MacWindow: React.FC<MacWindowProps> = ({
           </div>
         )}
 
-        {/* Pinned Indicator - More Obvious */}
-        {isPinned && (
+        {highlight && (
           <div className="ml-auto flex items-center gap-1 px-2 py-1 rounded-md bg-primary/20 border border-primary/30">
-            <span className="text-xs font-semibold text-primary">PINNED</span>
+            <span className="text-xs font-semibold text-primary">
+              {highlight}
+            </span>
             <svg
               className="w-4 h-4 text-primary"
               fill="currentColor"

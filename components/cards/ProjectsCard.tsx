@@ -11,40 +11,15 @@ const ProjectsCard = ({
   description,
   technologies,
   links,
-  isPinned = false,
-  lastCommit,
+  highlight,
 }: ProjectItem) => {
-  // Create bookmark ID from project name
   const bookmarkId = project.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <div id={bookmarkId} className="scroll-mt-20">
-      <MacWindow title={project} isPinned={isPinned}>
+      <MacWindow title={project} highlight={highlight}>
         <div className="space-y-4 p-6">
           <p className="text-base">{description}</p>
-
-          {/* Last Commit Info */}
-          {lastCommit && (
-            <div className="text-xs text-muted-foreground bg-muted/30 p-3 rounded-md border border-border/50">
-              <div className="flex items-start gap-2">
-                <svg
-                  className="w-4 h-4 mt-0.5 flex-shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="flex-1">
-                  <p className="font-medium">{lastCommit.message}</p>
-                  <p className="text-xs opacity-75 mt-1">{lastCommit.date}</p>
-                </div>
-              </div>
-            </div>
-          )}
 
           <div className="flex flex-wrap gap-2">
             {technologies.map((tech, index) => (
