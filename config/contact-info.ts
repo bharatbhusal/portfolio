@@ -16,8 +16,8 @@ export const contactInfo = {
   phone: "+917416476507",
 
   // Website & URLs
-  website: "https://23q5tz2n-3000.inc1.devtunnels.ms",
-  portfolio: "https://23q5tz2n-3000.inc1.devtunnels.ms",
+  website: "https://bharatbhusal.com",
+  portfolio: "https://bharatbhusal.com",
 
   // Social Media Links
   social: {
