@@ -58,6 +58,7 @@ export interface SocialLink {
   icon: React.ComponentType<{ className?: string }>;
   type: string;
   label: string;
+  handle?: string;
 }
 
 export interface ToggleProfileQRProps {

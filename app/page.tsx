@@ -4,6 +4,7 @@ import React from "react";
 import SocialLinks from "@/components/features/SocialLinks";
 import ToggleProfileQR from "@/components/features/ToggleProfileQR";
 import { contactInfo, siteConfig } from "@/config";
+import { socialLinks } from "@/data/aboutMe";
 
 const Home: React.FC = () => {
   return (
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
           {contactInfo.tagline}
         </p>
 
-        <SocialLinks />
+        <SocialLinks socialLinks={socialLinks} />
       </div>
     </div>
   );

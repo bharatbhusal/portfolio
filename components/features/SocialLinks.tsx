@@ -12,9 +12,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { socialLinks } from "@/data/aboutMe";
 
-function SocialLinks() {
+function SocialLinks({
+  socialLinks,
+}: {
+  socialLinks: { icon: React.ElementType; link: string; label: string }[];
+}) {
   const handleClick = (link: string) => {
     window.open(link, "_blank", "noopener,noreferrer");
   };
@@ -22,7 +25,7 @@ function SocialLinks() {
   return (
     <div className="mt-6 flex justify-center flex-wrap gap-2">
       <TooltipProvider>
-        {socialLinks.map((social, index) => (
+        {socialLinks?.map((social, index) => (
           <Tooltip key={index}>
             <TooltipTrigger asChild>
               <Button
