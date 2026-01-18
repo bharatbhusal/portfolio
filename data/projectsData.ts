@@ -7,7 +7,7 @@ const projectsData: ProjectItem[] = [
   {
     project: "Portfolio Website",
     description:
-      "A modern Next.js 15 portfolio with macOS-inspired design, fullscreen video backgrounds, GitHub stats integration, and responsive UI. Features dark/light themes, vCard QR codes, and pinned projects showcase.",
+      "A modern Next.js portfolio with macOS-inspired design, GitHub stats integration, and responsive UI. Features dark/light themes, vCard QR codes and NFC compliant.",
     technologies: [
       "Next.js 15",
       "TypeScript",
@@ -42,7 +42,6 @@ const projectsData: ProjectItem[] = [
       "Prisma ORM",
       "AWS S3",
       "JWT",
-      "bcrypt",
     ],
     links: [
       {
@@ -79,7 +78,7 @@ const projectsData: ProjectItem[] = [
   {
     project: "MoodSync",
     description:
-      "A heartfelt full-stack Next.js app to log and share emotions. Built for a special friend—whenever I miss her, I post my feelings here. Features secure authentication and emotion history.",
+      "A heartfelt full-stack Next.js app to log and share emotions. Built for a special friend—whenever, post your feelings here. Features secure authentication and emotion history.",
     technologies: [
       "Next.js",
       "TypeScript",
@@ -95,6 +94,7 @@ const projectsData: ProjectItem[] = [
         type: "github",
       },
     ],
+    highlight: "PINNED",
   },
   {
     project: "Router Newsletter Website",
@@ -116,13 +116,7 @@ const projectsData: ProjectItem[] = [
         icon: FaGithub,
         type: "github",
       },
-      {
-        link: "https://newsletter.bharatbhusal.com/",
-        icon: CgWebsite,
-        type: "website",
-      },
     ],
-    highlight: "PINNED",
   },
   {
     project: "Car Parking System",
@@ -144,24 +138,13 @@ const projectsData: ProjectItem[] = [
         icon: FaGithub,
         type: "github",
       },
-      {
-        link: "https://park-your-car.vercel.app",
-        icon: CgWebsite,
-        type: "website",
-      },
     ],
-    highlight: "PINNED",
   },
   {
     project: "Telegram Web3 Zone Bot",
     description:
-      "Telegram bot for Web3 ecosystem interactions with modular architecture. Features aiogram framework, environment validation, custom handlers, and Docker deployment support.",
-    technologies: [
-      "Python",
-      "aiogram",
-      "Telegram Bot API",
-      "Docker",
-    ],
+      "Telegram bot for Web3 ecosystem interactions with modular architecture for trading crypto tokens within telegram. Features aiogram framework, environment validation, custom handlers, and Docker deployment support.",
+    technologies: ["Python", "aiogram", "Telegram Bot API", "Docker"],
     links: [
       {
         link: "https://github.com/bharatbhusal/tg_web3_zone",
