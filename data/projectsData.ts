@@ -7,13 +7,14 @@ const projectsData: ProjectItem[] = [
   {
     project: "Portfolio Website",
     description:
-      "A minimal, fully responsive website built with React.js to showcase my career, education, projects and social links.",
+      "A modern Next.js 15 portfolio with macOS-inspired design, fullscreen video backgrounds, GitHub stats integration, and responsive UI. Features dark/light themes, vCard QR codes, and pinned projects showcase.",
     technologies: [
-      "React.js",
-      "Vite",
-      "Redux with persistence storage",
-      "Tailwinds(majorly)",
-      "React Router",
+      "Next.js 15",
+      "TypeScript",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "next-themes",
+      "Embla Carousel",
     ],
     links: [
       {
@@ -30,18 +31,84 @@ const projectsData: ProjectItem[] = [
     highlight: "PINNED",
   },
   {
+    project: "Pockity",
+    description:
+      "Secure multi-tenant cloud storage service with isolated S3 buckets per user. Features API key authentication, quota management, admin approval workflow, and comprehensive audit logging.",
+    technologies: [
+      "Node.js",
+      "TypeScript",
+      "Express",
+      "PostgreSQL",
+      "Prisma ORM",
+      "AWS S3",
+      "JWT",
+      "bcrypt",
+    ],
+    links: [
+      {
+        link: "https://github.com/bharatbhusal/pockity",
+        icon: FaGithub,
+        type: "github",
+      },
+    ],
+    highlight: "PINNED",
+  },
+  {
+    project: "CogniFlow",
+    description:
+      "AI-powered workflow automation platform combining LLMs, document processing, and web search. Features RAG with ChromaDB, multi-step workflows, real-time chat interface, and FastAPI backend.",
+    technologies: [
+      "React 18",
+      "TypeScript",
+      "Redux Toolkit",
+      "FastAPI",
+      "Python",
+      "PostgreSQL",
+      "ChromaDB",
+      "OpenAI API",
+    ],
+    links: [
+      {
+        link: "https://github.com/bharatbhusal/cogniFlow",
+        icon: FaGithub,
+        type: "github",
+      },
+    ],
+    highlight: "PINNED",
+  },
+  {
+    project: "MoodSync",
+    description:
+      "A heartfelt full-stack Next.js app to log and share emotions. Built for a special friend—whenever I miss her, I post my feelings here. Features secure authentication and emotion history.",
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "MongoDB",
+      "Mongoose",
+      "JWT",
+    ],
+    links: [
+      {
+        link: "https://github.com/bharatbhusal/emotions",
+        icon: FaGithub,
+        type: "github",
+      },
+    ],
+  },
+  {
     project: "Router Newsletter Website",
     description:
-      "An open-source, fully responsive archive for daily newsletters prepared for Router Protocol Internal Team.",
+      "Full-stack newsletter archive for Router Protocol with CRUD operations, role-based access control, JWT authentication, and service workers for offline support. Features responsive UI and admin panel.",
     technologies: [
-      "MERN Stack",
-      "React Router",
-      "Service Workers",
-      "Redux with persistence storage",
-      "CSS",
+      "React.js",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Redux",
+      "JWT",
       "RBAC",
-      "JWT Authentication",
-      "React Context API",
+      "Service Workers",
     ],
     links: [
       {
@@ -60,14 +127,16 @@ const projectsData: ProjectItem[] = [
   {
     project: "Car Parking System",
     description:
-      "A robust full stack application enabling admins, service providers, and users to manage/user parking slots and bookings.",
+      "Full-stack parking management system with role-based dashboards for admins, service providers, and users. Features real-time slot tracking, multiple vehicle support, and Redux state management.",
     technologies: [
-      "MERN Stack",
-      "React Router",
-      "Redux with persistence storage",
-      "Tailwinds",
+      "React.js",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Redux",
+      "Tailwind CSS",
+      "JWT",
       "RBAC",
-      "JWT Authentication",
     ],
     links: [
       {
@@ -76,7 +145,7 @@ const projectsData: ProjectItem[] = [
         type: "github",
       },
       {
-        link: "https://bharatbhusal.com/coming-soon",
+        link: "https://park-your-car.vercel.app",
         icon: CgWebsite,
         type: "website",
       },
@@ -84,9 +153,27 @@ const projectsData: ProjectItem[] = [
     highlight: "PINNED",
   },
   {
+    project: "Telegram Web3 Zone Bot",
+    description:
+      "Telegram bot for Web3 ecosystem interactions with modular architecture. Features aiogram framework, environment validation, custom handlers, and Docker deployment support.",
+    technologies: [
+      "Python",
+      "aiogram",
+      "Telegram Bot API",
+      "Docker",
+    ],
+    links: [
+      {
+        link: "https://github.com/bharatbhusal/tg_web3_zone",
+        icon: FaGithub,
+        type: "github",
+      },
+    ],
+  },
+  {
     project: "Stader Staking Platform",
     description:
-      "A cryptocurrency staking platform deployed on Goerli Testnet, enabling users to stake, unstake, and withdraw ETH, integrating with blockchain smart contracts via Ethers.js.",
+      "Cryptocurrency staking platform on Goerli Testnet enabling users to stake, unstake, and withdraw ETH. Integrates with blockchain smart contracts via Ethers.js with React frontend.",
     technologies: [
       "React.js",
       "Ethers.js",
@@ -100,35 +187,25 @@ const projectsData: ProjectItem[] = [
         icon: FaGithub,
         type: "github",
       },
-      {
-        link: "https://bharatbhusal.com/coming-soon",
-        icon: CgWebsite,
-        type: "website",
-      },
     ],
   },
   {
     project: "LeCal Telegram Bot",
     description:
-      "A telegram bot automating group moderation tasks such as banning and muting users, with real-time dynamic content triggers.",
-    technologies: ["Python", "Telegram Bot API", "Docker", "Third-party APIs"],
+      "Telegram chatbot automating group moderation with ban/mute capabilities and real-time dynamic content triggers. Features Docker deployment and third-party API integrations.",
+    technologies: ["Python", "Telegram Bot API", "Docker"],
     links: [
       {
         link: "https://github.com/bharatbhusal/lecal",
         icon: FaGithub,
         type: "github",
       },
-      {
-        link: "https://bharatbhusal.com/coming-soon",
-        icon: CgWebsite,
-        type: "website",
-      },
     ],
   },
   {
     project: "Semester Routine Manager",
     description:
-      "An application for managing and displaying class schedules and faculty contacts/details, featuring easily replaceable components.",
+      "Class schedule and faculty contact management application with easily replaceable components. Features responsive design and React Router navigation.",
     technologies: ["React.js", "CSS", "React Router"],
     links: [
       {
@@ -146,7 +223,7 @@ const projectsData: ProjectItem[] = [
   {
     project: "Whale Games",
     description:
-      "A crypto wallet-integrated gambling game using Terra chain SDK for seamless on-chain transaction handling.",
+      "Crypto wallet-integrated gambling game using Terra blockchain SDK for seamless on-chain transactions. Features React frontend with Terra SDK integration.",
     technologies: [
       "React.js",
       "Node.js",
@@ -160,17 +237,12 @@ const projectsData: ProjectItem[] = [
         icon: FaGithub,
         type: "github",
       },
-      {
-        link: "https://bharatbhusal.com/coming-soon",
-        icon: CgWebsite,
-        type: "website",
-      },
     ],
   },
   {
     project: "Imagine Image",
     description:
-      "Full stack application using OpenAI APIs to generate images based on textual prompts.",
+      "AI image generation platform using OpenAI DALL-E API to create images from text prompts. Full-stack application with Node.js backend and React frontend.",
     technologies: ["React.js", "Node.js", "OpenAI API", "CSS"],
     links: [
       {
@@ -188,8 +260,8 @@ const projectsData: ProjectItem[] = [
   {
     project: "Function Selector",
     description:
-      "A frontend application to extract the function selector from a given Solidity function signature.",
-    technologies: ["React.js", "Tailwinds", "Vite", "js-sha3"],
+      "Solidity function selector extraction tool for smart contract development. Computes function selectors from function signatures using keccak256 hashing.",
+    technologies: ["React.js", "Tailwind CSS", "Vite", "js-sha3"],
     links: [
       {
         link: "https://github.com/bharatbhusal/function_selector",
@@ -203,24 +275,10 @@ const projectsData: ProjectItem[] = [
       },
     ],
   },
-  // {
-  // 	project: "Router Admin Saviour",
-  // 	description:
-  // 		"A tool for Router Protocol’s community Moderators to resolve users' issues smoothly.",
-  // 	technologies: ["React.js", "Node.js"],
-  // 	links: [
-  // 		{
-  // 			link:
-  // 				"https://github.com/bharatbhusal/router-admin-saviour",
-  // 			icon: FaGithub,
-  //			type: "github",
-  // 		},
-  // 	],
-  // },
   {
     project: "Stopwatch",
     description:
-      "An Interactive and responsive frontend stopwatch application.",
+      "Interactive and responsive stopwatch application with React Context API for state management. Features Email.js integration for sharing results.",
     technologies: ["React.js", "CSS", "React Context API", "Email.js"],
     links: [
       {
@@ -236,8 +294,9 @@ const projectsData: ProjectItem[] = [
     ],
   },
   {
-    project: "True and Dare",
-    description: "A simple full stack questionnaire game for a group.",
+    project: "Truth and Dare",
+    description:
+      "Interactive party game for groups with truth and dare challenges. Integrates third-party APIs for dynamic question generation.",
     technologies: ["React.js", "Third-party APIs", "CSS"],
     links: [
       {
