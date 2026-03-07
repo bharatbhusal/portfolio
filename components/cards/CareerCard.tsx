@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { FaGamepad, FaTelegram } from "react-icons/fa";
+import { FaGamepad, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { FaXTwitter, FaMapLocation } from "react-icons/fa6";
 import { CareerItem } from "@/types";
@@ -53,15 +53,7 @@ const CareerCard = ({
                 className="hover:text-primary transition-colors"
                 aria-label={`Visit ${link.type} link`}
               >
-                {link.icon === CgWebsite ? (
-                  <CgWebsite className="h-5 w-5" />
-                ) : link.icon === FaXTwitter ? (
-                  <FaXTwitter className="h-5 w-5" />
-                ) : link.icon === FaTelegram ? (
-                  <FaTelegram className="h-5 w-5" />
-                ) : (
-                  <FaGamepad className="h-5 w-5" />
-                )}
+                <link.icon className="h-5 w-5" />
               </Link>
             ))}
           </div>
