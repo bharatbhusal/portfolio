@@ -1,10 +1,41 @@
 "use client";
-import { FaGamepad, FaTelegram } from "react-icons/fa";
+import { FaGamepad, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { FaXTwitter } from "react-icons/fa6";
 import { CareerItem } from "@/types";
 
 const careerData: CareerItem[] = [
+  {
+    company: "Keyloop",
+    role: "Software Engineer",
+    duration: "Nov 2025 - Present",
+    address: "Hybrid",
+    description: `An integrated platform for automotive retailers, OEMs, fleet providers and financiers. A smarter, simpler journey for car buyers and owners.`,
+    achievements: [
+      "Working on stories to build and improve epayments products.",
+      "Enhancing development experience by seamlessly integrating AI in day-to-day life.",
+      "Learning to become a team player.",
+    ],
+    links: [
+      {
+        link: "https://keyloop.com/",
+        icon: CgWebsite,
+        type: "website",
+      },
+      {
+        link: "https://x.com/KeyloopAuto",
+        icon: FaXTwitter,
+        type: "twitter",
+      },
+      {
+        link: "https://www.linkedin.com/company/keyloop",
+        icon: FaLinkedin,
+        type: "linkedin",
+      },
+    ],
+
+    highlight: "PINNED",
+  },
   {
     company: "Kanine Klans",
     role: "Blockchain Engineer",

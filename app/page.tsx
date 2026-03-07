@@ -20,7 +20,7 @@ const Home: React.FC = () => {
           {contactInfo.name.full}
         </h1>
         <p className="text-muted-foreground text-base sm:text-lg mt-2 leading-relaxed max-w-xl mx-auto px-4">
-          {contactInfo.tagline}
+          {contactInfo.title}
         </p>
 
         <SocialLinks socialLinks={socialLinks} />

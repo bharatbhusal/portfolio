@@ -9,7 +9,7 @@ export interface Link {
 
 // Career Data Types
 export interface CareerLink extends Link {
-  type: "website" | "twitter" | "telegram" | "game";
+  type: "website" | "twitter" | "telegram" | "game" | "linkedin";
 }
 
 export interface CareerItem {

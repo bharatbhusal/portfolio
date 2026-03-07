@@ -30,20 +30,18 @@ export const contactInfo = {
   },
 
   // Professional Information
-  title: "Fullstack Developer | Web3 Specialist",
-  tagline: "HMU for anything Tech. Fullstack, Web3 and Execution.",
-  bio: "Skilled Security Auditor and MERN Stack Developer with experience in blockchain security and fullstack web application development.",
+  title: "Software Engineer with prior experience in Web3",
+  tagline: "Exploring everything!",
+  bio: "Skilled Security Auditor and Developer with experience in blockchain security and fullstack web application development.",
 
   // Skills & Keywords
   keywords: [
     "Bharat Bhusal",
     "Security Auditor",
-    "MERN Stack Developer",
+    "Fullstack Developer",
     "Community Manager",
-    "Developer",
     "Web Developer",
     "Blockchain Security",
-    "Fullstack Developer",
     "Web3",
   ],
 } as const;
