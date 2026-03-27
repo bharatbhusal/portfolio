@@ -30,7 +30,7 @@ const GitHubStats = ({ username }: GitHubStatsProps) => {
         {/* GitHub Top Langs Card */}
         <div className="flex justify-center">
           <Image
-            src={`https://github-readme-stats-fast.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=radical&theme=${themeParam}&hide_border=true&background=00000000`}
+            src={`https://github-readme-stats-fast.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=${themeParam}&hide_border=true`}
             alt="GitHub Top Langs"
             width={495}
             height={195}
