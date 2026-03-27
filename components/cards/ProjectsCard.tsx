@@ -1,7 +1,5 @@
 "use client";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
 import { ProjectItem } from "@/types";
 import { cn } from "@/lib/utils";
 import MacWindow from "@/components/ui/mac-window";
@@ -30,7 +28,7 @@ const ProjectsCard = ({
                   "px-3 py-1 rounded-full text-sm",
                   "bg-primary/10 dark:bg-primary/20",
                   "border border-primary/20",
-                  "text-foreground"
+                  "text-foreground",
                 )}
               >
                 {tech}
@@ -45,21 +43,12 @@ const ProjectsCard = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors flex items-center gap-2"
-                aria-label={`Visit ${
-                  link.icon === FaGithub ? "GitHub" : "Website"
-                } link`}
+                aria-label={`Visit ${link.type} link`}
               >
-                {link.icon === FaGithub ? (
-                  <>
-                    <FaGithub className="h-5 w-5" />
-                    <span className="text-sm">Repository</span>
-                  </>
-                ) : (
-                  <>
-                    <CgWebsite className="h-5 w-5" />
-                    <span className="text-sm">Live Demo</span>
-                  </>
-                )}
+                <link.icon className="h-5 w-5" />
+                <span className="text-sm">
+                  {link.type === "github" ? "Repository" : "Live Demo"}
+                </span>
               </Link>
             ))}
           </div>

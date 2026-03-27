@@ -60,8 +60,3 @@ export interface SocialLink {
   label: string;
   handle?: string;
 }
-
-export interface ToggleProfileQRProps {
-  profileUrl: string;
-  qrValue: string;
-}

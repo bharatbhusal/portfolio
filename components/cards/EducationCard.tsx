@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
-import { FaLinkedin, FaInstagram, FaFacebook } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
-import { FaMapLocation, FaXTwitter } from "react-icons/fa6";
+import { FaMapLocation } from "react-icons/fa6";
 import { EducationItem } from "@/types";
 import { cn } from "@/lib/utils";
 import MacWindow from "@/components/ui/mac-window";
@@ -56,7 +54,7 @@ const EducationCard = ({
                   "px-3 py-1 rounded-full text-sm",
                   "bg-primary/10 dark:bg-primary/20",
                   "border border-primary/20",
-                  "text-foreground"
+                  "text-foreground",
                 )}
               >
                 {course}
@@ -73,17 +71,7 @@ const EducationCard = ({
                 className="hover:text-primary transition-colors"
                 aria-label={`Visit ${link.type} link`}
               >
-                {link.icon === CgWebsite ? (
-                  <CgWebsite className="h-5 w-5" />
-                ) : link.icon === FaLinkedin ? (
-                  <FaLinkedin className="h-5 w-5" />
-                ) : link.icon === FaXTwitter ? (
-                  <FaXTwitter className="h-5 w-5" />
-                ) : link.icon === FaInstagram ? (
-                  <FaInstagram className="h-5 w-5" />
-                ) : (
-                  <FaFacebook className="h-5 w-5" />
-                )}
+                <link.icon className="h-5 w-5" />
               </Link>
             ))}
           </div>

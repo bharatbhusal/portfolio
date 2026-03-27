@@ -1,8 +1,44 @@
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
 import ThemeSwitcher from "@/components/layout/ThemeSwitcher";
 import Explore from "@/components/layout/Explore";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig, contactInfo } from "@/config";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
+  title: siteConfig.title,
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.author }],
+  openGraph: {
+    title: `${contactInfo.name.full} - ${contactInfo.title}`,
+    description: contactInfo.bio,
+    url: siteConfig.url,
+    type: "website",
+    images: [siteConfig.ogImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${contactInfo.name.full} - ${contactInfo.title}`,
+    description: contactInfo.bio,
+    images: [siteConfig.ogImage],
+    site: siteConfig.twitterHandle,
+  },
+  icons: {
+    icon: siteConfig.ogImage,
+  },
+  alternates: {
+    canonical: siteConfig.url,
+  },
+};
 
 export default function RootLayout({
   children,
@@ -11,49 +47,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        {/* SEO Meta Tags */}
-        <title>{siteConfig.title}</title>
-        <meta name="description" content={siteConfig.description} />
-        <meta name="keywords" content={siteConfig.keywords.join(", ")} />
-        <meta name="author" content={siteConfig.author} />
-
-        {/* Custom Font: Poppins */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
-
-        {/* Open Graph Meta Tags for Social Media Sharing */}
-        <meta
-          property="og:title"
-          content={`${contactInfo.name.full} - ${contactInfo.title}`}
-        />
-        <meta property="og:description" content={contactInfo.bio} />
-        <meta property="og:image" content={siteConfig.ogImage} />
-        <meta property="og:url" content={siteConfig.url} />
-        <meta property="og:type" content="website" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content={`${contactInfo.name.full} - ${contactInfo.title}`}
-        />
-        <meta name="twitter:description" content={contactInfo.bio} />
-        <meta name="twitter:image" content={siteConfig.ogImage} />
-        <meta name="twitter:site" content={siteConfig.twitterHandle} />
-
-        {/* Canonical URL for SEO */}
-        <link rel="canonical" href={siteConfig.url} />
-
-        {/* Favicon */}
-        <link rel="icon" type="image/jpeg" href={siteConfig.ogImage} />
-      </head>
-      <body className="min-h-screen transition-colors duration-300 bg-background text-foreground overflow-x-hidden">
+      <body
+        className={`${poppins.className} min-h-screen transition-colors duration-300 bg-background text-foreground overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme={siteConfig.defaultTheme}

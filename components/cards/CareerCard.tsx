@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
-import { FaGamepad, FaLinkedin, FaTelegram } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
-import { FaXTwitter, FaMapLocation } from "react-icons/fa6";
+import { FaMapLocation } from "react-icons/fa6";
 import { CareerItem } from "@/types";
 import MacWindow from "@/components/ui/mac-window";
 

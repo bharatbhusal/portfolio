@@ -24,8 +24,8 @@ const Projects = () => {
 
         {/* Grid Layout: 1 column (sm), 2 columns (md), 3 columns (lg+) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto pb-8">
-          {sortedProjects.map((project, index) => (
-            <ProjectsCard key={index} {...project} />
+          {sortedProjects.map((project) => (
+            <ProjectsCard key={project.project} {...project} />
           ))}
         </div>
       </div>

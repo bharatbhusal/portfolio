@@ -1,4 +1,3 @@
-"use client";
 import { FaGamepad, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { FaXTwitter } from "react-icons/fa6";

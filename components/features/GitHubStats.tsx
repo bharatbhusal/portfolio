@@ -27,11 +27,11 @@ const GitHubStats = ({ username }: GitHubStatsProps) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* GitHub Stats Card */}
+        {/* GitHub Top Langs Card */}
         <div className="flex justify-center">
           <Image
-            src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${themeParam}&hide_border=true&bg_color=00000000`}
-            alt="GitHub Stats"
+            src={`https://github-readme-stats-fast.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=radical&theme=${themeParam}&hide_border=true&background=00000000`}
+            alt="GitHub Top Langs"
             width={495}
             height={195}
             className="rounded-lg"

@@ -25,8 +25,8 @@ const Education = () => {
 
       {/* Grid Layout: 1 column (sm), 2 columns (md), 3 columns (lg+) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-8">
-        {sortedEducation.map((item, index) => (
-          <EducationCard key={index} {...item} />
+        {sortedEducation.map((item) => (
+          <EducationCard key={item.institution} {...item} />
         ))}
       </div>
     </div>

@@ -6,7 +6,6 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
 
 interface MacWindowProps {
   children: React.ReactNode;
@@ -21,16 +20,6 @@ const MacWindow: React.FC<MacWindowProps> = ({
   className,
   highlight,
 }) => {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Use class-based approach to avoid hydration mismatch
-  const isDark = mounted ? resolvedTheme === "dark" : false;
-
   return (
     <div
       className={cn(
@@ -39,7 +28,7 @@ const MacWindow: React.FC<MacWindowProps> = ({
         "border-gray-300/50 dark:border-gray-700/50",
         "backdrop-blur-xl",
         highlight && "ring-2 ring-primary/50",
-        className
+        className,
       )}
     >
       {/* macOS Window Title Bar */}
@@ -47,7 +36,7 @@ const MacWindow: React.FC<MacWindowProps> = ({
         className={cn(
           "flex items-center px-4 py-3 border-b",
           "bg-gray-100/50 dark:bg-gray-900/50",
-          "border-gray-200/50 dark:border-gray-700/50"
+          "border-gray-200/50 dark:border-gray-700/50",
         )}
       >
         {/* Traffic Light Buttons */}
@@ -62,7 +51,7 @@ const MacWindow: React.FC<MacWindowProps> = ({
           <div
             className={cn(
               "flex-1 text-center text-sm font-medium",
-              "text-gray-700 dark:text-gray-300"
+              "text-gray-700 dark:text-gray-300",
             )}
           >
             {title}

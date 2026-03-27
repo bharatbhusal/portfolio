@@ -1,4 +1,3 @@
-"use client";
 import { FaGithub } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 import { ProjectItem } from "@/types";
