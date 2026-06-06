@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import ThemeSwitcher from "@/components/layout/ThemeSwitcher";
-import Explore from "@/components/layout/Explore";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Header, Footer } from "@/components/layout";
 import { siteConfig, contactInfo } from "@/config";
 
 const poppins = Poppins({
@@ -56,12 +55,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          {/* Navigation and Theme controls - Fixed position */}
-          <Explore />
-          <ThemeSwitcher />
-
-          {/* Main content - Full screen */}
+          <Header />
           <main className="min-h-screen">{children}</main>
+          {/* <Footer /> */}
         </ThemeProvider>
       </body>
     </html>

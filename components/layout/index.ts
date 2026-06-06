@@ -1,7 +1,3 @@
-/**
- * Layout Components Index
- * Export all layout-related components
- */
-
-export { default as Explore } from "./Explore";
-export { default as ThemeSwitcher } from "./ThemeSwitcher";
+export { default as Header } from "./Header";
+export { default as Footer } from "./Footer";
+export { default as MobileNav } from "./MobileNav";

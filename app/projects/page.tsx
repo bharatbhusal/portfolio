@@ -1,11 +1,12 @@
 "use client";
-import ProjectsCard from "@/components/cards/ProjectsCard";
+
+import React, { useMemo } from "react";
 import projectsData from "@/data/projectsData";
+import { ProjectCard } from "@/components/cards";
+import { SectionWrapper } from "@/components/features";
 import GitHubStats from "@/components/features/GitHubStats";
-import { useMemo } from "react";
 
 const Projects = () => {
-  // Sort projects: highlighted first, then rest
   const sortedProjects = useMemo(() => {
     return [...projectsData].sort((a, b) => {
       if (a.highlight && !b.highlight) return -1;
@@ -15,31 +16,27 @@ const Projects = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full min-h-screen py-8 z-0 overflow-y-auto space-y-12">
-      {/* Projects Section */}
-      <div className="space-y-6 px-4 sm:px-6 md:px-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Projects</h1>
-        </div>
-
-        {/* Grid Layout: 1 column (sm), 2 columns (md), 3 columns (lg+) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto pb-8">
+    <>
+      <div className="max-w-7xl mx-auto">
+        <div
+          // ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {sortedProjects.map((project) => (
-            <ProjectsCard key={project.project} {...project} />
+            <ProjectCard key={project.project} {...project} />
           ))}
         </div>
       </div>
 
-      {/* GitHub Stats Section with Bookmark */}
-      <div id="stats" className="w-full px-4 sm:px-6 md:px-8 scroll-mt-20">
-        <h2 className="text-3xl font-bold text-center mb-6">
-          GitHub Statistics
-        </h2>
-        <div className="w-full lg:w-[80%] xl:w-[70%] mx-auto">
+      <SectionWrapper>
+        <div id="stats" className="max-w-4xl mx-auto mt-20 scroll-mt-20">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            GitHub Statistics
+          </h2>
           <GitHubStats username="bharatbhusal" />
         </div>
-      </div>
-    </div>
+      </SectionWrapper>
+    </>
   );
 };
 
