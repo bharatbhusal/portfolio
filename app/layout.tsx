@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header, Footer } from "@/components/layout";
+import { Header } from "@/components/layout";
 import { siteConfig, contactInfo } from "@/config";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -57,8 +58,8 @@ export default function RootLayout({
         >
           <Header />
           <main className="min-h-screen">{children}</main>
-          {/* <Footer /> */}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
