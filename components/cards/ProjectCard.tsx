@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Pin, ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import { ProjectItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,22 +18,12 @@ const ProjectCard = ({
   return (
     <Card
       className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
-        highlight
-          ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]"
-          : ""
+        highlight ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]" : ""
       }`}
     >
       <CardContent className="flex flex-col flex-1 p-6">
         <div className="flex items-start justify-between gap-4 mb-3">
-          <h3 className="font-semibold text-lg">
-            {project}
-          </h3>
-          {highlight && (
-            <Badge variant="default" className="text-[10px] px-2 py-0 h-5 flex-shrink-0">
-              <Pin className="h-3 w-3 mr-1" />
-              {highlight}
-            </Badge>
-          )}
+          <h3 className="font-semibold text-lg">{project}</h3>
         </div>
 
         <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">

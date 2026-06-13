@@ -2,10 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { MapPin, Pin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { CareerItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 const CareerCard = ({
   company,
@@ -20,9 +19,7 @@ const CareerCard = ({
   return (
     <Card
       className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
-        highlight
-          ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]"
-          : ""
+        highlight ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]" : ""
       }`}
     >
       <CardContent className="flex flex-col flex-1 p-6">
@@ -30,12 +27,6 @@ const CareerCard = ({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-lg">{company}</h3>
-              {highlight && (
-                <Badge variant="default" className="text-[10px] px-2 py-0 h-5">
-                  <Pin className="h-3 w-3 mr-1" />
-                  {highlight}
-                </Badge>
-              )}
             </div>
             <p className="text-primary font-medium text-sm">{role}</p>
           </div>
@@ -55,7 +46,10 @@ const CareerCard = ({
 
         <ul className="space-y-2 mb-4">
           {achievements.map((achievement, index) => (
-            <li key={index} className="text-sm text-foreground/80 flex items-start gap-2">
+            <li
+              key={index}
+              className="text-sm text-foreground/80 flex items-start gap-2"
+            >
               <span className="text-primary mt-1.5 h-1 w-1 rounded-full bg-primary flex-shrink-0" />
               {achievement}
             </li>
