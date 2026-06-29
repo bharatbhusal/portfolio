@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 // Common link type used across multiple interfaces
 export interface Link {
   link: string;
-  icon: IconType;
+  icon?: IconType;
   type: string;
 }
 
@@ -42,7 +42,7 @@ export interface EducationItem {
 
 // Projects Data Types
 export interface ProjectLink extends Link {
-  type: "website" | "github";
+  type: "website" | "github" | "details";
 }
 
 export interface ProjectItem {
@@ -51,6 +51,10 @@ export interface ProjectItem {
   technologies: string[];
   links: ProjectLink[];
   highlight?: string;
+  stars?: number;
+  forks?: number;
+  updatedAt?: string;
+  language?: string;
 }
 
 export interface SocialLink {
