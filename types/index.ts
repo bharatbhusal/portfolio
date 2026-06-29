@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 // Common link type used across multiple interfaces
 export interface Link {
   link: string;
-  icon: IconType;
+  icon?: IconType;
   type: string;
 }
 

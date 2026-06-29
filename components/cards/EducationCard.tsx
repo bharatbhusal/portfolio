@@ -7,6 +7,20 @@ import { EducationItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+import { CgWebsite } from "react-icons/cg";
+import { FaLinkedin, FaTelegram, FaGamepad, FaInstagram, FaFacebook } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+
+const iconMap: Record<string, React.ComponentType<any>> = {
+  website: CgWebsite,
+  twitter: FaXTwitter,
+  linkedin: FaLinkedin,
+  telegram: FaTelegram,
+  game: FaGamepad,
+  instagram: FaInstagram,
+  facebook: FaFacebook,
+};
+
 const EducationCard = ({
   institution,
   degree,
@@ -64,18 +78,21 @@ const EducationCard = ({
 
         {links.length > 0 && (
           <div className="flex gap-3 pt-4 border-t mt-auto">
-            {links.map((link, index) => (
-              <Link
-                key={index}
-                href={link.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label={`Visit ${link.type} link`}
-              >
-                <link.icon className="h-4 w-4" />
-              </Link>
-            ))}
+            {links.map((link, index) => {
+              const Icon = iconMap[link.type] || CgWebsite;
+              return (
+                <Link
+                  key={index}
+                  href={link.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  aria-label={`Visit ${link.type} link`}
+                >
+                  <Icon className="h-4 w-4" />
+                </Link>
+              );
+            })}
           </div>
         )}
       </CardContent>

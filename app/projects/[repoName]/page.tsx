@@ -16,10 +16,39 @@ import remarkGfm from "remark-gfm";
 import { getGithubRepoDetails, getGithubRepoReadme, getGithubUsername } from "@/lib/github";
 import MermaidRenderer from "@/components/features/MermaidRenderer";
 
+import type { Metadata } from "next";
+
 interface PageProps {
   params: Promise<{
     repoName: string;
   }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { repoName } = await params;
+  const repo = await getGithubRepoDetails(repoName);
+  
+  if (!repo) {
+    return {
+      title: "Project Not Found",
+      description: "The requested GitHub repository could not be found.",
+    };
+  }
+
+  const formattedName = repo.name
+    .split(/[-_]+/)
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  return {
+    title: formattedName,
+    description: repo.description || `Read the details and documentation of the ${formattedName} repository on the portfolio.`,
+    openGraph: {
+      title: `${formattedName} | Projects`,
+      description: repo.description || `Read the documentation of ${repo.name} on the portfolio.`,
+      type: "article",
+    },
+  };
 }
 
 export default async function ProjectDetailPage({ params }: PageProps) {
