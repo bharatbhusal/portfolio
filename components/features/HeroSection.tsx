@@ -20,7 +20,7 @@ const HeroSection = () => {
     const img = new Image();
     img.onload = () => setLoaded(true);
     img.onerror = () => setLoaded(true);
-    img.src = "/bharatbhusal.jpeg";
+    img.src = "/name.jpeg";
   }, []);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const HeroSection = () => {
       <div ref={containerRef} className="max-w-2xl mx-auto px-4 text-center">
         <div className="hero-avatar">
           <ToggleProfileQR
-            profileUrl="/bharatbhusal.jpeg"
+            profileUrl="/name.jpeg"
             qrValue={`${siteConfig.url}/api/contact/vcard`}
             name={contactInfo.name.full}
           />

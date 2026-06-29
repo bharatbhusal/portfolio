@@ -46,7 +46,7 @@ const MobileNav = ({ navItems, pathname }: MobileNavProps) => {
           {/* Profile card */}
           <div className="flex items-center gap-3 px-4 py-6 border-b">
             <Avatar className="w-10 h-10">
-              <AvatarImage src="/bharatbhusal.jpeg" alt={contactInfo.name.full} className="object-cover" />
+              <AvatarImage src="/name.jpeg" alt={contactInfo.name.full} className="object-cover" />
               <AvatarFallback className="text-sm font-semibold">
                 {contactInfo.name.first.charAt(0)}
               </AvatarFallback>
