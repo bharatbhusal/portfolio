@@ -15,10 +15,9 @@ export interface GithubRepo {
 }
 
 export function getGithubUsername(): string {
-  return process.env.NEXT_PUBLIC_GITHUB_USERNAME ||
-         process.env.GITHUB_USERNAME ||
-         contactInfo.social.github.split("/").pop() ||
-         "bharatbhusal";
+  return process.env.GITHUB_USERNAME ||
+    contactInfo.social.github.split("/").pop() ||
+    "bharatbhusal";
 }
 
 // Dedicated central client for all GitHub API requests
@@ -67,7 +66,7 @@ export async function fetchGithubRepos(): Promise<GithubRepo[]> {
 
 export async function getGithubProjects(): Promise<ProjectItem[]> {
   const repos = await fetchGithubRepos();
-  
+
   if (repos.length === 0) {
     return [];
   }
@@ -120,7 +119,7 @@ export async function getGithubRepoDetails(repoName: string): Promise<any | null
 export async function getGithubRepoReadme(repoName: string): Promise<string> {
   const username = getGithubUsername();
   const data = await githubFetch<any>(`repos/${username}/${repoName}/readme`);
-  
+
   if (data && data.content && data.encoding === "base64") {
     const cleanBase64 = data.content.replace(/\s/g, "");
     return Buffer.from(cleanBase64, "base64").toString("utf8");
