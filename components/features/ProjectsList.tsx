@@ -21,8 +21,8 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   // Client-side states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("all");
-  const [sortBy, setSortBy] = useState<"name" | "updated">("name");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortBy, setSortBy] = useState<"name" | "updated">("updated");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
