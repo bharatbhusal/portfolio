@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, ChevronLeft, ChevronRight, ChevronDown, Cpu } from "lucide-react";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Cpu,
+} from "lucide-react";
 import { ProjectCard } from "@/components/cards";
 import { ProjectItem } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -21,8 +27,8 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   // Client-side states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("all");
-  const [sortBy, setSortBy] = useState<"name" | "updated">("name");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortBy, setSortBy] = useState<"name" | "updated">("updated");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -30,8 +36,8 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   // Extract unique topics across all repositories
   const allTopics = useMemo(() => {
     const topicsSet = new Set<string>();
-    initialProjects.forEach(proj => {
-      proj.technologies?.forEach(tech => {
+    initialProjects.forEach((proj) => {
+      proj.technologies?.forEach((tech) => {
         topicsSet.add(tech.toLowerCase());
       });
     });
@@ -46,7 +52,7 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   // Handle Sort button clicks
   const handleSortClick = (field: "name" | "updated") => {
     if (sortBy === field) {
-      setSortOrder(prev => prev === "asc" ? "desc" : "asc");
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
       setSortBy(field);
       setSortOrder(field === "updated" ? "desc" : "asc");
@@ -56,22 +62,26 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   // Filter and sort repositories
   const processedProjects = useMemo(() => {
     // 1. Filter by search query
-    let filtered = initialProjects.filter(proj => {
-      const nameMatch = proj.project.toLowerCase().includes(searchQuery.toLowerCase());
-      const descMatch = proj.description.toLowerCase().includes(searchQuery.toLowerCase());
+    let filtered = initialProjects.filter((proj) => {
+      const nameMatch = proj.project
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const descMatch = proj.description
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
       return nameMatch || descMatch;
     });
 
     // 2. Filter by topic
     if (selectedTopic !== "all") {
-      filtered = filtered.filter(proj =>
-        proj.technologies?.some(tech => tech.toLowerCase() === selectedTopic)
+      filtered = filtered.filter((proj) =>
+        proj.technologies?.some((tech) => tech.toLowerCase() === selectedTopic),
       );
     }
 
     // 3. Filter by featured (pinned) only
     if (featuredOnly) {
-      filtered = filtered.filter(proj => proj.highlight === "PINNED");
+      filtered = filtered.filter((proj) => proj.highlight === "PINNED");
     }
 
     // 4. Sort projects: Pinned items are always placed at the top first, then apply criteria
@@ -96,10 +106,20 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
         return sortOrder === "asc" ? compare : -compare;
       }
     });
-  }, [initialProjects, searchQuery, selectedTopic, sortBy, sortOrder, featuredOnly]);
+  }, [
+    initialProjects,
+    searchQuery,
+    selectedTopic,
+    sortBy,
+    sortOrder,
+    featuredOnly,
+  ]);
 
   // Pagination bounds
-  const totalPages = Math.max(1, Math.ceil(processedProjects.length / itemsPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(processedProjects.length / itemsPerPage),
+  );
   const paginatedProjects = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return processedProjects.slice(startIndex, startIndex + itemsPerPage);
@@ -141,7 +161,7 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
           <Button
             variant={featuredOnly ? "default" : "outline"}
             size="sm"
-            onClick={() => setFeaturedOnly(prev => !prev)}
+            onClick={() => setFeaturedOnly((prev) => !prev)}
             className="h-8 text-xs rounded-lg border border-border"
           >
             Featured
@@ -163,21 +183,31 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
               onClick={() => handleSortClick("updated")}
               className="h-7 text-xs rounded-md px-3 gap-0.5"
             >
-              Updated {sortBy === "updated" && (sortOrder === "asc" ? "↑" : "↓")}
+              Updated{" "}
+              {sortBy === "updated" && (sortOrder === "asc" ? "↑" : "↓")}
             </Button>
           </div>
 
           {/* Topics Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 text-xs rounded-lg gap-1 border border-border bg-card">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs rounded-lg gap-1 border border-border bg-card"
+              >
                 <span className="capitalize">
-                  {selectedTopic === "all" ? `All Topics (${initialProjects.length})` : `${selectedTopic} (${initialProjects.filter(p => p.technologies?.some(t => t.toLowerCase() === selectedTopic)).length})`}
+                  {selectedTopic === "all"
+                    ? `All Topics (${initialProjects.length})`
+                    : `${selectedTopic} (${initialProjects.filter((p) => p.technologies?.some((t) => t.toLowerCase() === selectedTopic)).length})`}
                 </span>
                 <ChevronDown className="h-3.5 w-3.5 opacity-60" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48 bg-card border border-border max-h-64 overflow-y-auto rounded-lg shadow-lg">
+            <DropdownMenuContent
+              align="start"
+              className="w-48 bg-card border border-border max-h-64 overflow-y-auto rounded-lg shadow-lg"
+            >
               <DropdownMenuRadioGroup
                 value={selectedTopic}
                 onValueChange={setSelectedTopic}
@@ -188,9 +218,9 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
                 >
                   All Topics ({initialProjects.length})
                 </DropdownMenuRadioItem>
-                {allTopics.map(topic => {
-                  const count = initialProjects.filter(p =>
-                    p.technologies?.some(t => t.toLowerCase() === topic)
+                {allTopics.map((topic) => {
+                  const count = initialProjects.filter((p) =>
+                    p.technologies?.some((t) => t.toLowerCase() === topic),
                   ).length;
 
                   return (
@@ -254,17 +284,25 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border/40 font-sans">
           {/* Status text */}
           <span className="text-sm text-muted-foreground">
-            Showing <span className="font-semibold text-foreground">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+            Showing{" "}
+            <span className="font-semibold text-foreground">
+              {(currentPage - 1) * itemsPerPage + 1}
+            </span>{" "}
+            to{" "}
             <span className="font-semibold text-foreground">
               {Math.min(currentPage * itemsPerPage, processedProjects.length)}
             </span>{" "}
-            of <span className="font-semibold text-foreground">{processedProjects.length}</span> projects
+            of{" "}
+            <span className="font-semibold text-foreground">
+              {processedProjects.length}
+            </span>{" "}
+            projects
           </span>
 
           {/* Page buttons */}
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
               className="p-2 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground disabled:opacity-40 disabled:hover:bg-transparent transition-all active:scale-95 h-8 w-8 flex items-center justify-center"
               aria-label="Previous page"
@@ -275,7 +313,10 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
             {pageButtons.map((page, index) => {
               if (page === "....") {
                 return (
-                  <span key={`ellipsis-${index}`} className="px-1.5 text-muted-foreground select-none text-xs font-semibold tracking-widest leading-8">
+                  <span
+                    key={`ellipsis-${index}`}
+                    className="px-1.5 text-muted-foreground select-none text-xs font-semibold tracking-widest leading-8"
+                  >
                     ....
                   </span>
                 );
@@ -286,10 +327,11 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
                 <button
                   key={`page-${pageNum}`}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-all active:scale-95 ${currentPage === pageNum
-                    ? "bg-primary border-primary text-primary-foreground shadow-sm"
-                    : "bg-card border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted"
-                    }`}
+                  className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-all active:scale-95 ${
+                    currentPage === pageNum
+                      ? "bg-primary border-primary text-primary-foreground shadow-sm"
+                      : "bg-card border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
                 >
                   {pageNum}
                 </button>
@@ -297,7 +339,9 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
             })}
 
             <button
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
               disabled={currentPage === totalPages}
               className="p-2 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground disabled:opacity-40 disabled:hover:bg-transparent transition-all active:scale-95 h-8 w-8 flex items-center justify-center"
               aria-label="Next page"
