@@ -4,15 +4,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <div className="max-w-7xl mx-auto">
-      {/* Breadcrumb Skeleton */}
-      <div className="flex items-center gap-2 mb-8">
-        <Skeleton className="h-4 w-12" />
-        <span className="text-muted-foreground">/</span>
-        <Skeleton className="h-4 w-16" />
-        <span className="text-muted-foreground">/</span>
-        <Skeleton className="h-4 w-28" />
-      </div>
-
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left/Main Column - Readme Skeleton (3/4 width) */}

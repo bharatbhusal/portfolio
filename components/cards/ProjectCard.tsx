@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Github, BookOpen, Star, GitFork } from "lucide-react";
+import { ExternalLink, Github, BookOpen, Star, GitFork, GitBranch } from "lucide-react";
 import { ProjectItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ const ProjectCard = ({
   forks,
   updatedAt,
   language,
+  latestCommit,
 }: ProjectItem) => {
   return (
     <Card
@@ -50,18 +51,29 @@ const ProjectCard = ({
           {description}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {technologies.map((tech, index) => (
-            <Badge key={index} variant="secondary" className="text-[10px]">
-              {tech}
-            </Badge>
-          ))}
-        </div>
+        {technologies.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {technologies.map((tech, index) => (
+              <Badge key={index} variant="secondary" className="text-[10px]">
+                {tech}
+              </Badge>
+            ))}
+          </div>
+        )}
 
-        {/* Metadata Row: Language & Last Updated */}
+        {/* Commit metadata */}
+        {latestCommit && (
+          <div className="flex items-center gap-1 font-mono text-[11px] mb-2 truncate min-w-0" title={`${latestCommit.branch}: ${latestCommit.message}`}>
+            <GitBranch className="h-3 w-3 shrink-0 text-primary" />
+            <span className="text-primary font-semibold shrink-0">{latestCommit.branch}</span>
+            <span className="text-muted-foreground truncate">:{latestCommit.message.split('\n')[0]}</span>
+          </div>
+        )}
+
+        {/* Language & Last Updated */}
         <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-4">
           {language && (
-            <span className="flex items-center gap-1.5 font-medium">
+            <span className="flex items-center gap-1 font-medium">
               <span className="h-2 w-2 rounded-full bg-primary" />
               {language}
             </span>
