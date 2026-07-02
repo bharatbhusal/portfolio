@@ -45,6 +45,11 @@ export interface ProjectLink extends Link {
   type: "website" | "github" | "details";
 }
 
+export interface LatestCommit {
+  branch: string;
+  message: string;
+}
+
 export interface ProjectItem {
   project: string;
   description: string;
@@ -55,6 +60,7 @@ export interface ProjectItem {
   forks?: number;
   updatedAt?: string;
   language?: string;
+  latestCommit?: LatestCommit;
 }
 
 export interface SocialLink {

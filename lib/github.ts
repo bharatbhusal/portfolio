@@ -12,6 +12,30 @@ export interface GithubRepo {
   language: string | null;
   fork: boolean;
   updated_at: string;
+  default_branch: string;
+}
+
+interface GraphQLCommitInfo {
+  message: string;
+  oid: string;
+}
+
+interface GraphQLBranchRef {
+  name: string;
+  target: GraphQLCommitInfo | null;
+}
+
+interface GraphQLRepoNode {
+  name: string;
+  defaultBranchRef: GraphQLBranchRef | null;
+}
+
+interface GraphQLReposData {
+  repositoryOwner: {
+    repositories: {
+      nodes: GraphQLRepoNode[];
+    };
+  };
 }
 
 export function getGithubUsername(): string {
@@ -64,6 +88,43 @@ export async function fetchGithubRepos(): Promise<GithubRepo[]> {
   return repos || [];
 }
 
+// GraphQL client for batch queries
+async function githubGraphQLFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+  headers.set("Accept", "application/vnd.github+json");
+  headers.set("User-Agent", "bharatbhusal-portfolio");
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  try {
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query, variables }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      console.error(`GitHub GraphQL error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const json = await response.json();
+    if (json.errors) {
+      console.error("GitHub GraphQL errors:", json.errors);
+      return null;
+    }
+
+    return json.data as T;
+  } catch (error) {
+    console.error("GitHub GraphQL fetch failed:", error);
+    return null;
+  }
+}
+
 export async function getGithubProjects(): Promise<ProjectItem[]> {
   const repos = await fetchGithubRepos();
 
@@ -71,34 +132,32 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
     return [];
   }
 
-  // Filter out forks so only original repositories are shown
-  const sourceRepos = repos.filter(repo => !repo.fork);
+  const shyTopics = ["pin", "shy"];
 
-  const mappedProjects: ProjectItem[] = sourceRepos.map(repo => {
+  // Filter out repos with "shy" topic
+  const visibleRepos = repos.filter(
+    repo => !repo.topics?.some(t => shyTopics.includes(t.toLowerCase()))
+  );
+
+  const mappedProjects: ProjectItem[] = visibleRepos.map(repo => {
     const links = [
       { link: repo.html_url, type: "github", icon: null as any }
     ] as any[];
 
-    // Add homepage link if it exists on GitHub
     if (repo.homepage) {
       links.push({ link: repo.homepage, type: "website", icon: null as any });
     }
 
-    // Add internal details link for README page
     links.push({ link: `/projects/${repo.name}`, type: "details", icon: null as any });
 
-    // Check if the repo has 'pin' (case-insensitive) in its topics
     const isPinned = repo.topics?.some(t => t.toLowerCase() === "pin");
 
     return {
       project: formatRepoName(repo.name),
       description: repo.description || "No description provided.",
-      // Show topics directly, filtering out the system 'pin' topic. Fallback to main language.
-      technologies: (repo.topics && repo.topics.length > 0)
-        ? repo.topics.filter(t => t.toLowerCase() !== "pin")
-        : repo.language
-          ? [repo.language]
-          : [],
+      technologies: repo.topics?.filter(
+        t => !shyTopics.includes(t.toLowerCase())
+      ) || [],
       links,
       highlight: isPinned ? "PINNED" : undefined,
       stars: repo.stargazers_count,
@@ -108,7 +167,52 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
     };
   });
 
-  return mappedProjects;
+  // Batch-fetch latest commits for all repos in a single GraphQL call
+  const commitQuery = `
+    query ReposWithDefaultBranch($username: String!) {
+      repositoryOwner(login: $username) {
+        repositories(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            name
+            defaultBranchRef {
+              name
+              target {
+                ... on Commit {
+                  message
+                  oid
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const commitData = await githubGraphQLFetch<GraphQLReposData>(commitQuery, { username: getGithubUsername() });
+  const commitMap = new Map<string, { branch: string; message: string }>();
+
+  if (commitData?.repositoryOwner?.repositories?.nodes) {
+    for (const node of commitData.repositoryOwner.repositories.nodes) {
+      if (node.defaultBranchRef?.target) {
+        commitMap.set(node.name, {
+          branch: node.defaultBranchRef.name,
+          message: node.defaultBranchRef.target.message,
+        });
+      }
+    }
+  }
+
+  return mappedProjects.map(project => {
+    const repo = visibleRepos.find(r => formatRepoName(r.name) === project.project);
+    if (!repo) return project;
+    const commit = commitMap.get(repo.name);
+    if (!commit) return project;
+    return {
+      ...project,
+      latestCommit: commit,
+    };
+  });
 }
 
 export async function getGithubRepoDetails(repoName: string): Promise<any | null> {
