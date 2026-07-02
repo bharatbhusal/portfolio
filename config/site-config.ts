@@ -17,7 +17,7 @@ export const siteConfig = {
   keywords: contactInfo.keywords,
 
   // Open Graph / Social Media
-  ogImage: "/bharatbhusal.jpeg",
+  ogImage: "/name.jpeg",
   twitterHandle: "@bharatbhusal02",
 
   // Theme

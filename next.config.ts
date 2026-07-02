@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "github-readme-stats-fast.vercel.app",
+      },
+      {
+        protocol: "https",
         hostname: "github-readme-streak-stats.herokuapp.com",
       },
     ],

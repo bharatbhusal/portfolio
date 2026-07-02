@@ -1,0 +1,239 @@
+import { contactInfo } from "@/config/contact-info";
+import { ProjectItem } from "@/types";
+
+export interface GithubRepo {
+  name: string;
+  description: string | null;
+  html_url: string;
+  homepage: string | null;
+  topics: string[];
+  stargazers_count: number;
+  forks_count: number;
+  language: string | null;
+  fork: boolean;
+  updated_at: string;
+  default_branch: string;
+}
+
+interface GraphQLCommitInfo {
+  message: string;
+  oid: string;
+}
+
+interface GraphQLBranchRef {
+  name: string;
+  target: GraphQLCommitInfo | null;
+}
+
+interface GraphQLRepoNode {
+  name: string;
+  defaultBranchRef: GraphQLBranchRef | null;
+}
+
+interface GraphQLReposData {
+  repositoryOwner: {
+    repositories: {
+      nodes: GraphQLRepoNode[];
+    };
+  };
+}
+
+export function getGithubUsername(): string {
+  return process.env.GITHUB_USERNAME ||
+    contactInfo.social.github.split("/").pop() ||
+    "bharatbhusal";
+}
+
+// Dedicated central client for all GitHub API requests
+async function githubFetch<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const headers = new Headers();
+  headers.set("Accept", "application/vnd.github+json");
+  headers.set("User-Agent", "bharatbhusal-portfolio");
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  if (options?.headers) {
+    const extraHeaders = new Headers(options.headers);
+    extraHeaders.forEach((value, key) => {
+      headers.set(key, value);
+    });
+  }
+
+  const url = `https://api.github.com/${endpoint.replace(/^\//, "")}`;
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      next: { revalidate: 3600, ...options?.next }, // Cache for 1 hour by default
+    });
+
+    if (!response.ok) {
+      console.error(`GitHub API error on ${url}: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    return await response.json() as T;
+  } catch (error) {
+    console.error(`GitHub fetch failed on ${url}:`, error);
+    return null;
+  }
+}
+
+export async function fetchGithubRepos(): Promise<GithubRepo[]> {
+  const username = getGithubUsername();
+  const repos = await githubFetch<GithubRepo[]>(
+    `users/${username}/repos?sort=updated&per_page=100`
+  );
+  return repos || [];
+}
+
+// GraphQL client for batch queries
+async function githubGraphQLFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+  headers.set("Accept", "application/vnd.github+json");
+  headers.set("User-Agent", "bharatbhusal-portfolio");
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  try {
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query, variables }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      console.error(`GitHub GraphQL error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const json = await response.json();
+    if (json.errors) {
+      console.error("GitHub GraphQL errors:", json.errors);
+      return null;
+    }
+
+    return json.data as T;
+  } catch (error) {
+    console.error("GitHub GraphQL fetch failed:", error);
+    return null;
+  }
+}
+
+export async function getGithubProjects(): Promise<ProjectItem[]> {
+  const repos = await fetchGithubRepos();
+
+  if (repos.length === 0) {
+    return [];
+  }
+
+  const shyTopics = ["pin", "shy"];
+
+  // Filter out repos with "shy" topic
+  const visibleRepos = repos.filter(
+    repo => !repo.topics?.some(t => shyTopics.includes(t.toLowerCase()))
+  );
+
+  const mappedProjects: ProjectItem[] = visibleRepos.map(repo => {
+    const links = [
+      { link: repo.html_url, type: "github", icon: null as any }
+    ] as any[];
+
+    if (repo.homepage) {
+      links.push({ link: repo.homepage, type: "website", icon: null as any });
+    }
+
+    links.push({ link: `/projects/${repo.name}`, type: "details", icon: null as any });
+
+    const isPinned = repo.topics?.some(t => t.toLowerCase() === "pin");
+
+    return {
+      project: formatRepoName(repo.name),
+      description: repo.description || "No description provided.",
+      technologies: repo.topics?.filter(
+        t => !shyTopics.includes(t.toLowerCase())
+      ) || [],
+      links,
+      highlight: isPinned ? "PINNED" : undefined,
+      stars: repo.stargazers_count,
+      forks: repo.forks_count,
+      updatedAt: repo.updated_at,
+      language: repo.language || undefined,
+    };
+  });
+
+  // Batch-fetch latest commits for all repos in a single GraphQL call
+  const commitQuery = `
+    query ReposWithDefaultBranch($username: String!) {
+      repositoryOwner(login: $username) {
+        repositories(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            name
+            defaultBranchRef {
+              name
+              target {
+                ... on Commit {
+                  message
+                  oid
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const commitData = await githubGraphQLFetch<GraphQLReposData>(commitQuery, { username: getGithubUsername() });
+  const commitMap = new Map<string, { branch: string; message: string }>();
+
+  if (commitData?.repositoryOwner?.repositories?.nodes) {
+    for (const node of commitData.repositoryOwner.repositories.nodes) {
+      if (node.defaultBranchRef?.target) {
+        commitMap.set(node.name, {
+          branch: node.defaultBranchRef.name,
+          message: node.defaultBranchRef.target.message,
+        });
+      }
+    }
+  }
+
+  return mappedProjects.map(project => {
+    const repo = visibleRepos.find(r => formatRepoName(r.name) === project.project);
+    if (!repo) return project;
+    const commit = commitMap.get(repo.name);
+    if (!commit) return project;
+    return {
+      ...project,
+      latestCommit: commit,
+    };
+  });
+}
+
+export async function getGithubRepoDetails(repoName: string): Promise<any | null> {
+  const username = getGithubUsername();
+  return githubFetch<any>(`repos/${username}/${repoName}`);
+}
+
+export async function getGithubRepoReadme(repoName: string): Promise<string> {
+  const username = getGithubUsername();
+  const data = await githubFetch<any>(`repos/${username}/${repoName}/readme`);
+
+  if (data && data.content && data.encoding === "base64") {
+    const cleanBase64 = data.content.replace(/\s/g, "");
+    return Buffer.from(cleanBase64, "base64").toString("utf8");
+  }
+  return "";
+}
+
+function formatRepoName(name: string): string {
+  return name
+    .split(/[-_]+/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

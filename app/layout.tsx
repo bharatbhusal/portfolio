@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import ThemeSwitcher from "@/components/layout/ThemeSwitcher";
-import Explore from "@/components/layout/Explore";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Header } from "@/components/layout";
 import { siteConfig, contactInfo } from "@/config";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -14,7 +14,10 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: siteConfig.title,
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.title}`,
+  },
   description: siteConfig.description,
   keywords: [...siteConfig.keywords],
   authors: [{ name: siteConfig.author }],
@@ -56,13 +59,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          {/* Navigation and Theme controls - Fixed position */}
-          <Explore />
-          <ThemeSwitcher />
-
-          {/* Main content - Full screen */}
+          <Header />
           <main className="min-h-screen">{children}</main>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
