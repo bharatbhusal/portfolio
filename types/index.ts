@@ -53,9 +53,9 @@ export interface LatestCommit {
 export interface ProjectItem {
   project: string;
   description: string;
-  technologies: string[];
+  tags: string[];
   links: ProjectLink[];
-  highlight?: string;
+  isFeatured?: boolean;
   stars?: number;
   forks?: number;
   updatedAt?: string;

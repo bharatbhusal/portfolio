@@ -39,13 +39,18 @@ interface GraphQLReposData {
 }
 
 export function getGithubUsername(): string {
-  return process.env.GITHUB_USERNAME ||
+  return (
+    process.env.GITHUB_USERNAME ||
     contactInfo.social.github.split("/").pop() ||
-    "bharatbhusal";
+    "bharatbhusal"
+  );
 }
 
 // Dedicated central client for all GitHub API requests
-async function githubFetch<T>(endpoint: string, options?: RequestInit): Promise<T | null> {
+async function githubFetch<T>(
+  endpoint: string,
+  options?: RequestInit,
+): Promise<T | null> {
   const token = process.env.GITHUB_TOKEN;
   const headers = new Headers();
   headers.set("Accept", "application/vnd.github+json");
@@ -69,11 +74,13 @@ async function githubFetch<T>(endpoint: string, options?: RequestInit): Promise<
     });
 
     if (!response.ok) {
-      console.error(`GitHub API error on ${url}: ${response.status} ${response.statusText}`);
+      console.error(
+        `GitHub API error on ${url}: ${response.status} ${response.statusText}`,
+      );
       return null;
     }
 
-    return await response.json() as T;
+    return (await response.json()) as T;
   } catch (error) {
     console.error(`GitHub fetch failed on ${url}:`, error);
     return null;
@@ -83,13 +90,16 @@ async function githubFetch<T>(endpoint: string, options?: RequestInit): Promise<
 export async function fetchGithubRepos(): Promise<GithubRepo[]> {
   const username = getGithubUsername();
   const repos = await githubFetch<GithubRepo[]>(
-    `users/${username}/repos?sort=updated&per_page=100`
+    `users/${username}/repos?sort=updated&per_page=100`,
   );
   return repos || [];
 }
 
 // GraphQL client for batch queries
-async function githubGraphQLFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T | null> {
+async function githubGraphQLFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>,
+): Promise<T | null> {
   const token = process.env.GITHUB_TOKEN;
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
@@ -108,7 +118,9 @@ async function githubGraphQLFetch<T>(query: string, variables?: Record<string, u
     });
 
     if (!response.ok) {
-      console.error(`GitHub GraphQL error: ${response.status} ${response.statusText}`);
+      console.error(
+        `GitHub GraphQL error: ${response.status} ${response.statusText}`,
+      );
       return null;
     }
 
@@ -132,34 +144,39 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
     return [];
   }
 
-  const shyTopics = ["pin", "shy"];
+  const shyTopics = ["shy"];
 
   // Filter out repos with "shy" topic
   const visibleRepos = repos.filter(
-    repo => !repo.topics?.some(t => shyTopics.includes(t.toLowerCase()))
+    (repo) => !repo.topics?.some((t) => shyTopics.includes(t.toLowerCase())),
   );
 
-  const mappedProjects: ProjectItem[] = visibleRepos.map(repo => {
+  const mappedProjects: ProjectItem[] = visibleRepos.map((repo) => {
     const links = [
-      { link: repo.html_url, type: "github", icon: null as any }
+      { link: repo.html_url, type: "github", icon: null as any },
     ] as any[];
 
     if (repo.homepage) {
       links.push({ link: repo.homepage, type: "website", icon: null as any });
     }
 
-    links.push({ link: `/projects/${repo.name}`, type: "details", icon: null as any });
+    links.push({
+      link: `/projects/${repo.name}`,
+      type: "details",
+      icon: null as any,
+    });
 
-    const isPinned = repo.topics?.some(t => t.toLowerCase() === "pin");
+    const isFeatured = repo.topics?.some((t) => t.toLowerCase() === "pin");
 
     return {
       project: formatRepoName(repo.name),
       description: repo.description || "No description provided.",
-      technologies: repo.topics?.filter(
-        t => !shyTopics.includes(t.toLowerCase())
-      ) || [],
+      tags:
+        repo.topics?.filter(
+          (t) => !shyTopics.includes(t.toLowerCase()) && t !== "pin",
+        ) || [],
       links,
-      highlight: isPinned ? "PINNED" : undefined,
+      isFeatured,
       stars: repo.stargazers_count,
       forks: repo.forks_count,
       updatedAt: repo.updated_at,
@@ -189,7 +206,9 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
     }
   `;
 
-  const commitData = await githubGraphQLFetch<GraphQLReposData>(commitQuery, { username: getGithubUsername() });
+  const commitData = await githubGraphQLFetch<GraphQLReposData>(commitQuery, {
+    username: getGithubUsername(),
+  });
   const commitMap = new Map<string, { branch: string; message: string }>();
 
   if (commitData?.repositoryOwner?.repositories?.nodes) {
@@ -203,8 +222,10 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
     }
   }
 
-  return mappedProjects.map(project => {
-    const repo = visibleRepos.find(r => formatRepoName(r.name) === project.project);
+  return mappedProjects.map((project) => {
+    const repo = visibleRepos.find(
+      (r) => formatRepoName(r.name) === project.project,
+    );
     if (!repo) return project;
     const commit = commitMap.get(repo.name);
     if (!commit) return project;
@@ -215,7 +236,9 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
   });
 }
 
-export async function getGithubRepoDetails(repoName: string): Promise<any | null> {
+export async function getGithubRepoDetails(
+  repoName: string,
+): Promise<any | null> {
   const username = getGithubUsername();
   return githubFetch<any>(`repos/${username}/${repoName}`);
 }
@@ -234,6 +257,6 @@ export async function getGithubRepoReadme(repoName: string): Promise<string> {
 function formatRepoName(name: string): string {
   return name
     .split(/[-_]+/)
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
