@@ -77,8 +77,7 @@ export default function ProjectsFilterBar({
             onClick={() => onSortClick("updated")}
             className="h-7 text-xs rounded-md px-3 gap-0.5"
           >
-            Updated{" "}
-            {sortBy === "updated" && (sortOrder === "asc" ? "↑" : "↓")}
+            Updated {sortBy === "updated" && (sortOrder === "asc" ? "↑" : "↓")}
           </Button>
         </div>
 

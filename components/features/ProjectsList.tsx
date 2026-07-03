@@ -24,8 +24,8 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   const allTopics = useMemo(() => {
     const topicsSet = new Set<string>();
     initialProjects.forEach((proj) => {
-      proj.technologies?.forEach((tech) => {
-        topicsSet.add(tech.toLowerCase());
+      proj.tags?.forEach((tag) => {
+        topicsSet.add(tag.toLowerCase());
       });
     });
     return Array.from(topicsSet).sort();
@@ -44,8 +44,8 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   const topicCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     initialProjects.forEach((proj) => {
-      proj.technologies?.forEach((tech) => {
-        const key = tech.toLowerCase();
+      proj.tags?.forEach((tag) => {
+        const key = tag.toLowerCase();
         counts[key] = (counts[key] || 0) + 1;
       });
     });
@@ -65,7 +65,14 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedTopic, selectedLanguage, sortBy, sortOrder, featuredOnly]);
+  }, [
+    searchQuery,
+    selectedTopic,
+    selectedLanguage,
+    sortBy,
+    sortOrder,
+    featuredOnly,
+  ]);
 
   const handleSortClick = (field: "name" | "updated") => {
     if (sortBy === field) {
@@ -89,23 +96,23 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
 
     if (selectedTopic !== "all") {
       filtered = filtered.filter((proj) =>
-        proj.technologies?.some((tech) => tech.toLowerCase() === selectedTopic),
+        proj.tags?.some((tag) => tag.toLowerCase() === selectedTopic),
       );
     }
 
     if (selectedLanguage !== "all") {
-      filtered = filtered.filter((proj) =>
-        proj.language?.toLowerCase() === selectedLanguage,
+      filtered = filtered.filter(
+        (proj) => proj.language?.toLowerCase() === selectedLanguage,
       );
     }
 
     if (featuredOnly) {
-      filtered = filtered.filter((proj) => proj.highlight === "PINNED");
+      filtered = filtered.filter((proj) => proj.isFeatured);
     }
 
     return [...filtered].sort((a, b) => {
-      const isAPinned = a.highlight === "PINNED";
-      const isBPinned = b.highlight === "PINNED";
+      const isAPinned = a.isFeatured;
+      const isBPinned = b.isFeatured;
 
       if (!featuredOnly) {
         if (isAPinned && !isBPinned) return -1;
@@ -133,7 +140,10 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
     featuredOnly,
   ]);
 
-  const totalPages = Math.max(1, Math.ceil(processedProjects.length / itemsPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(processedProjects.length / itemsPerPage),
+  );
   const paginatedProjects = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return processedProjects.slice(startIndex, startIndex + itemsPerPage);

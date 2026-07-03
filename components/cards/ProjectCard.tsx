@@ -2,7 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Github, BookOpen, Star, GitFork, GitBranch } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  BookOpen,
+  Star,
+  GitFork,
+  GitBranch,
+} from "lucide-react";
 import { ProjectItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,9 +18,9 @@ import { Button } from "@/components/ui/button";
 const ProjectCard = ({
   project,
   description,
-  technologies,
+  tags,
   links,
-  highlight,
+  isFeatured,
   stars,
   forks,
   updatedAt,
@@ -23,7 +30,9 @@ const ProjectCard = ({
   return (
     <Card
       className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
-        highlight ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]" : ""
+        isFeatured
+          ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]"
+          : ""
       }`}
     >
       <CardContent className="flex flex-col flex-1 p-6">
@@ -51,11 +60,11 @@ const ProjectCard = ({
           {description}
         </p>
 
-        {technologies.length > 0 && (
+        {tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
-            {technologies.map((tech, index) => (
+            {tags.map((tag, index) => (
               <Badge key={index} variant="secondary" className="text-[10px]">
-                {tech}
+                {tag}
               </Badge>
             ))}
           </div>
@@ -63,10 +72,17 @@ const ProjectCard = ({
 
         {/* Commit metadata */}
         {latestCommit && (
-          <div className="flex items-center gap-1 font-mono text-[11px] mb-2 truncate min-w-0" title={`${latestCommit.branch}: ${latestCommit.message}`}>
+          <div
+            className="flex items-center gap-1 font-mono text-[11px] mb-2 truncate min-w-0"
+            title={`${latestCommit.branch}: ${latestCommit.message}`}
+          >
             <GitBranch className="h-3 w-3 shrink-0 text-primary" />
-            <span className="text-primary font-semibold shrink-0">{latestCommit.branch}</span>
-            <span className="text-muted-foreground truncate">:{latestCommit.message.split('\n')[0]}</span>
+            <span className="text-primary font-semibold shrink-0">
+              {latestCommit.branch}
+            </span>
+            <span className="text-muted-foreground truncate">
+              :{latestCommit.message.split("\n")[0]}
+            </span>
           </div>
         )}
 
@@ -80,7 +96,8 @@ const ProjectCard = ({
           )}
           {updatedAt && (
             <span>
-              Updated {new Date(updatedAt).toLocaleDateString(undefined, {
+              Updated{" "}
+              {new Date(updatedAt).toLocaleDateString(undefined, {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
@@ -108,8 +125,8 @@ const ProjectCard = ({
                 {link.type === "github"
                   ? "Code"
                   : link.type === "details"
-                  ? "Readme"
-                  : "Demo"}
+                    ? "Readme"
+                    : "Demo"}
               </Button>
             );
 
