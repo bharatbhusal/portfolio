@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Star,
@@ -88,52 +87,52 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
-                    h1: ({ node, ...props }) => (
+                    h1:                     ({ ...props }) => (
                       <h1
                         className="text-3xl font-extrabold border-b pb-2 mb-4 text-foreground"
                         {...props}
                       />
                     ),
-                    h2: ({ node, ...props }) => (
+                    h2:                     ({ ...props }) => (
                       <h2
                         className="text-2xl font-bold border-b pb-1.5 mb-4 text-foreground"
                         {...props}
                       />
                     ),
-                    h3: ({ node, ...props }) => (
+                    h3:                     ({ ...props }) => (
                       <h3
                         className="text-xl font-semibold mb-3 mt-6 text-foreground"
                         {...props}
                       />
                     ),
-                    h4: ({ node, ...props }) => (
+                    h4:                     ({ ...props }) => (
                       <h4
                         className="text-lg font-semibold mb-3 mt-6 text-foreground"
                         {...props}
                       />
                     ),
-                    p: ({ node, ...props }) => (
+                    p:                     ({ ...props }) => (
                       <p
                         className="mb-4 text-muted-foreground leading-relaxed text-sm sm:text-base"
                         {...props}
                       />
                     ),
-                    ul: ({ node, ...props }) => (
+                    ul:                     ({ ...props }) => (
                       <ul
                         className="list-disc pl-6 mb-4 space-y-1 text-muted-foreground text-sm sm:text-base"
                         {...props}
                       />
                     ),
-                    ol: ({ node, ...props }) => (
+                    ol:                     ({ ...props }) => (
                       <ol
                         className="list-decimal pl-6 mb-4 space-y-1 text-muted-foreground text-sm sm:text-base"
                         {...props}
                       />
                     ),
-                    li: ({ node, ...props }) => (
+                    li:                     ({ ...props }) => (
                       <li className="mb-1" {...props} />
                     ),
-                    a: ({ node, href, ...props }) => {
+                    a: ({ href, ...props }) => {
                       const isAnchor = href?.startsWith("#");
                       const isExternal =
                         href?.startsWith("http") || href?.startsWith("//");
@@ -164,8 +163,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         />
                       );
                     },
-                    pre: ({ node, children, ...props }: any) => {
-                      const child = React.Children.only(children) as any;
+                    pre: ({ children, ...props }) => {
+                      const child = React.Children.only(children) as React.ReactElement<{
+                        className?: string;
+                      }>;
                       if (
                         child &&
                         child.props &&
@@ -182,7 +183,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         </pre>
                       );
                     },
-                    code: ({ node, className, children, ...props }: any) => {
+                    code: ({ className, children, ...props }) => {
                       const isBlock =
                         className?.includes("language-") ||
                         (typeof children === "string" &&
@@ -207,7 +208,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         </code>
                       );
                     },
-                    table: ({ node, ...props }) => (
+                    table:                     ({ ...props }) => (
                       <div className="overflow-x-auto my-6 border border-border/50 rounded-lg">
                         <table
                           className="min-w-full divide-y divide-border"
@@ -215,40 +216,40 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         />
                       </div>
                     ),
-                    thead: ({ node, ...props }) => (
+                    thead:                     ({ ...props }) => (
                       <thead className="bg-muted/50" {...props} />
                     ),
-                    tbody: ({ node, ...props }) => (
+                    tbody:                     ({ ...props }) => (
                       <tbody
                         className="divide-y divide-border/40 bg-card/10"
                         {...props}
                       />
                     ),
-                    tr: ({ node, ...props }) => (
+                    tr:                     ({ ...props }) => (
                       <tr
                         className="hover:bg-muted/20 transition-colors"
                         {...props}
                       />
                     ),
-                    th: ({ node, ...props }) => (
+                    th:                     ({ ...props }) => (
                       <th
                         className="px-4 py-3 text-left text-xs font-semibold text-foreground uppercase tracking-wider border-r border-border/40 last:border-r-0"
                         {...props}
                       />
                     ),
-                    td: ({ node, ...props }) => (
+                    td:                     ({ ...props }) => (
                       <td
                         className="px-4 py-3 text-sm text-muted-foreground border-r border-border/40 last:border-r-0"
                         {...props}
                       />
                     ),
-                    blockquote: ({ node, ...props }) => (
+                    blockquote:                     ({ ...props }) => (
                       <blockquote
                         className="border-l-4 border-primary pl-4 italic my-6 text-muted-foreground bg-primary/5 py-2 pr-2 rounded-r-lg"
                         {...props}
                       />
                     ),
-                    img: ({ node, src, alt, ...props }) => {
+                    img: ({ src, alt, ...props }) => {
                       let imageUrl = src;
                       const isExternal =
                         src?.startsWith("http") ||

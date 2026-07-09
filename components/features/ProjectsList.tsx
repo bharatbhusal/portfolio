@@ -80,7 +80,6 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
         onSortClick={handleSortClick}
         featuredOnly={featuredOnly}
         onFeaturedToggle={() => setFeaturedOnly((prev) => !prev)}
-        totalProjects={initialProjects.length}
         resultCount={processedProjects.length}
       />
 

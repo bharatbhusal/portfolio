@@ -10,7 +10,7 @@ import { CgWebsite } from "react-icons/cg";
 import { FaLinkedin, FaTelegram, FaGamepad, FaInstagram, FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-const iconMap: Record<string, React.ComponentType<any>> = {
+const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   website: CgWebsite,
   twitter: FaXTwitter,
   linkedin: FaLinkedin,

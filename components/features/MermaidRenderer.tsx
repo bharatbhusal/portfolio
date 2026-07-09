@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface MermaidRendererProps {
   chart: string;
 }
 
 export default function MermaidRenderer({ chart }: MermaidRendererProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
@@ -33,7 +32,7 @@ export default function MermaidRenderer({ chart }: MermaidRendererProps) {
           setSvg(renderedSvg);
           setError(null);
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error("Mermaid diagram rendering error:", err);
         if (isMounted) {
           setError("Failed to compile diagram view");

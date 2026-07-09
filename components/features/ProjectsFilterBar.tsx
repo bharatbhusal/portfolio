@@ -12,7 +12,6 @@ interface FilterBarProps {
   onSortClick: (field: "name" | "updated") => void;
   featuredOnly: boolean;
   onFeaturedToggle: () => void;
-  totalProjects: number;
   resultCount: number;
 }
 
@@ -24,7 +23,6 @@ export default function ProjectsFilterBar({
   onSortClick,
   featuredOnly,
   onFeaturedToggle,
-  totalProjects,
   resultCount,
 }: FilterBarProps) {
   return (

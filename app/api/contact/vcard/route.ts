@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { contactInfo } from "@/config/contact-info";
 
 /**
@@ -7,7 +7,7 @@ import { contactInfo } from "@/config/contact-info";
  * Compatible with iOS and Android devices
  */
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const vCardContent = generateVCard();
 
   return new NextResponse(vCardContent, {
@@ -70,6 +70,6 @@ function generateVCard(): string {
 /**
  * POST method (alias for GET)
  */
-export async function POST(request: NextRequest) {
-  return GET(request);
+export async function POST() {
+  return GET();
 }
