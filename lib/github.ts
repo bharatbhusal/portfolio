@@ -1,5 +1,5 @@
 import { contactInfo } from "@/config/contact-info";
-import { ProjectItem } from "@/types";
+import { ProjectItem, ProjectLink } from "@/types";
 
 export interface GithubRepo {
   name: string;
@@ -13,6 +13,7 @@ export interface GithubRepo {
   fork: boolean;
   updated_at: string;
   default_branch: string;
+  license?: { name: string; spdx_id?: string };
 }
 
 interface GraphQLCommitInfo {
@@ -39,11 +40,7 @@ interface GraphQLReposData {
 }
 
 export function getGithubUsername(): string {
-  return (
-    process.env.GITHUB_USERNAME ||
-    contactInfo.social.github.split("/").pop() ||
-    "bharatbhusal"
-  );
+  return process.env.GITHUB_USERNAME || contactInfo.social.github.split("/").pop()!;
 }
 
 // Dedicated central client for all GitHub API requests
@@ -152,18 +149,18 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
   );
 
   const mappedProjects: ProjectItem[] = visibleRepos.map((repo) => {
-    const links = [
-      { link: repo.html_url, type: "github", icon: null as any },
-    ] as any[];
+    const links: ProjectLink[] = [
+      { link: repo.html_url, type: "github", icon: undefined },
+    ];
 
     if (repo.homepage) {
-      links.push({ link: repo.homepage, type: "website", icon: null as any });
+      links.push({ link: repo.homepage, type: "website", icon: undefined });
     }
 
     links.push({
       link: `/projects/${repo.name}`,
       type: "details",
-      icon: null as any,
+      icon: undefined,
     });
 
     const isFeatured = repo.topics?.some((t) => t.toLowerCase() === "pin");
@@ -238,14 +235,16 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
 
 export async function getGithubRepoDetails(
   repoName: string,
-): Promise<any | null> {
+): Promise<GithubRepo | null> {
   const username = getGithubUsername();
-  return githubFetch<any>(`repos/${username}/${repoName}`);
+  return githubFetch<GithubRepo>(`repos/${username}/${repoName}`);
 }
 
 export async function getGithubRepoReadme(repoName: string): Promise<string> {
   const username = getGithubUsername();
-  const data = await githubFetch<any>(`repos/${username}/${repoName}/readme`);
+  const data = await githubFetch<{ content: string; encoding: string }>(
+    `repos/${username}/${repoName}/readme`,
+  );
 
   if (data && data.content && data.encoding === "base64") {
     const cleanBase64 = data.content.replace(/\s/g, "");

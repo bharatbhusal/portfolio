@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -12,20 +12,40 @@ const poppins = Poppins({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.title}`,
   },
   description: siteConfig.description,
   keywords: [...siteConfig.keywords],
-  authors: [{ name: siteConfig.author }],
+  authors: [{ name: contactInfo.name.full }],
+  category: "portfolio",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: siteConfig.name,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    siteName: siteConfig.name,
     title: `${contactInfo.name.full} - ${contactInfo.title}`,
     description: contactInfo.bio,
-    url: siteConfig.url,
-    type: "website",
     images: [siteConfig.ogImage],
   },
   twitter: {
@@ -34,9 +54,7 @@ export const metadata: Metadata = {
     description: contactInfo.bio,
     images: [siteConfig.ogImage],
     site: siteConfig.twitterHandle,
-  },
-  icons: {
-    icon: siteConfig.ogImage,
+    creator: siteConfig.twitterHandle,
   },
   alternates: {
     canonical: siteConfig.url,
