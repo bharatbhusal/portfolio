@@ -13,66 +13,15 @@ interface ProjectsListProps {
 
 export default function ProjectsList({ initialProjects }: ProjectsListProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTopic, setSelectedTopic] = useState("all");
-  const [selectedLanguage, setSelectedLanguage] = useState("all");
   const [sortBy, setSortBy] = useState<"name" | "updated">("updated");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const allTopics = useMemo(() => {
-    const topicsSet = new Set<string>();
-    initialProjects.forEach((proj) => {
-      proj.tags?.forEach((tag) => {
-        topicsSet.add(tag.toLowerCase());
-      });
-    });
-    return Array.from(topicsSet).sort();
-  }, [initialProjects]);
-
-  const allLanguages = useMemo(() => {
-    const langSet = new Set<string>();
-    initialProjects.forEach((proj) => {
-      if (proj.language) {
-        langSet.add(proj.language.toLowerCase());
-      }
-    });
-    return Array.from(langSet).sort();
-  }, [initialProjects]);
-
-  const topicCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    initialProjects.forEach((proj) => {
-      proj.tags?.forEach((tag) => {
-        const key = tag.toLowerCase();
-        counts[key] = (counts[key] || 0) + 1;
-      });
-    });
-    return counts;
-  }, [initialProjects]);
-
-  const languageCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    initialProjects.forEach((proj) => {
-      if (proj.language) {
-        const key = proj.language.toLowerCase();
-        counts[key] = (counts[key] || 0) + 1;
-      }
-    });
-    return counts;
-  }, [initialProjects]);
-
   useEffect(() => {
     setCurrentPage(1);
-  }, [
-    searchQuery,
-    selectedTopic,
-    selectedLanguage,
-    sortBy,
-    sortOrder,
-    featuredOnly,
-  ]);
+  }, [searchQuery, sortBy, sortOrder, featuredOnly]);
 
   const handleSortClick = (field: "name" | "updated") => {
     if (sortBy === field) {
@@ -94,31 +43,11 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
       return nameMatch || descMatch;
     });
 
-    if (selectedTopic !== "all") {
-      filtered = filtered.filter((proj) =>
-        proj.tags?.some((tag) => tag.toLowerCase() === selectedTopic),
-      );
-    }
-
-    if (selectedLanguage !== "all") {
-      filtered = filtered.filter(
-        (proj) => proj.language?.toLowerCase() === selectedLanguage,
-      );
-    }
-
     if (featuredOnly) {
       filtered = filtered.filter((proj) => proj.isFeatured);
     }
 
     return [...filtered].sort((a, b) => {
-      const isAPinned = a.isFeatured;
-      const isBPinned = b.isFeatured;
-
-      if (!featuredOnly) {
-        if (isAPinned && !isBPinned) return -1;
-        if (!isAPinned && isBPinned) return 1;
-      }
-
       let compare = 0;
       if (sortBy === "updated") {
         const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
@@ -130,15 +59,7 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
         return sortOrder === "asc" ? compare : -compare;
       }
     });
-  }, [
-    initialProjects,
-    searchQuery,
-    selectedTopic,
-    selectedLanguage,
-    sortBy,
-    sortOrder,
-    featuredOnly,
-  ]);
+  }, [initialProjects, searchQuery, sortBy, sortOrder, featuredOnly]);
 
   const totalPages = Math.max(
     1,
@@ -154,19 +75,11 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
       <ProjectsFilterBar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        selectedTopic={selectedTopic}
-        onTopicChange={setSelectedTopic}
-        selectedLanguage={selectedLanguage}
-        onLanguageChange={setSelectedLanguage}
         sortBy={sortBy}
         sortOrder={sortOrder}
         onSortClick={handleSortClick}
         featuredOnly={featuredOnly}
         onFeaturedToggle={() => setFeaturedOnly((prev) => !prev)}
-        allTopics={allTopics}
-        allLanguages={allLanguages}
-        topicCounts={topicCounts}
-        languageCounts={languageCounts}
         totalProjects={initialProjects.length}
         resultCount={processedProjects.length}
       />

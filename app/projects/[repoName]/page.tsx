@@ -13,7 +13,11 @@ import {
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getGithubRepoDetails, getGithubRepoReadme, getGithubUsername } from "@/lib/github";
+import {
+  getGithubRepoDetails,
+  getGithubRepoReadme,
+  getGithubUsername,
+} from "@/lib/github";
 import MermaidRenderer from "@/components/features/MermaidRenderer";
 
 import type { Metadata } from "next";
@@ -24,10 +28,12 @@ interface PageProps {
   }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { repoName } = await params;
   const repo = await getGithubRepoDetails(repoName);
-  
+
   if (!repo) {
     return {
       title: "Project Not Found",
@@ -42,10 +48,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: formattedName,
-    description: repo.description || `Read the details and documentation of the ${formattedName} repository on the portfolio.`,
+    description:
+      repo.description ||
+      `Read the details and documentation of the ${formattedName} repository on the portfolio.`,
     openGraph: {
       title: `${formattedName} | Projects`,
-      description: repo.description || `Read the documentation of ${repo.name} on the portfolio.`,
+      description:
+        repo.description ||
+        `Read the documentation of ${repo.name} on the portfolio.`,
       type: "article",
     },
   };
@@ -80,21 +90,27 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   components={{
                     h1: ({ node, ...props }) => (
                       <h1
-                        className="text-3xl font-extrabold border-b pb-2 mb-4 mt-8 text-foreground"
+                        className="text-3xl font-extrabold border-b pb-2 mb-4 text-foreground"
                         {...props}
                       />
                     ),
                     h2: ({ node, ...props }) => (
                       <h2
-                        className="text-2xl font-bold border-b pb-1.5 mb-4 mt-8 text-foreground"
+                        className="text-2xl font-bold border-b pb-1.5 mb-4 text-foreground"
                         {...props}
                       />
                     ),
                     h3: ({ node, ...props }) => (
-                      <h3 className="text-xl font-semibold mb-3 mt-6 text-foreground" {...props} />
+                      <h3
+                        className="text-xl font-semibold mb-3 mt-6 text-foreground"
+                        {...props}
+                      />
                     ),
                     h4: ({ node, ...props }) => (
-                      <h4 className="text-lg font-semibold mb-3 mt-6 text-foreground" {...props} />
+                      <h4
+                        className="text-lg font-semibold mb-3 mt-6 text-foreground"
+                        {...props}
+                      />
                     ),
                     p: ({ node, ...props }) => (
                       <p
@@ -114,19 +130,28 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         {...props}
                       />
                     ),
-                    li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+                    li: ({ node, ...props }) => (
+                      <li className="mb-1" {...props} />
+                    ),
                     a: ({ node, href, ...props }) => {
                       const isAnchor = href?.startsWith("#");
-                      const isExternal = href?.startsWith("http") || href?.startsWith("//");
+                      const isExternal =
+                        href?.startsWith("http") || href?.startsWith("//");
                       if (isAnchor) {
-                        return <a className="text-primary hover:underline" href={href} {...props} />;
+                        return (
+                          <a
+                            className="text-primary hover:underline"
+                            href={href}
+                            {...props}
+                          />
+                        );
                       }
                       let targetUrl = href;
                       if (!isExternal && href) {
                         const username = getGithubUsername();
                         targetUrl = `https://github.com/${username}/${repoName}/blob/${defaultBranch}/${href.replace(
                           /^\.\//,
-                          ""
+                          "",
                         )}`;
                       }
                       return (
@@ -141,7 +166,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     },
                     pre: ({ node, children, ...props }: any) => {
                       const child = React.Children.only(children) as any;
-                      if (child && child.props && child.props.className === "language-mermaid") {
+                      if (
+                        child &&
+                        child.props &&
+                        child.props.className === "language-mermaid"
+                      ) {
                         return children;
                       }
                       return (
@@ -154,12 +183,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                       );
                     },
                     code: ({ node, className, children, ...props }: any) => {
-                      const isBlock = className?.includes("language-") || (typeof children === "string" && children.includes("\n"));
-                      
+                      const isBlock =
+                        className?.includes("language-") ||
+                        (typeof children === "string" &&
+                          children.includes("\n"));
+
                       if (className === "language-mermaid") {
-                        return <MermaidRenderer chart={String(children).trim()} />;
+                        return (
+                          <MermaidRenderer chart={String(children).trim()} />
+                        );
                       }
-                      
+
                       return !isBlock ? (
                         <code
                           className="bg-muted/70 px-1.5 py-0.5 rounded text-sm font-mono text-foreground border border-border/40"
@@ -175,15 +209,26 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     },
                     table: ({ node, ...props }) => (
                       <div className="overflow-x-auto my-6 border border-border/50 rounded-lg">
-                        <table className="min-w-full divide-y divide-border" {...props} />
+                        <table
+                          className="min-w-full divide-y divide-border"
+                          {...props}
+                        />
                       </div>
                     ),
-                    thead: ({ node, ...props }) => <thead className="bg-muted/50" {...props} />,
+                    thead: ({ node, ...props }) => (
+                      <thead className="bg-muted/50" {...props} />
+                    ),
                     tbody: ({ node, ...props }) => (
-                      <tbody className="divide-y divide-border/40 bg-card/10" {...props} />
+                      <tbody
+                        className="divide-y divide-border/40 bg-card/10"
+                        {...props}
+                      />
                     ),
                     tr: ({ node, ...props }) => (
-                      <tr className="hover:bg-muted/20 transition-colors" {...props} />
+                      <tr
+                        className="hover:bg-muted/20 transition-colors"
+                        {...props}
+                      />
                     ),
                     th: ({ node, ...props }) => (
                       <th
@@ -213,7 +258,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         const username = getGithubUsername();
                         imageUrl = `https://raw.githubusercontent.com/${username}/${repoName}/${defaultBranch}/${src.replace(
                           /^\.\//,
-                          ""
+                          "",
                         )}`;
                       }
                       return (
@@ -235,8 +280,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <BookOpen className="h-12 w-12 text-muted-foreground mx-auto opacity-50" />
                 <h3 className="font-semibold text-lg">No README available</h3>
                 <p className="text-muted-foreground text-sm max-w-md mx-auto">
-                  This repository does not have a README file or we were unable to retrieve it from
-                  GitHub. You can explore the files directly.
+                  This repository does not have a README file or we were unable
+                  to retrieve it from GitHub. You can explore the files
+                  directly.
                 </p>
                 <div className="pt-2">
                   <a
@@ -292,7 +338,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     <Shield className="h-4 w-4" />
                     License
                   </span>
-                  <span className="font-medium max-w-[120px] truncate" title={repo.license.name}>
+                  <span
+                    className="font-medium max-w-[120px] truncate"
+                    title={repo.license.name}
+                  >
                     {repo.license.spdx_id || repo.license.name}
                   </span>
                 </div>

@@ -1,32 +1,17 @@
 "use client";
 
 import React from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "@/components/ui/dropdown-menu";
 
 interface FilterBarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  selectedTopic: string;
-  onTopicChange: (value: string) => void;
-  selectedLanguage: string;
-  onLanguageChange: (value: string) => void;
   sortBy: "name" | "updated";
   sortOrder: "asc" | "desc";
   onSortClick: (field: "name" | "updated") => void;
   featuredOnly: boolean;
   onFeaturedToggle: () => void;
-  allTopics: string[];
-  allLanguages: string[];
-  topicCounts: Record<string, number>;
-  languageCounts: Record<string, number>;
   totalProjects: number;
   resultCount: number;
 }
@@ -34,19 +19,11 @@ interface FilterBarProps {
 export default function ProjectsFilterBar({
   searchQuery,
   onSearchChange,
-  selectedTopic,
-  onTopicChange,
-  selectedLanguage,
-  onLanguageChange,
   sortBy,
   sortOrder,
   onSortClick,
   featuredOnly,
   onFeaturedToggle,
-  allTopics,
-  allLanguages,
-  topicCounts,
-  languageCounts,
   totalProjects,
   resultCount,
 }: FilterBarProps) {
@@ -80,90 +57,6 @@ export default function ProjectsFilterBar({
             Updated {sortBy === "updated" && (sortOrder === "asc" ? "↑" : "↓")}
           </Button>
         </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 text-xs rounded-lg gap-1 border border-border bg-card"
-            >
-              <span className="capitalize">
-                {selectedTopic === "all"
-                  ? `All Topics (${totalProjects})`
-                  : `${selectedTopic} (${topicCounts[selectedTopic] || 0})`}
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="w-48 bg-card border border-border max-h-64 overflow-y-auto rounded-lg shadow-lg"
-          >
-            <DropdownMenuRadioGroup
-              value={selectedTopic}
-              onValueChange={onTopicChange}
-            >
-              <DropdownMenuRadioItem
-                value="all"
-                className="text-xs cursor-pointer focus:bg-accent rounded"
-              >
-                All Topics ({totalProjects})
-              </DropdownMenuRadioItem>
-              {allTopics.map((topic) => (
-                <DropdownMenuRadioItem
-                  key={topic}
-                  value={topic}
-                  className="text-xs uppercase cursor-pointer focus:bg-accent rounded"
-                >
-                  {topic} ({topicCounts[topic] || 0})
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 text-xs rounded-lg gap-1 border border-border bg-card"
-            >
-              <span className="capitalize">
-                {selectedLanguage === "all"
-                  ? `All Languages (${totalProjects})`
-                  : `${selectedLanguage} (${languageCounts[selectedLanguage] || 0})`}
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="w-48 bg-card border border-border max-h-64 overflow-y-auto rounded-lg shadow-lg"
-          >
-            <DropdownMenuRadioGroup
-              value={selectedLanguage}
-              onValueChange={onLanguageChange}
-            >
-              <DropdownMenuRadioItem
-                value="all"
-                className="text-xs cursor-pointer focus:bg-accent rounded"
-              >
-                All Languages ({totalProjects})
-              </DropdownMenuRadioItem>
-              {allLanguages.map((lang) => (
-                <DropdownMenuRadioItem
-                  key={lang}
-                  value={lang}
-                  className="text-xs cursor-pointer focus:bg-accent rounded"
-                >
-                  {lang} ({languageCounts[lang] || 0})
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       <div className="w-full sm:w-80">
