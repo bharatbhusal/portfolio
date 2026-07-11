@@ -10,6 +10,7 @@ For architectural patterns, developer guidelines, and customization walkthroughs
 *   [Low-Level Design (LLD) ](docs/LLD.md) — State hooks, code interfaces, pagination logic, and hydration fixes.
 *   [User Journey](docs/USER_JOURNEY.md) — Step-by-step visitor search sequence diagrams and interface states.
 *   [How to Fork & Customize](docs/CUSTOMIZE.md) — Guide on environment setups, profile assets, and static data arrays.
+*   [Screenshots Walkthrough](docs/screenshots.md) — Visual tour of every page with captured screenshots.
 
 ---
 
@@ -59,3 +60,11 @@ npm run dev
 npm run build
 npm start
 ```
+
+---
+
+## Screenshots
+
+### Main Page
+
+![Main Page](public/assets/home.png)
