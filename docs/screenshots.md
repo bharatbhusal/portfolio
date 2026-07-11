@@ -3,13 +3,13 @@
 A visual walkthrough of every page in the portfolio site. The app is a
 Next.js 15 project; run it locally with `npm run dev` (default URL
 `http://localhost:3000`). Screenshots below are viewport captures of each
-route, saved under `public/assets/`.
+route, saved under `/public/assets/`.
 
 ## Pages
 
 ### Home (`/`)
 
-![Home](public/assets/home.png)
+![Home](/public/assets/home.png)
 
 - **How to get there:** The landing page, served at the root URL.
 - **What it shows:** The hero/intro section with the avatar, name, and a
@@ -18,7 +18,7 @@ route, saved under `public/assets/`.
 
 ### Projects (`/projects`)
 
-![Projects](public/assets/projects.png)
+![Projects](/public/assets/projects.png)
 
 - **How to get there:** Header navigation item "Projects" or direct URL
   `/projects`.
@@ -30,7 +30,7 @@ route, saved under `public/assets/`.
 
 ### Project Detail (`/projects/[repoName]`)
 
-![Project Detail](public/assets/project-detail.png)
+![Project Detail](/public/assets/project-detail.png)
 
 - **How to get there:** Click "Readme" on any project card, e.g.
   `/projects/openworld`.
@@ -41,7 +41,7 @@ route, saved under `public/assets/`.
 
 ### Career (`/career`)
 
-![Career](public/assets/career.png)
+![Career](/public/assets/career.png)
 
 - **How to get there:** Header navigation item "Career" or direct URL
   `/career`.
@@ -50,7 +50,7 @@ route, saved under `public/assets/`.
 
 ### Education (`/education`)
 
-![Education](public/assets/education.png)
+![Education](/public/assets/education.png)
 
 - **How to get there:** Header navigation item "Education" or direct URL
   `/education`.
