@@ -87,25 +87,15 @@ route, saved under `/public/assets/`.
   the full resume preview and a "Download PDF" button. Uses a separate layout
   with back navigation to the builder.
 
-## Tips
-
-- **Theme toggle:** Use the header switch to preview every page in light and
-  dark mode (`next-themes`, persisted).
-- **Live GitHub data:** The projects and detail pages query GitHub at request
-  time (server-side, ~1-hour cache), so stars, forks, and READMEs reflect the
-  connected account.
-- **Filters & pagination:** On `/projects`, combine search, topic filter, and
-  sort controls; pagination uses ellipsis for large result sets.
-
 ## Mobile Views (390x844 — iPhone 14)
 
-| Page | Route | Image |
-|------|-------|-------|
-| Home | `/` | ![](/public/assets/home-mobile.png) |
-| Projects | `/projects` | ![](/public/assets/projects-mobile.png) |
+| Page           | Route                 | Image                                         |
+| -------------- | --------------------- | --------------------------------------------- |
+| Home           | `/`                   | ![](/public/assets/home-mobile.png)           |
+| Projects       | `/projects`           | ![](/public/assets/projects-mobile.png)       |
 | Project Detail | `/projects/openworld` | ![](/public/assets/project-detail-mobile.png) |
-| Career | `/career` | ![](/public/assets/career-mobile.png) |
-| Education | `/education` | ![](/public/assets/education-mobile.png) |
-| Resume Builder | `/resume` | ![](/public/assets/resume-mobile.png) |
-| Resume History | `/resume` (scrolled) | ![](/public/assets/resume-history-mobile.png) |
-| Resume Detail | `/resume/[id]` | ![](/public/assets/resume-detail-mobile.png) |
+| Career         | `/career`             | ![](/public/assets/career-mobile.png)         |
+| Education      | `/education`          | ![](/public/assets/education-mobile.png)      |
+| Resume Builder | `/resume`             | ![](/public/assets/resume-mobile.png)         |
+| Resume History | `/resume` (scrolled)  | ![](/public/assets/resume-history-mobile.png) |
+| Resume Detail  | `/resume/[id]`        | ![](/public/assets/resume-detail-mobile.png)  |
