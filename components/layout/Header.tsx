@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, GraduationCap, FolderGit2, Moon, Sun } from "lucide-react";
+import { Home, Briefcase, GraduationCap, FolderGit2, FileText, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import gsap from "gsap";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ const navItems = [
   { href: "/career", label: "Career", icon: Briefcase },
   { href: "/education", label: "Education", icon: GraduationCap },
   { href: "/projects", label: "Projects", icon: FolderGit2 },
+  { href: "/resume", label: "Resume", icon: FileText },
 ];
 
 const Header = () => {

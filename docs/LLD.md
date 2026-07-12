@@ -74,3 +74,34 @@ The page list button array is derived as follows:
 - **Resolution**:
   - The custom `pre` node mapper evaluates its children. If the child is a code block containing class `language-mermaid`, it strips out the parent `<pre>` tag container and returns the child node directly.
   - This allows the `MermaidRenderer` component to draw dynamic SVG charts as standalone block containers, preventing HTML violations and rendering clean responsive grids.
+
+### 5. Resume LLM Client (`lib/llm.ts`)
+- **`generateResume(prompt)`**: Calls Groq API (`llama-3.3-70b-versatile`) with `response_format: { type: "json_object" }`.
+- Validates response has `basics.name` and `work` array before returning.
+- Uses `temperature: 0.7` for balanced creativity/consistency.
+
+### 6. Resume Context Builder (`lib/resume.ts`)
+- **`buildResumeContext()`**: Aggregates data from `contactInfo`, `careerData`, `educationData`, and top 20 GitHub repos into a structured context object.
+- **`buildPrompt(ctx, role)`**: Generates an ATS-optimized prompt with JSON schema, rules for quantification, reverse-chronological ordering, and role-specific tailoring.
+
+### 7. MongoDB Connection (`lib/mongodb.ts`)
+- Singleton pattern: caches `MongoClient` and `Db` across hot reloads.
+- **`getResumesCollection()`**: Returns `resumes` collection.
+- **`getRateLimitsCollection()`**: Returns `rate_limits` collection.
+- **`serializeId(doc)`**: Converts MongoDB `ObjectId` to string for client consumption.
+
+### 8. Rate Limiting (`lib/rate-limit.ts`)
+- **`checkApiRateLimit(ip, windowMs)`**: Per-IP 10min window via MongoDB. Upserts `lastRequest` timestamp per IP.
+- **`checkPdfRateLimit()`**: Service-wide 2hr window via in-memory variable. Resets on server restart.
+- **`extractIp(headers)`**: Reads client IP from `x-forwarded-for` header.
+
+### 9. Resume Types (`types/resume.ts`)
+- `ResumeData`: Core shape (`basics`, `work`, `education`, `skills`, `projects`).
+- `ResumeDocument`: Extends `ResumeData` with `_id`, `role`, `createdAt`.
+- `JobRole`: Union type of 4 role strings.
+- `JOB_ROLES`: Const array for iteration.
+
+### 10. Client-Side Rate Limiting (`components/resume/ResumeBuilder.tsx`)
+- Stores two timestamps in localStorage: `resume_latest_ts` (latest resume createdAt) and `resume_user_ts` (when user last generated).
+- Computes `max(service_remaining, user_remaining)` every second.
+- Button disabled with inline countdown (`Generate New Resume  ·  3:42`) until both cooldowns expire.
