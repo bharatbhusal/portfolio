@@ -45,6 +45,11 @@ export const siteConfig = {
       href: "/projects",
       icon: "GrProjects",
     },
+    {
+      title: "Resume",
+      href: "/resume",
+      icon: "FaFileAlt",
+    },
   ],
 
   // Features
