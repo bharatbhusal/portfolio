@@ -96,3 +96,16 @@ route, saved under `/public/assets/`.
   connected account.
 - **Filters & pagination:** On `/projects`, combine search, topic filter, and
   sort controls; pagination uses ellipsis for large result sets.
+
+## Mobile Views (390x844 — iPhone 14)
+
+| Page | Route | Image |
+|------|-------|-------|
+| Home | `/` | ![](/public/assets/home-mobile.png) |
+| Projects | `/projects` | ![](/public/assets/projects-mobile.png) |
+| Project Detail | `/projects/openworld` | ![](/public/assets/project-detail-mobile.png) |
+| Career | `/career` | ![](/public/assets/career-mobile.png) |
+| Education | `/education` | ![](/public/assets/education-mobile.png) |
+| Resume Builder | `/resume` | ![](/public/assets/resume-mobile.png) |
+| Resume History | `/resume` (scrolled) | ![](/public/assets/resume-history-mobile.png) |
+| Resume Detail | `/resume/[id]` | ![](/public/assets/resume-detail-mobile.png) |
