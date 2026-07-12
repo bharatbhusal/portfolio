@@ -81,3 +81,40 @@ To control which projects are highlighted at the top of your portfolio projects 
 1. Go to your GitHub repository settings.
 2. In the **About** section, add the tag `"pin"` (case-insensitive) to your repository's **Topics**.
 3. The portfolio's listing page will automatically scan for the `"pin"` tag, move these repositories to the very top, highlight them with a special border, and hide the `"pin"` tag from the public topic badges.
+
+### Step 7: Resume Builder
+The resume builder uses Groq LLM to generate ATS-optimized resumes from your data.
+
+#### Environment Variables
+```env
+# MongoDB connection (required for resume storage and rate limiting)
+DATABASE_URL=mongodb+srv://<user>:<pass>@cluster.mongodb.net/portfolio?retryWrites=true
+
+# Groq API key (required for LLM resume generation)
+# Get one free at https://console.groq.com/keys
+GROQ_API_KEY=gsk_yourgroqapikeyhere
+```
+
+#### Rate Limits
+| Scope | Window | Storage |
+|-------|--------|---------|
+| Per-IP | 10min | MongoDB |
+| Service-wide | 2hr | In-memory (resets on server restart) |
+| Client cooldown | 10min | localStorage |
+
+#### Data Sources
+The builder pulls from existing data files:
+- `config/contact-info.ts` — name, email, phone, website, bio
+- `data/careerData.ts` — work experience
+- `data/educationData.ts` — education
+- GitHub repos — top 20 repos by stars, used for skills and projects
+
+#### Job Roles
+Edit `types/resume.ts` to customize available roles:
+```typescript
+export type JobRole =
+  | "Blockchain Developer"
+  | "Software Engineer"
+  | "Community Manager (Web3)"
+  | "Smart Contract Auditor";
+```

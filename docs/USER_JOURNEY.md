@@ -66,3 +66,62 @@ sequenceDiagram
 2. **Instant Search Feedback**: Results count badges and listing grids update instantly as the user types keywords, avoiding full page refreshes.
 3. **Optimized Pagination Layout**: Restricting page indexes using middle page ellipses ensures the navigation bar looks clean and readable on mobile views.
 4. **Isolated README Layouts**: Accessing project sub-routes exposes full-width markdown views without trailing statistics sections, ensuring readers can focus strictly on the project details.
+
+---
+
+### Scenario 3: Generating an ATS Resume
+
+```mermaid
+sequenceDiagram
+  actor Visitor
+  participant UI as Resume Builder
+  participant API as /api/resume/generate
+  participant LLM as Groq LLM
+  participant DB as MongoDB
+
+  Visitor->>UI: Navigates to /resume
+  UI->>DB: Fetch latest resume (GET /api/resume/latest)
+  DB-->>UI: Returns existing resume (or null)
+  UI-->>UI: Stores createdAt in localStorage, starts cooldown timer
+
+  alt Cooldown active
+    UI-->>Visitor: Button disabled with countdown: "Generate New Resume  ·  3:42"
+  else Cooldown expired
+    UI-->>Visitor: Button enabled: "Generate New Resume"
+  end
+
+  Visitor->>UI: Clicks "Generate New Resume"
+  UI->>API: POST /api/resume/generate
+  API->>API: Check per-IP rate limit (10min)
+  API->>API: Check service-wide rate limit (2hr)
+  API->>LLM: Send prompt with resume context
+  LLM-->>API: Returns ATS-optimized JSON
+  API->>DB: Save resume document
+  API-->>UI: Returns new resume
+  UI-->>UI: Saves timestamps, refreshes history
+  UI-->>Visitor: Displays new resume preview
+  UI-->>Visitor: Button disabled again with 10min countdown
+```
+
+### Scenario 4: Browsing Resume History
+
+```mermaid
+sequenceDiagram
+  actor Visitor
+  participant UI as Resume Builder
+  participant API as /api/resume/history
+  participant DB as MongoDB
+
+  Visitor->>UI: Scrolls to "Previously Generated" section
+  UI->>API: GET /api/resume/history?page=1&limit=6
+  API->>DB: Query resumes (projection: _id, createdAt, basics)
+  DB-->>API: Returns paginated documents
+  API-->>UI: Returns docs, total, page, pages
+  UI-->>Visitor: Displays resume cards with date/time and summary
+
+  Visitor->>UI: Clicks "View Full Resume" on a card
+  UI-->>Visitor: Navigates to /resume/[id]
+  UI->>DB: Server-side fetch by ObjectId
+  DB-->>UI: Returns full resume document
+  UI-->>Visitor: Displays resume detail with PDF download
+```

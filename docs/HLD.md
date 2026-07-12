@@ -24,11 +24,24 @@ graph TD
       DetailPage[ProjectDetail page.tsx]
       Mermaid[MermaidRenderer Client Component]
     end
+
+    subgraph Route: app/resume
+      ResumeLayout[Resume layout.tsx]
+      ResumePage[Resume page.tsx]
+      Builder[ResumeBuilder Client Component]
+    end
+
+    subgraph Route: app/resume/[id]
+      DetailResumeLayout[Resume Detail layout.tsx]
+      DetailResumePage[Resume Detail page.tsx]
+    end
   end
   
   subgraph APIs & Services
     GithubAPI[GitHub REST API]
     StatsAPI[GitHub Stats API]
+    GroqAPI[Groq LLM API]
+    MongoDB[(MongoDB)]
   end
 
   User --> RootLayout
@@ -46,6 +59,19 @@ graph TD
   DetailLayout --> DetailPage
   DetailPage -- Server Fetch README --> GithubAPI
   DetailPage -- Render Diagrams --> Mermaid
+
+  %% Resume Route Path
+  RootLayout --> ResumeLayout
+  ResumeLayout --> ResumePage
+  ResumePage --> Builder
+  Builder -- Fetch latest --> MongoDB
+  Builder -- Generate via LLM --> GroqAPI
+  Builder -- Save resume --> MongoDB
+
+  %% Resume Detail Route Path
+  RootLayout --> DetailResumeLayout
+  DetailResumeLayout --> DetailResumePage
+  DetailResumePage -- Fetch by ID --> MongoDB
 ```
 
 ## System Components
@@ -75,3 +101,13 @@ Client-side interactivity is deferred to leaf components:
 - **`ProjectsList`**: Manages search state, sorting field/order, topic dropdown selectors, and page indices.
 - **`MermaidRenderer`**: Handles client-side SVG generation for Mermaid graphs, ensuring no web API execution occurs during server-rendering (SSR).
 - **`ToggleProfileQR`**: Interactive button to switch between the profile avatar and a vCard QR code.
+- **`ResumeBuilder`**: Manages resume generation, cooldown timer, history pagination, and preview/display. Fetches latest resume from MongoDB on mount, stores timestamps in localStorage for client-side rate limiting.
+
+### 5. Resume Builder (`app/resume/`)
+- **Route**: `/resume` (resume builder), `/resume/[id]` (resume detail view).
+- **Layout**: Separate layout from project routes — includes heading and back navigation.
+- **Data Flow**: Client component fetches from 4 API routes (`/api/resume/generate`, `/api/resume/latest`, `/api/resume/history`, `/api/resume/[id]`).
+- **LLM Integration**: Groq API (`llama-3.3-70b-versatile`) generates ATS-optimized resumes from structured context built from `data/aboutMe.ts`, `data/careerData.ts`, `data/educationData.ts`, and GitHub repos.
+- **Persistence**: MongoDB stores generated resumes (`resumes` collection) and rate limit records (`rate_limits` collection).
+- **Rate Limiting**: Dual-layer — service-wide 2hr (in-memory) + per-user 10min (MongoDB + localStorage). Button shows inline countdown when disabled.
+- **PDF Generation**: `@react-pdf/renderer` produces A4 PDFs with green-themed section titles and clickable contact links.

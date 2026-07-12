@@ -1,0 +1,234 @@
+"use client";
+
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+  Link as PdfLink,
+  Font,
+} from "@react-pdf/renderer";
+import { Download } from "lucide-react";
+import type { ResumeData } from "@/types/resume";
+
+Font.register({
+  family: "Helvetica",
+  fonts: [{ src: "Helvetica" }, { src: "Helvetica-Bold", fontWeight: "bold" }],
+});
+
+const GREEN = "#16a34a";
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 40,
+    fontSize: 10,
+    fontFamily: "Helvetica",
+    color: "#1a1a1a",
+  },
+  name: { fontSize: 22, fontWeight: "bold", marginBottom: 4 },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 4,
+  },
+  contactCol: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: 2,
+  },
+  contactRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 4,
+    color: "#555",
+    fontSize: 9,
+  },
+  contactLink: { color: GREEN, textDecoration: "none" },
+  summary: { marginBottom: 12, lineHeight: 1.5, fontSize: 10, color: "#333" },
+  sectionTitle: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    color: GREEN,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    paddingBottom: 3,
+    marginBottom: 8,
+    marginTop: 14,
+  },
+  row: { marginBottom: 10 },
+  rowHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+  },
+  bold: { fontWeight: "bold", fontSize: 10 },
+  italic: { fontStyle: "italic", color: "#555", fontSize: 9 },
+  date: { fontSize: 9, color: "#666" },
+  bulletRow: { flexDirection: "row", marginBottom: 2 },
+  bullet: { width: 12, fontSize: 10 },
+  bulletText: { flex: 1, fontSize: 9.5, lineHeight: 1.4 },
+  skillRow: { marginBottom: 3 },
+  skillCategory: { fontWeight: "bold", fontSize: 9.5 },
+  skillKeywords: { fontSize: 9.5, color: "#333" },
+  projectTech: { fontSize: 8.5, color: "#666", marginTop: 2 },
+  projectLink: { fontSize: 8.5, color: GREEN, marginTop: 2 },
+});
+
+function ResumeDoc({ data }: { data: ResumeData }) {
+  const { basics, work, education, skills, projects } = data;
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.headerRow}>
+          <Text style={styles.name}>{basics.name}</Text>
+          <View style={styles.contactCol}>
+            {basics.email && (
+              <PdfLink href={`mailto:${basics.email}`} style={styles.contactLink}>
+                {basics.email}
+              </PdfLink>
+            )}
+            {basics.phone && (
+              <PdfLink href={`tel:${basics.phone}`} style={styles.contactLink}>
+                {basics.phone}
+              </PdfLink>
+            )}
+            {basics.url && (
+              <PdfLink href={basics.url} style={styles.contactLink}>
+                {basics.url}
+              </PdfLink>
+            )}
+          </View>
+        </View>
+        {basics.summary && <Text style={styles.summary}>{basics.summary}</Text>}
+
+        {/* Skills */}
+        {skills.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Skills</Text>
+            {skills.map((s, i) => (
+              <View key={i} style={styles.skillRow}>
+                <Text>
+                  <Text style={styles.skillCategory}>{s.category}: </Text>
+                  <Text style={styles.skillKeywords}>
+                    {s.keywords.join(", ")}
+                  </Text>
+                </Text>
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Work */}
+        {work.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Experience</Text>
+            {work.map((w, i) => (
+              <View key={i} style={styles.row}>
+                <View style={styles.rowHeader}>
+                  <Text style={styles.bold}>{w.position}</Text>
+                  <Text style={styles.date}>
+                    {w.startDate} – {w.endDate || "Present"}
+                  </Text>
+                </View>
+                <Text style={styles.italic}>{w.company}</Text>
+                {w.highlights.map((h, j) => (
+                  <View key={j} style={styles.bulletRow}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.bulletText}>{h}</Text>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Projects */}
+        {projects.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Projects</Text>
+            {projects.map((p, i) => (
+              <View key={i} style={styles.row}>
+                <Text style={styles.bold}>{p.name}</Text>
+                <Text style={{ fontSize: 9.5, color: "#333", marginTop: 1 }}>
+                  {p.description}
+                </Text>
+                {p.techStack.length > 0 && (
+                  <Text style={styles.projectTech}>
+                    {p.techStack.join(" · ")}
+                  </Text>
+                )}
+                {p.url && (
+                  <PdfLink href={p.url} style={styles.projectLink}>
+                    {p.url}
+                  </PdfLink>
+                )}
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* Education */}
+        {education.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Education</Text>
+            {education.map((e, i) => (
+              <View key={i} style={styles.row}>
+                <View style={styles.rowHeader}>
+                  <Text style={styles.bold}>{e.degree}</Text>
+                  <Text style={styles.date}>
+                    {e.startDate} – {e.endDate || ""}
+                  </Text>
+                </View>
+                <Text style={styles.italic}>{e.institution}</Text>
+                {e.area && (
+                  <Text style={{ fontSize: 9, color: "#666" }}>{e.area}</Text>
+                )}
+                {e.gpa && (
+                  <Text style={{ fontSize: 9, color: "#666" }}>
+                    GPA: {e.gpa}
+                  </Text>
+                )}
+              </View>
+            ))}
+          </>
+        )}
+      </Page>
+    </Document>
+  );
+}
+
+export function ResumePDFLink({ data }: { data: ResumeData | null }) {
+  if (!data) {
+    return (
+      <button
+        disabled
+        className="inline-flex items-center gap-2 px-4 py-2 bg-muted text-muted-foreground rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
+      >
+        <Download className="h-4 w-4" />
+        Download PDF
+      </button>
+    );
+  }
+
+  return (
+    <PDFDownloadLink
+      document={<ResumeDoc data={data} />}
+      fileName={`${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
+      className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+    >
+      {({ loading }) => (
+        <>
+          <Download className="h-4 w-4" />
+          {loading ? "Generating PDF..." : "Download PDF"}
+        </>
+      )}
+    </PDFDownloadLink>
+  );
+}
