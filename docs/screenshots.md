@@ -57,6 +57,36 @@ route, saved under `/public/assets/`.
 - **What it shows:** Academic background and qualifications presented in a
   clean, responsive layout.
 
+### Resume Builder (`/resume`)
+
+![Resume Builder](/public/assets/resume.png)
+
+- **How to get there:** Header navigation item "Resume" or direct URL
+  `/resume`.
+- **What it shows:** The ATS resume builder with a "Generate New Resume"
+  button (with inline cooldown timer when rate-limited), a live HTML preview
+  of the generated resume with green-themed section titles and right-aligned
+  clickable contacts (email, phone, website), and a "Download PDF" button.
+
+### Resume History (`/resume` — scrolled)
+
+![Resume History](/public/assets/resume-history.png)
+
+- **How to get there:** Scroll to the bottom of the `/resume` page.
+- **What it shows:** The "Previously Generated" section displaying a
+  paginated grid of previously generated resumes, each card showing the
+  generation date/time, a summary, and a "View Full Resume" link.
+
+### Resume Detail (`/resume/[id]`)
+
+![Resume Detail](/public/assets/resume-detail.png)
+
+- **How to get there:** Click "View Full Resume" on a history card, e.g.
+  `/resume/6a53c84a770efd29c7d0bb3f`.
+- **What it shows:** A dedicated view of a previously generated resume with
+  the full resume preview and a "Download PDF" button. Uses a separate layout
+  with back navigation to the builder.
+
 ## Tips
 
 - **Theme toggle:** Use the header switch to preview every page in light and
