@@ -24,7 +24,8 @@ const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>
 const EducationCard = ({
   institution,
   degree,
-  duration,
+  startDate,
+  endDate,
   address,
   cgpa,
   description,
@@ -49,7 +50,7 @@ const EducationCard = ({
             )}
           </div>
           <span className="text-xs text-muted-foreground whitespace-nowrap">
-            {duration}
+            {startDate} – {endDate || ""}
           </span>
         </div>
 

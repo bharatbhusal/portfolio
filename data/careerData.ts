@@ -7,7 +7,8 @@ const careerData: CareerItem[] = [
   {
     company: "Keyloop",
     role: "Software Engineer",
-    duration: "Nov 2025 - Present",
+    startDate: "Nov 2025",
+    endDate: "Present",
     address: "Hybrid",
     description: `An integrated platform for automotive retailers, OEMs, fleet providers and financiers. A smarter, simpler journey for car buyers and owners.`,
     achievements: [
@@ -38,7 +39,8 @@ const careerData: CareerItem[] = [
   {
     company: "Kanine Klans",
     role: "Blockchain Engineer",
-    duration: "Apr 2025 - Aug 2025",
+    startDate: "Apr 2025",
+    endDate: "Aug 2025",
     address: "Remote",
     description: `MASTER THE ELEMENTS, DOMINATE MARS! Strategize Your Moves. Explore Uncharted Land, And Rise To Supremacy On The Red Planet.`,
     achievements: [
@@ -67,7 +69,8 @@ const careerData: CareerItem[] = [
   {
     company: "jaisriram",
     role: "Fullstack Blockchain Developer",
-    duration: "Oct 2024 - Apr 2025",
+    startDate: "Oct 2024",
+    endDate: "Apr 2025",
     address: "Remote",
     description: `Embark on a transformative journey with $JSR, evolving from a devoted seeker to the enlightened master of "Chant-to-Earn."`,
     achievements: [
@@ -105,7 +108,8 @@ const careerData: CareerItem[] = [
   {
     company: "Router Protocol",
     role: "Community Manager",
-    duration: "Oct 2023 - Feb 2025",
+    startDate: "Oct 2023",
+    endDate: "Feb 2025",
     address: "Remote",
     description:
       "Bridging blockchain ecosystems to onboard the next billion users into Web3 by eliminating blockchain fragmentation.",
@@ -135,12 +139,13 @@ const careerData: CareerItem[] = [
   {
     company: "0xCommit",
     role: "Security Auditor and Community Manager",
-    duration: "Feb 2024 - Oct 2024",
+    startDate: "Feb 2024",
+    endDate: "Oct 2024",
     address: "Remote",
     description:
       "Enhancing the security of decentralized systems through comprehensive smart contract audits.",
     achievements: [
-      "Conducted independent and collaborative audits of over 20 client’s smart contracts.",
+      "Conducted independent and collaborative audits of over 20 client's smart contracts.",
       "Prepared more than 20 detailed audit reports with clear, concise explanations of identified vulnerabilities.",
       "Established a new community centered on smart contract security and audits. In 1 week successfully gathered 20+ genuine security enthusiasts.",
       "Consistently created and shared around 21 educational content per week, including articles and social media updates.",
@@ -168,7 +173,8 @@ const careerData: CareerItem[] = [
   {
     company: "Terraform Labs",
     role: "Community Moderator",
-    duration: "Sept 2021 - Aug 2023",
+    startDate: "Sept 2021",
+    endDate: "Aug 2023",
     address: "Remote",
     description:
       "Supporting a passionate community and developer ecosystem to drive innovation within the Terra blockchain network.",

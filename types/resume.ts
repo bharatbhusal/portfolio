@@ -13,6 +13,7 @@ export interface ResumeWork {
   position: string;
   startDate: string;
   endDate?: string;
+  location?: string;
   summary?: string;
   highlights: string[];
 }
@@ -33,7 +34,7 @@ export interface ResumeSkill {
 
 export interface ResumeProject {
   name: string;
-  description: string;
+  highlights: string[];
   techStack: string[];
   url?: string;
 }
