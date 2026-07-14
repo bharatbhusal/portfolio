@@ -40,7 +40,7 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                 className="hover:underline"
                 style={{ color: GREEN }}
               >
-                {basics.url}
+                {basics.url.replace(/^https?:\/\//, "")}
               </a>
             )}
           </div>
@@ -90,7 +90,10 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                     {w.startDate} – {w.endDate || "Present"}
                   </span>
                 </div>
-                <div className="text-gray-600 italic">{w.company}</div>
+                <div className="text-gray-600 italic">
+                  {w.company}
+                  {w.location ? ` · ${w.location}` : ""}
+                </div>
                 {w.highlights.length > 0 && (
                   <ul className="mt-1 ml-4 list-disc space-y-0.5">
                     {w.highlights.map((h, j) => (
@@ -117,7 +120,13 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
             {projects.map((p, i) => (
               <div key={i}>
                 <div className="font-bold">{p.name}</div>
-                <div className="text-gray-700">{p.description}</div>
+                {p.highlights.length > 0 && (
+                  <ul className="mt-1 ml-4 list-disc space-y-0.5">
+                    {p.highlights.map((h, j) => (
+                      <li key={j}>{h}</li>
+                    ))}
+                  </ul>
+                )}
                 {p.techStack.length > 0 && (
                   <div className="text-gray-500 text-[10px] mt-0.5">
                     {p.techStack.join(" · ")}
@@ -131,7 +140,7 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                     className="text-[10px] hover:underline"
                     style={{ color: GREEN }}
                   >
-                    {p.url}
+                    {p.url.replace(/^https?:\/\//, "")}
                   </a>
                 )}
               </div>

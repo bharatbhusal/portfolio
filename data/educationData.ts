@@ -6,7 +6,8 @@ import { EducationItem } from "@/types";
 const educationData: EducationItem[] = [
   {
     institution: "GITAM University",
-    duration: "Nov 2021 - Apr 2025",
+    startDate: "Nov 2021",
+    endDate: "Apr 2025",
     address: "Hyderabad, India",
     cgpa: "9.11/10 (Gold Medalist)",
     degree: "B.Tech in Computer Science & Engineering",
@@ -45,7 +46,8 @@ const educationData: EducationItem[] = [
   },
   {
     institution: "Kathmandu World School",
-    duration: "2019 - 2020",
+    startDate: "2019",
+    endDate: "2020",
     address: "Bhaktapur, Nepal",
     cgpa: "3.61/4",
     degree: "Higher Secondary Education (Science)",
@@ -78,7 +80,8 @@ const educationData: EducationItem[] = [
   },
   {
     institution: "SOS Hermann Gmeiner Higher Secondary School",
-    duration: "2017 - 2018",
+    startDate: "2017",
+    endDate: "2018",
     address: "Surkhet, Nepal",
     degree: "Secondary Education (Science)",
     cgpa: "9.14/10",

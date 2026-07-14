@@ -5,6 +5,8 @@ export async function checkApiRateLimit(
   ip: string,
   windowMs = 10 * 60_000,
 ): Promise<{ allowed: boolean; retryAfterMs?: number }> {
+  if (process.env.NODE_ENV === "development") return { allowed: true };
+
   const col = await getRateLimitsCollection();
   const now = new Date();
   const cutoff = new Date(now.getTime() - windowMs);
@@ -28,6 +30,8 @@ export function checkPdfRateLimit(): {
   allowed: boolean;
   retryAfterMs?: number;
 } {
+  if (process.env.NODE_ENV === "development") return { allowed: true };
+
   const now = Date.now();
   if (now - lastPdfGeneration < PDF_WINDOW_MS) {
     return {
