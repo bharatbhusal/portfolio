@@ -69,7 +69,7 @@ RULES:
 - Quantify achievements with numbers where possible.
 - Use ATS-friendly keywords relevant to "${role}".
 - For projects: explain each project in 2-4 bullet points based on the README content provided.
-- List skills in categories relevant to "${role}" (e.g., Languages, Frameworks, Tools, Platforms) based on work experience and projects.
+- List all the skills in categories (e.g., Languages, Frameworks, Tools, Platforms) based on work experience and projects.
 - Use reverse chronological order for work and education.
 - Keep bullet points concise (1-2 lines each).
 
