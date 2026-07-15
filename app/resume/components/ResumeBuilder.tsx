@@ -72,9 +72,10 @@ export default function ResumeBuilder() {
     return () => clearInterval(interval);
   }, []);
 
-  function fetchHistory(page: number) {
+  function fetchHistory(page: number, bustCache = false) {
     setHistoryLoading(true);
-    fetch(`/api/resume/history?page=${page}&limit=6`)
+    const ts = bustCache ? `&t=${Date.now()}` : "";
+    fetch(`/api/resume/history?page=${page}&limit=6${ts}`)
       .then((r) => r.json())
       .then((d: HistoryPage) => {
         setHistory(d);
@@ -104,7 +105,7 @@ export default function ResumeBuilder() {
       localStorage.setItem(LATEST_TS_KEY, now);
       localStorage.setItem(USER_TS_KEY, now);
       setCooldown(getCooldown());
-      fetchHistory(1);
+      fetchHistory(1, true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
