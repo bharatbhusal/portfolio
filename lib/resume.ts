@@ -1,18 +1,138 @@
 import { contactInfo } from "@/config/contact-info";
 import careerData from "@/data/careerData";
 import educationData from "@/data/educationData";
-import { getGithubProjects } from "@/lib/github";
+import { getGithubPinnedReposWithReadme } from "@/lib/github";
 import type { ResumeData, JobRole } from "@/types/resume";
 
+function parseStartDate(dateStr: string): number {
+  const months: Record<string, number> = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sept: 8,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+  };
+  const parts = dateStr.split(" ");
+  if (parts.length < 2) return 0;
+  const month = months[parts[0]] ?? 0;
+  const year = parseInt(parts[1], 10) || 0;
+  return year * 100 + month;
+}
+
 export async function buildResumeContext(): Promise<{
-  basics: ResumeData["basics"];
-  work: ResumeData["work"];
-  education: ResumeData["education"];
-  projects: { name: string; description: string; tags: string[] }[];
-  skills: string[];
+  work: {
+    company: string;
+    address: string;
+    highlights: string[];
+  }[];
+  projects: {
+    name: string;
+    description: string;
+    tags: string[];
+    readmeContent: string;
+    links: { type: string; url: string }[];
+  }[];
 }> {
-  const projects = await getGithubProjects();
-  const featuredProjects = projects.slice(0, 20);
+  const pinnedRepos = await getGithubPinnedReposWithReadme();
+
+  return {
+    work: careerData.map((c) => ({
+      company: c.company,
+      address: c.address,
+      highlights: c.achievements,
+    })),
+    projects: pinnedRepos.map((p) => ({
+      name: p.name,
+      description: p.description,
+      tags: p.tags,
+      readmeContent: p.readmeContent,
+      links: p.links,
+    })),
+  };
+}
+
+export function buildSystemPrompt(role: JobRole): string {
+  return `You are an expert ATS-friendly resume writer. You create tailored, ATS-optimized resumes.
+
+RULES:
+- Output ONLY valid JSON matching the schema below. No markdown, no explanation.
+- Reorder and emphasize work experience to highlight relevance to "${role}".
+- Write a 2-3 line professional summary tailored to "${role}" based on work experience and projects.
+- Quantify achievements with numbers where possible.
+- Use ATS-friendly keywords relevant to "${role}".
+- For projects: explain each project in 2-4 bullet points based on the README content provided.
+- List all the skills in categories (e.g., Languages, Frameworks, Tools, Platforms) based on work experience and projects.
+- Use reverse chronological order for work and education.
+- Keep bullet points concise (1-2 lines each).
+
+OUTPUT SCHEMA:
+{
+  "summary": "2-3 line professional summary tailored to the role",
+  "skills": [
+    {
+      "category": "string (e.g., Languages, Frameworks, Tools)",
+      "keywords": ["string"]
+    }
+  ],
+  "work": [
+    {
+      "company": "string",
+      "highlights": ["string (concise, quantified, ATS-optimized bullets)"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "string",
+      "highlights": ["string (2-4 bullet points explaining the project based on README)"],
+      "techStack": ["string"]
+    }
+  ]
+}`;
+}
+
+export function buildUserPrompt(
+  ctx: Awaited<ReturnType<typeof buildResumeContext>>,
+  role: JobRole,
+): string {
+  return `Create a resume for the role of "${role}".
+
+RAW DATA:
+${JSON.stringify(ctx, null, 2)}`;
+}
+
+export function postProcessResume(
+  llmOutput: Record<string, unknown>,
+  ctx: Awaited<ReturnType<typeof buildResumeContext>>,
+): ResumeData {
+  const workMap = new Map(careerData.map((c) => [c.company, c]));
+
+  const llmWork = (llmOutput.work || []) as {
+    company: string;
+    highlights: string[];
+  }[];
+
+  const llmProjects = (llmOutput.projects || []) as {
+    name: string;
+    highlights: string[];
+    techStack: string[];
+  }[];
+
+  const sortedWork = [...llmWork].sort((a, b) => {
+    const rawA = workMap.get(a.company);
+    const rawB = workMap.get(b.company);
+    return (
+      parseStartDate(rawB?.startDate || "") -
+      parseStartDate(rawA?.startDate || "")
+    );
+  });
 
   return {
     basics: {
@@ -20,95 +140,37 @@ export async function buildResumeContext(): Promise<{
       email: contactInfo.email,
       phone: contactInfo.phone,
       url: contactInfo.website,
-      summary: contactInfo.bio,
+      summary: (llmOutput.summary as string) || contactInfo.bio,
     },
-    work: careerData.map((c) => ({
-      company: c.company,
-      position: c.role,
-      startDate: c.duration.split(" - ")[0]?.trim() || "",
-      endDate: c.duration.split(" - ")[1]?.trim() || undefined,
-      highlights: c.achievements,
-    })),
+    work: sortedWork.map((w) => {
+      const raw = workMap.get(w.company);
+      return {
+        company: w.company,
+        position: raw?.role || "",
+        startDate: raw?.startDate || "",
+        endDate: raw?.endDate,
+        location: raw?.address || undefined,
+        highlights: w.highlights,
+      };
+    }),
     education: educationData.map((e) => ({
       institution: e.institution,
       degree: e.degree || "",
       area: e.courses?.join(", ") || "",
-      startDate: e.duration.split(" - ")[0]?.trim() || "",
-      endDate: e.duration.split(" - ")[1]?.trim() || undefined,
+      startDate: e.startDate,
+      endDate: e.endDate,
       gpa: e.cgpa,
     })),
-    projects: featuredProjects.map((p) => ({
-      name: p.project,
-      description: p.description,
-      tags: p.tags,
-    })),
-    skills: [
-      ...new Set(
-        featuredProjects.flatMap((p) => p.tags).filter(Boolean) as string[]
-      ),
-    ],
+    skills: (llmOutput.skills || []) as ResumeData["skills"],
+    projects: ctx.projects.map((ctxProject) => {
+      const llmProj = llmProjects.find((p) => p.name === ctxProject.name);
+      const homepage = ctxProject.links.find((l) => l.type === "website")?.url;
+      return {
+        name: ctxProject.name,
+        highlights: llmProj?.highlights || [ctxProject.description],
+        techStack: llmProj?.techStack || ctxProject.tags,
+        url: homepage || undefined,
+      };
+    }),
   };
-}
-
-export function buildPrompt(ctx: Awaited<ReturnType<typeof buildResumeContext>>, role: JobRole): string {
-  return `You are an expert ATS-friendly resume writer. Given the following raw data about a person, create a tailored, ATS-optimized resume for the role of "${role}".
-
-RULES:
-- Output ONLY valid JSON matching the schema below.
-- Reorder and emphasize work experience to highlight relevance to "${role}".
-- Write a 2-3 line professional summary tailored to "${role}".
-- Quantify achievements with numbers where possible.
-- Use ATS-friendly keywords relevant to "${role}".
-- Keep bullet points concise (1-2 lines each).
-- List skills in categories relevant to "${role}".
-- Include the most relevant 5-8 projects that match "${role}".
-- Use reverse chronological order for work and education.
-- Date format: "Mon YYYY" (e.g., "Nov 2025").
-
-OUTPUT SCHEMA:
-{
-  "basics": {
-    "name": "string",
-    "email": "string",
-    "phone": "string or null",
-    "url": "string or null",
-    "summary": "2-3 line professional summary tailored to the role"
-  },
-  "work": [
-    {
-      "company": "string",
-      "position": "string (tailored title if appropriate)",
-      "startDate": "Mon YYYY",
-      "endDate": "Mon YYYY or Present",
-      "highlights": ["string (concise, quantified, ATS-optimized bullets)"]
-    }
-  ],
-  "education": [
-    {
-      "institution": "string",
-      "degree": "string",
-      "area": "string (relevant coursework)",
-      "startDate": "Mon YYYY",
-      "endDate": "Mon YYYY",
-      "gpa": "string or null"
-    }
-  ],
-  "skills": [
-    {
-      "category": "string (e.g., Languages, Frameworks, Tools)",
-      "keywords": ["string"]
-    }
-  ],
-  "projects": [
-    {
-      "name": "string",
-      "description": "string (1-2 lines, relevant to role)",
-      "techStack": ["string"],
-      "url": "string or null"
-    }
-  ]
-}
-
-RAW DATA:
-${JSON.stringify(ctx, null, 2)}`;
 }

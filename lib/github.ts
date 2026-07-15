@@ -40,7 +40,9 @@ interface GraphQLReposData {
 }
 
 export function getGithubUsername(): string {
-  return process.env.GITHUB_USERNAME || contactInfo.social.github.split("/").pop()!;
+  return (
+    process.env.GITHUB_USERNAME || contactInfo.social.github.split("/").pop()!
+  );
 }
 
 // Dedicated central client for all GitHub API requests
@@ -67,7 +69,10 @@ async function githubFetch<T>(
     const response = await fetch(url, {
       ...options,
       headers,
-      next: { revalidate: 3600, ...options?.next }, // Cache for 1 hour by default
+      next: {
+        revalidate: process.env.NODE_ENV === "development" ? 0 : 3600,
+        ...options?.next,
+      },
     });
 
     if (!response.ok) {
@@ -111,7 +116,7 @@ async function githubGraphQLFetch<T>(
       method: "POST",
       headers,
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 3600 },
+      next: { revalidate: process.env.NODE_ENV === "development" ? 0 : 3600 },
     });
 
     if (!response.ok) {
@@ -251,6 +256,57 @@ export async function getGithubRepoReadme(repoName: string): Promise<string> {
     return Buffer.from(cleanBase64, "base64").toString("utf8");
   }
   return "";
+}
+
+export interface PinnedRepoWithReadme {
+  name: string;
+  description: string;
+  tags: string[];
+  links: { type: string; url: string }[];
+  readmeContent: string;
+  language: string | null;
+}
+
+export async function getGithubPinnedReposWithReadme(): Promise<
+  PinnedRepoWithReadme[]
+> {
+  const repos = await fetchGithubRepos();
+  const shyTopics = ["shy"];
+
+  const pinnedRepos = repos
+    .filter(
+      (repo) =>
+        repo.topics?.some((t) => t.toLowerCase() === "pin") &&
+        !repo.topics?.some((t) => shyTopics.includes(t.toLowerCase())),
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+    );
+
+  const results: PinnedRepoWithReadme[] = [];
+  for (const repo of pinnedRepos) {
+    const readmeRaw = await getGithubRepoReadme(repo.name);
+    const links: { type: string; url: string }[] = [
+      { type: "github", url: repo.html_url },
+    ];
+    if (repo.homepage) {
+      links.push({ type: "website", url: repo.homepage });
+    }
+    results.push({
+      name: formatRepoName(repo.name),
+      description: repo.description || "No description provided.",
+      tags:
+        repo.topics?.filter(
+          (t) => !shyTopics.includes(t.toLowerCase()) && t !== "pin",
+        ) || [],
+      links,
+      readmeContent: readmeRaw,
+      language: repo.language || null,
+    });
+  }
+
+  return results;
 }
 
 function formatRepoName(name: string): string {

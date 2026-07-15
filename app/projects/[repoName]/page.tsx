@@ -1,5 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import {
   Star,
   GitFork,
@@ -17,7 +18,7 @@ import {
   getGithubRepoReadme,
   getGithubUsername,
 } from "@/lib/github";
-import MermaidRenderer from "@/components/features/MermaidRenderer";
+import MermaidRenderer from "./components/MermaidRenderer";
 
 import type { Metadata } from "next";
 
@@ -249,7 +250,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         {...props}
                       />
                     ),
-                    img: ({ src, alt, ...props }) => {
+                    img: ({ src, alt, width, height, ...props }) => {
                       let imageUrl = src;
                       const isExternal =
                         src?.startsWith("http") ||
@@ -263,10 +264,13 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         )}`;
                       }
                       return (
-                        <img
+                        <Image
                           className="rounded-lg max-w-full h-auto my-6 mx-auto border border-border/40"
-                          src={imageUrl}
-                          alt={alt}
+                          src={imageUrl || ""}
+                          alt={alt || ""}
+                          width={typeof width === "number" ? width : 800}
+                          height={typeof height === "number" ? height : 600}
+                          unoptimized
                           {...props}
                         />
                       );

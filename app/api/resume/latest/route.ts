@@ -7,5 +7,11 @@ export async function GET() {
   if (!doc) {
     return NextResponse.json(null);
   }
-  return NextResponse.json(serializeId(doc), { headers: { "Cache-Control": "public, max-age=60" } });
+  const serialized = serializeId(doc);
+  if (process.env.NODE_ENV === "development") {
+    serialized.createdAt = new Date(0).toISOString();
+  }
+  return NextResponse.json(serialized, {
+    headers: { "Cache-Control": "public, max-age=60" },
+  });
 }

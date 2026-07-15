@@ -90,7 +90,10 @@ function ResumeDoc({ data }: { data: ResumeData }) {
           <Text style={styles.name}>{basics.name}</Text>
           <View style={styles.contactCol}>
             {basics.email && (
-              <PdfLink href={`mailto:${basics.email}`} style={styles.contactLink}>
+              <PdfLink
+                href={`mailto:${basics.email}`}
+                style={styles.contactLink}
+              >
                 {basics.email}
               </PdfLink>
             )}
@@ -101,7 +104,7 @@ function ResumeDoc({ data }: { data: ResumeData }) {
             )}
             {basics.url && (
               <PdfLink href={basics.url} style={styles.contactLink}>
-                {basics.url}
+                {basics.url.replace(/^https?:\/\//, "")}
               </PdfLink>
             )}
           </View>
@@ -137,7 +140,10 @@ function ResumeDoc({ data }: { data: ResumeData }) {
                     {w.startDate} – {w.endDate || "Present"}
                   </Text>
                 </View>
-                <Text style={styles.italic}>{w.company}</Text>
+                <Text style={styles.italic}>
+                  {w.company}
+                  {w.location ? ` · ${w.location}` : ""}
+                </Text>
                 {w.highlights.map((h, j) => (
                   <View key={j} style={styles.bulletRow}>
                     <Text style={styles.bullet}>•</Text>
@@ -156,9 +162,12 @@ function ResumeDoc({ data }: { data: ResumeData }) {
             {projects.map((p, i) => (
               <View key={i} style={styles.row}>
                 <Text style={styles.bold}>{p.name}</Text>
-                <Text style={{ fontSize: 9.5, color: "#333", marginTop: 1 }}>
-                  {p.description}
-                </Text>
+                {p.highlights.map((h, j) => (
+                  <View key={j} style={styles.bulletRow}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.bulletText}>{h}</Text>
+                  </View>
+                ))}
                 {p.techStack.length > 0 && (
                   <Text style={styles.projectTech}>
                     {p.techStack.join(" · ")}
@@ -166,7 +175,7 @@ function ResumeDoc({ data }: { data: ResumeData }) {
                 )}
                 {p.url && (
                   <PdfLink href={p.url} style={styles.projectLink}>
-                    {p.url}
+                    {p.url.replace(/^https?:\/\//, "")}
                   </PdfLink>
                 )}
               </View>
