@@ -1,6 +1,6 @@
 import React from "react";
-import { SectionWrapper } from "@/components/features";
-import GitHubStats from "@/components/features/GitHubStats";
+import SectionWrapper from "./components/SectionWrapper";
+import GitHubStats from "./components/GitHubStats";
 import { getGithubUsername } from "@/lib/github";
 
 export default function ProjectsListLayout({

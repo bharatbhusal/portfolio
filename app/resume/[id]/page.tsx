@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getResumesCollection } from "@/lib/mongodb";
-import { ResumeDetail } from "@/components/resume";
+import ResumeDetail from "../components/ResumeDetail";
 import { ObjectId } from "mongodb";
 import type { Metadata } from "next";
 import type { ResumeData } from "@/types/resume";

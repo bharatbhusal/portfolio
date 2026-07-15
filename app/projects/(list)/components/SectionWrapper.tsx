@@ -14,6 +14,9 @@ const SectionWrapper = ({ children, className, id }: SectionWrapperProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -21,18 +24,11 @@ const SectionWrapper = ({ children, className, id }: SectionWrapperProps) => {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
+    observer.observe(el);
+    return () => observer.unobserve(el);
   }, []);
 
   return (
@@ -41,10 +37,8 @@ const SectionWrapper = ({ children, className, id }: SectionWrapperProps) => {
       ref={ref}
       className={cn(
         "transition-all duration-700",
-        isVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-8",
-        className
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+        className,
       )}
     >
       {children}

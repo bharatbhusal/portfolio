@@ -1,6 +1,6 @@
 import React from "react";
 import careerData from "@/data/careerData";
-import { CareerCard } from "@/components/cards";
+import CareerCard from "./components/CareerCard";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

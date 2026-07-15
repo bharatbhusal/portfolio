@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { Cpu } from "lucide-react";
-import { ProjectCard } from "@/components/cards";
+import ProjectCard from "./ProjectCard";
 import { ProjectItem } from "@/types";
-import ProjectsFilterBar from "@/components/features/ProjectsFilterBar";
-import ProjectsPagination from "@/components/features/ProjectsPagination";
+import ProjectsFilterBar from "./ProjectsFilterBar";
+import ProjectsPagination from "./ProjectsPagination";
 
 interface ProjectsListProps {
   initialProjects: ProjectItem[];
