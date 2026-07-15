@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ResumeBuilder } from "@/components/resume";
+import ResumeBuilder from "./components/ResumeBuilder";
 
 export const metadata: Metadata = {
   title: "Resume Builder",

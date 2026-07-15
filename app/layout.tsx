@@ -2,8 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/layout";
-import { siteConfig, contactInfo } from "@/config";
+import Header from "@/components/layout/Header";
+import { contactInfo } from "@/config/contact-info";
+import { siteConfig } from "@/config/site-config";
 import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
