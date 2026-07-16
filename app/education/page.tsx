@@ -1,35 +1,22 @@
 import React from "react";
-import educationData from "@/data/educationData";
-import EducationCard from "./components/EducationCard";
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import { prefetchEducation } from "@/lib/hydration";
+import EducationPageClient from "./components/EducationPageClient";
 
 export const metadata: Metadata = {
   title: "Education",
   description: "Educational background, university degrees, and academic history.",
 };
 
-export default function EducationPage() {
-  const sortedEducation = [...educationData].sort((a, b) => {
-    if (a.highlight && !b.highlight) return -1;
-    if (!a.highlight && b.highlight) return 1;
-    return 0;
-  });
+export default async function EducationPage() {
+  const docs = await prefetchEducation();
 
-  const cleanEducation = sortedEducation.map(item => ({
-    ...item,
-    links: item.links.map(link => ({
-      link: link.link,
-      type: link.type
-    }))
+  const data = docs.map((doc) => ({
+    ...doc,
+    _id: String(doc._id),
+    createdAt: undefined,
+    updatedAt: undefined,
   }));
 
-  return (
-    <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {cleanEducation.map((item) => (
-          <EducationCard key={item.institution} {...item} />
-        ))}
-      </div>
-    </div>
-  );
+  return <EducationPageClient initialData={data} />;
 }

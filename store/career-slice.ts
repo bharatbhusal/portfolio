@@ -69,6 +69,10 @@ const careerSlice = createSlice({
   name: "career",
   initialState,
   reducers: {
+    setCareerData(state, action) {
+      state.data = action.payload;
+      state.loading = false;
+    },
     setSelected(state, action) {
       state.selected = action.payload;
     },
@@ -100,5 +104,5 @@ const careerSlice = createSlice({
   },
 });
 
-export const { setSelected } = careerSlice.actions;
+export const { setSelected, setCareerData } = careerSlice.actions;
 export default careerSlice.reducer;

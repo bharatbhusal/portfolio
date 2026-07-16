@@ -69,6 +69,10 @@ const educationSlice = createSlice({
   name: "education",
   initialState,
   reducers: {
+    setEducationData(state, action) {
+      state.data = action.payload;
+      state.loading = false;
+    },
     setSelected(state, action) {
       state.selected = action.payload;
     },
@@ -100,5 +104,5 @@ const educationSlice = createSlice({
   },
 });
 
-export const { setSelected } = educationSlice.actions;
+export const { setSelected, setEducationData } = educationSlice.actions;
 export default educationSlice.reducer;

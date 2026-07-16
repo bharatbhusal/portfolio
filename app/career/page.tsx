@@ -1,35 +1,22 @@
 import React from "react";
-import careerData from "@/data/careerData";
-import CareerCard from "./components/CareerCard";
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import { prefetchCareer } from "@/lib/hydration";
+import CareerPageClient from "./components/CareerPageClient";
 
 export const metadata: Metadata = {
   title: "Career",
   description: "Professional experience and software engineering career history.",
 };
 
-export default function CareerPage() {
-  const sortedCareer = [...careerData].sort((a, b) => {
-    if (a.highlight && !b.highlight) return -1;
-    if (!a.highlight && b.highlight) return 1;
-    return 0;
-  });
+export default async function CareerPage() {
+  const docs = await prefetchCareer();
 
-  const cleanCareer = sortedCareer.map(item => ({
-    ...item,
-    links: item.links.map(link => ({
-      link: link.link,
-      type: link.type
-    }))
+  const data = docs.map((doc) => ({
+    ...doc,
+    _id: String(doc._id),
+    createdAt: undefined,
+    updatedAt: undefined,
   }));
 
-  return (
-    <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {cleanCareer.map((item) => (
-          <CareerCard key={item.company} {...item} />
-        ))}
-      </div>
-    </div>
-  );
+  return <CareerPageClient initialData={data} />;
 }

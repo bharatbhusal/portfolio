@@ -7,14 +7,47 @@ import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { contactInfo } from "@/config/contact-info";
-import { socialLinks } from "@/data/aboutMe";
+import { socialLinks as defaultSocialLinks } from "@/data/aboutMe";
 import ToggleProfileQR from "./ToggleProfileQR";
 import SocialLinks from "./SocialLinks";
 import { siteConfig } from "@/config/site-config";
+import type { PersonalInfoDocument } from "@/models/personal-info";
+import type { SocialLinkConfig } from "@/types/social";
+import { SOCIAL_PLATFORMS } from "@/types/social";
 
-const HeroSection = () => {
+function buildSocialLinks(configs: SocialLinkConfig[]) {
+  if (!configs.length) return defaultSocialLinks;
+
+  const platformMap = SOCIAL_PLATFORMS;
+
+  return configs
+    .filter((c) => c.enabled && c.url)
+    .map((c) => {
+      const platform = platformMap[c.platform];
+      return {
+        link: c.url,
+        icon: platform?.icon || defaultSocialLinks[0].icon,
+        type: c.platform,
+        label: platform?.label || c.platform,
+        handle: c.handle,
+      };
+    });
+}
+
+const HeroSection = ({
+  initialPersonalInfo,
+  initialSocialLinks,
+}: {
+  initialPersonalInfo?: PersonalInfoDocument | null;
+  initialSocialLinks?: SocialLinkConfig[];
+}) => {
   const [loaded, setLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const info = initialPersonalInfo;
+  const socialItems = initialSocialLinks
+    ? buildSocialLinks(initialSocialLinks)
+    : defaultSocialLinks;
 
   useEffect(() => {
     const img = new Image();
@@ -69,6 +102,12 @@ const HeroSection = () => {
     return () => ctx.revert();
   }, [loaded]);
 
+  const displayName = info
+    ? `${info.name.first} ${info.name.last}`
+    : contactInfo.name.full;
+
+  const title = info?.title || contactInfo.title;
+
   if (!loaded) {
     return (
       <section className="min-h-screen flex items-center justify-center pt-16">
@@ -99,24 +138,24 @@ const HeroSection = () => {
           <ToggleProfileQR
             profileUrl="/name.jpeg"
             qrValue={`${siteConfig.url}/api/contact/vcard`}
-            name={contactInfo.name.full}
+            name={displayName}
           />
         </div>
 
         <div className="hero-text space-y-4 mt-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
             <span className="bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent">
-              {contactInfo.name.full}
+              {displayName}
             </span>
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto">
-            {contactInfo.title}
+            {title}
           </p>
         </div>
 
         <div className="hero-social">
-          <SocialLinks socialLinks={socialLinks} />
+          <SocialLinks socialLinks={socialItems} />
         </div>
 
         <div className="hero-cta flex flex-wrap justify-center gap-3 my-4">
