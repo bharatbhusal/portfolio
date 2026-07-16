@@ -8,11 +8,25 @@ import {
 } from "@/store/social-links-slice";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { SocialLinksSkeleton } from "@/components/skeletons/SocialLinksSkeleton";
+import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SOCIAL_PLATFORMS, type SocialLinkConfig } from "@/types/social";
-import { getSocialIcon } from "@/types/social";
+import {
+  SOCIAL_PLATFORMS,
+  buildSocialUrl,
+  type SocialLinkConfig,
+  type SocialPlatform,
+} from "@/types/social";
+
+const platformOrder: SocialPlatform[] = [
+  "github",
+  "twitter",
+  "linkedin",
+  "telegram",
+  "email",
+  "substack",
+  "instagram",
+];
 
 export default function SocialLinksPage() {
   const dispatch = useAppDispatch();
@@ -29,18 +43,32 @@ export default function SocialLinksPage() {
 
   useEffect(() => {
     if (data.length > 0) {
-      setLinks(data);
+      const sorted = [...data].sort(
+        (a, b) =>
+          platformOrder.indexOf(a.platform) - platformOrder.indexOf(b.platform),
+      );
+      setLinks(sorted);
     }
   }, [data]);
 
-  const updateLink = (
-    platform: SocialLinkConfig["platform"],
-    field: keyof SocialLinkConfig,
-    value: string | boolean,
-  ) => {
+  const updateHandle = (platform: SocialPlatform, handle: string) => {
     setLinks((prev) =>
-      prev.map((link) =>
-        link.platform === platform ? { ...link, [field]: value } : link,
+      prev.map((l) =>
+        l.platform === platform
+          ? {
+              ...l,
+              handle,
+              url: buildSocialUrl(platform, handle),
+            }
+          : l,
+      ),
+    );
+  };
+
+  const toggleEnabled = (platform: SocialPlatform) => {
+    setLinks((prev) =>
+      prev.map((l) =>
+        l.platform === platform ? { ...l, enabled: !l.enabled } : l,
       ),
     );
   };
@@ -53,7 +81,7 @@ export default function SocialLinksPage() {
     } catch (err) {
       addNotification({
         type: "error",
-        title: "Failed to update",
+        title: "Failed to save",
         message: err instanceof Error ? err.message : "Unknown error",
       });
     } finally {
@@ -61,50 +89,61 @@ export default function SocialLinksPage() {
     }
   };
 
-  if (loading) return <SocialLinksSkeleton />;
+  if (loading) return <FormSkeleton />;
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <PageHeader title="Social Links" subtitle="Manage your social media profiles" />
+    <div className="space-y-6">
+      <PageHeader
+        title="Social Links"
+        subtitle="Manage your social media presence"
+      />
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {links.map((link) => {
-          const Icon = getSocialIcon(link.platform);
-          const platformInfo = SOCIAL_PLATFORMS[link.platform];
+          const platform = SOCIAL_PLATFORMS[link.platform];
+          const Icon = platform?.icon;
+          const previewUrl = buildSocialUrl(link.platform, link.handle);
+
           return (
             <div
               key={link.platform}
               className="flex items-center gap-4 p-4 rounded-xl border border-border/50 bg-card/50"
             >
-              <Icon className="h-6 w-6 text-muted-foreground" />
-              <div className="flex-1 space-y-2">
-                <p className="font-medium">{platformInfo.label}</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <Input
-                    placeholder="URL"
-                    value={link.url}
-                    onChange={(e) => updateLink(link.platform, "url", e.target.value)}
-                  />
-                  <Input
-                    placeholder="Handle"
-                    value={link.handle}
-                    onChange={(e) =>
-                      updateLink(link.platform, "handle", e.target.value)
-                    }
-                  />
-                </div>
+              <div className="flex items-center gap-3 min-w-[140px]">
+                {Icon && <Icon className="h-5 w-5 text-muted-foreground" />}
+                <span className="font-medium text-sm">{platform?.label}</span>
               </div>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={link.enabled}
-                  onChange={(e) =>
-                    updateLink(link.platform, "enabled", e.target.checked)
+
+              <div className="flex-1 space-y-1">
+                <Input
+                  placeholder={
+                    link.platform === "email"
+                      ? "your@email.com"
+                      : `username`
                   }
-                  className="rounded"
+                  value={link.handle}
+                  onChange={(e) => updateHandle(link.platform, e.target.value)}
                 />
-                <span className="text-sm">Enabled</span>
-              </label>
+                {previewUrl && (
+                  <p className="text-xs text-muted-foreground truncate">
+                    {previewUrl}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => toggleEnabled(link.platform)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  link.enabled ? "bg-primary" : "bg-muted"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    link.enabled ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
             </div>
           );
         })}

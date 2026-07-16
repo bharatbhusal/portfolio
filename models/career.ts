@@ -31,9 +31,7 @@ export async function getCareerById(
   return doc ? (serializeId(doc) as unknown as CareerDocument) : null;
 }
 
-export async function createCareer(
-  data: CareerItem,
-): Promise<CareerDocument> {
+export async function createCareer(data: CareerItem): Promise<CareerDocument> {
   const collection = await getCollection();
   const now = new Date();
   const result = await collection.insertOne({

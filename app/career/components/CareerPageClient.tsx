@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { setCareerData } from "@/store/career-slice";
 import CareerCard from "./CareerCard";
+import { EmptyState } from "@/components/shared/EmptyState";
 import type { CareerItem } from "@/types";
 
 type Item = CareerItem & { _id: string };
@@ -18,6 +19,17 @@ export default function CareerPageClient({
   useEffect(() => {
     dispatch(setCareerData(initialData));
   }, [dispatch, initialData]);
+
+  if (initialData.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <EmptyState
+          title="No career entries yet"
+          description="Work experience will appear here once added from the admin dashboard."
+        />
+      </div>
+    );
+  }
 
   const sorted = [...initialData].sort((a, b) => {
     if (a.highlight && !b.highlight) return -1;

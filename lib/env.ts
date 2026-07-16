@@ -2,12 +2,10 @@ import { z } from "zod";
 
 const envSchema = z.object({
   // Existing
-  GITHUB_TOKEN: z.string().min(1, "GITHUB_TOKEN is required"),
-  GITHUB_USERNAME: z.string().min(1, "GITHUB_USERNAME is required"),
+  GITHUB_TOKEN: z.string().optional(),
+  GITHUB_USERNAME: z.string().optional(),
   GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
-  DATABASE_URL: z
-    .string()
-    .default("mongodb://localhost:27017/resume"),
+  DATABASE_URL: z.string().default("mongodb://localhost:27017/resume"),
   HOSTED_URL: z.string().url().default("http://localhost:3000"),
   NODE_ENV: z
     .enum(["development", "production", "test"])
@@ -15,30 +13,17 @@ const envSchema = z.object({
 
   // Auth
   ADMIN_USERNAME: z.string().min(1, "ADMIN_USERNAME is required"),
-  ADMIN_PASSWORD: z.string().min(6, "ADMIN_PASSWORD must be at least 6 characters"),
+  ADMIN_PASSWORD: z
+    .string()
+    .min(6, "ADMIN_PASSWORD must be at least 6 characters"),
   JWT_SECRET: z.string().min(16, "JWT_SECRET must be at least 16 characters"),
 
-  // Feature toggles
-  ONBOARDING_ENABLED: z
-    .string()
-    .default("false")
-    .transform((val) => val === "true"),
-
   // Rate limiting (in ms)
-  RATE_LIMIT_WINDOW: z
-    .string()
-    .default("600000")
-    .transform(Number),
-  RATE_LIMIT_MAX_REQUESTS: z
-    .string()
-    .default("10")
-    .transform(Number),
+  RATE_LIMIT_WINDOW: z.string().default("600000").transform(Number),
+  RATE_LIMIT_MAX_REQUESTS: z.string().default("10").transform(Number),
 
   // Cache (in seconds)
-  CACHE_DURATION: z
-    .string()
-    .default("3600")
-    .transform(Number),
+  CACHE_DURATION: z.string().default("3600").transform(Number),
 });
 
 function validateEnv() {

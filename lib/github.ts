@@ -1,5 +1,5 @@
-import { contactInfo } from "@/config/contact-info";
 import { ProjectItem, ProjectLink } from "@/types";
+import { getSetting } from "@/models/settings";
 
 export interface GithubRepo {
   name: string;
@@ -39,10 +39,10 @@ interface GraphQLReposData {
   };
 }
 
-export function getGithubUsername(): string {
-  return (
-    process.env.GITHUB_USERNAME || contactInfo.social.github.split("/").pop()!
-  );
+export async function getGithubUsername(): Promise<string> {
+  const dbUsername = await getSetting("github_username");
+  if (dbUsername) return dbUsername;
+  return process.env.GITHUB_USERNAME || "";
 }
 
 // Dedicated central client for all GitHub API requests
@@ -50,7 +50,8 @@ async function githubFetch<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T | null> {
-  const token = process.env.GITHUB_TOKEN;
+  const dbToken = await getSetting("github_token");
+  const token = dbToken || process.env.GITHUB_TOKEN;
   const headers = new Headers();
   headers.set("Accept", "application/vnd.github+json");
   headers.set("User-Agent", "bharatbhusal-portfolio");
@@ -90,7 +91,8 @@ async function githubFetch<T>(
 }
 
 export async function fetchGithubRepos(): Promise<GithubRepo[]> {
-  const username = getGithubUsername();
+  const username = await getGithubUsername();
+  if (!username) return [];
   const repos = await githubFetch<GithubRepo[]>(
     `users/${username}/repos?sort=updated&per_page=100`,
   );
@@ -102,7 +104,8 @@ async function githubGraphQLFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T | null> {
-  const token = process.env.GITHUB_TOKEN;
+  const dbToken = await getSetting("github_token");
+  const token = dbToken || process.env.GITHUB_TOKEN;
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
   headers.set("Accept", "application/vnd.github+json");
@@ -209,7 +212,7 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
   `;
 
   const commitData = await githubGraphQLFetch<GraphQLReposData>(commitQuery, {
-    username: getGithubUsername(),
+    username: await getGithubUsername(),
   });
   const commitMap = new Map<string, { branch: string; message: string }>();
 
@@ -241,12 +244,12 @@ export async function getGithubProjects(): Promise<ProjectItem[]> {
 export async function getGithubRepoDetails(
   repoName: string,
 ): Promise<GithubRepo | null> {
-  const username = getGithubUsername();
+  const username = await getGithubUsername();
   return githubFetch<GithubRepo>(`repos/${username}/${repoName}`);
 }
 
 export async function getGithubRepoReadme(repoName: string): Promise<string> {
-  const username = getGithubUsername();
+  const username = await getGithubUsername();
   const data = await githubFetch<{ content: string; encoding: string }>(
     `repos/${username}/${repoName}/readme`,
   );

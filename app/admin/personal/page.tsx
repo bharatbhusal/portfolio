@@ -79,6 +79,7 @@ export default function PersonalInfoPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium">First Name</label>
             <Input
+              placeholder="John"
               value={form.name.first}
               onChange={(e) =>
                 setForm({ ...form, name: { ...form.name, first: e.target.value } })
@@ -88,6 +89,7 @@ export default function PersonalInfoPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Last Name</label>
             <Input
+              placeholder="Doe"
               value={form.name.last}
               onChange={(e) =>
                 setForm({ ...form, name: { ...form.name, last: e.target.value } })
@@ -99,6 +101,7 @@ export default function PersonalInfoPage() {
         <div className="space-y-2">
           <label className="text-sm font-medium">Full Name</label>
           <Input
+            placeholder="John Doe"
             value={form.name.full}
             onChange={(e) =>
               setForm({ ...form, name: { ...form.name, full: e.target.value } })
@@ -110,6 +113,7 @@ export default function PersonalInfoPage() {
           <label className="text-sm font-medium">Email</label>
           <Input
             type="email"
+            placeholder="you@example.com"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
@@ -118,6 +122,7 @@ export default function PersonalInfoPage() {
         <div className="space-y-2">
           <label className="text-sm font-medium">Phone</label>
           <Input
+            placeholder="+1 234 567 890"
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
@@ -126,6 +131,7 @@ export default function PersonalInfoPage() {
         <div className="space-y-2">
           <label className="text-sm font-medium">Title</label>
           <Input
+            placeholder="Software Engineer"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
@@ -134,6 +140,7 @@ export default function PersonalInfoPage() {
         <div className="space-y-2">
           <label className="text-sm font-medium">Tagline</label>
           <Input
+            placeholder="Exploring everything!"
             value={form.tagline}
             onChange={(e) => setForm({ ...form, tagline: e.target.value })}
           />
@@ -143,6 +150,7 @@ export default function PersonalInfoPage() {
           <label className="text-sm font-medium">Bio</label>
           <textarea
             className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            placeholder="Brief description about yourself..."
             value={form.bio}
             onChange={(e) => setForm({ ...form, bio: e.target.value })}
           />

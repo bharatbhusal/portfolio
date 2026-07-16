@@ -115,6 +115,7 @@ export default function CareerPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Company</label>
               <Input
+                placeholder="Company name"
                 value={form.company || ""}
                 onChange={(e) => setForm({ ...form, company: e.target.value })}
               />
@@ -122,6 +123,7 @@ export default function CareerPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Role</label>
               <Input
+                placeholder="Software Engineer"
                 value={form.role || ""}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
               />
@@ -129,6 +131,7 @@ export default function CareerPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Start Date</label>
               <Input
+                placeholder="Nov 2025"
                 value={form.startDate || ""}
                 onChange={(e) => setForm({ ...form, startDate: e.target.value })}
               />
@@ -136,6 +139,7 @@ export default function CareerPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">End Date</label>
               <Input
+                placeholder="Present"
                 value={form.endDate || ""}
                 onChange={(e) => setForm({ ...form, endDate: e.target.value })}
               />
@@ -145,6 +149,7 @@ export default function CareerPage() {
             <label className="text-sm font-medium">Description</label>
             <textarea
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="What does this company do? Your role..."
               value={form.description || ""}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />

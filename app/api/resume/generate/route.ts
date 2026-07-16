@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const systemPrompt = buildSystemPrompt(role);
     const userPrompt = buildUserPrompt(ctx, role);
     const rawOutput = await generateResume(systemPrompt, userPrompt);
-    const resume = postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
+    const resume = await postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
 
     // Save to MongoDB
     const col = await getResumesCollection();

@@ -23,6 +23,32 @@ export interface SocialLinkConfig {
   enabled: boolean;
 }
 
+export function buildSocialUrl(
+  platform: SocialPlatform,
+  handle: string,
+): string {
+  if (!handle) return "";
+  const h = handle.replace(/^@/, "");
+  switch (platform) {
+    case "github":
+      return `https://github.com/${h}`;
+    case "twitter":
+      return `https://x.com/${h}`;
+    case "telegram":
+      return `https://t.me/${h}`;
+    case "email":
+      return h.includes("@") ? `mailto:${h}` : `mailto:${h}`;
+    case "substack":
+      return `https://${h}.substack.com`;
+    case "linkedin":
+      return `https://linkedin.com/in/${h}`;
+    case "instagram":
+      return `https://instagram.com/${h}`;
+    default:
+      return "";
+  }
+}
+
 export function getSocialIcon(platform: SocialPlatform): IconType {
   return SOCIAL_PLATFORMS[platform].icon;
 }

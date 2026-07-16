@@ -3,12 +3,12 @@ import SectionWrapper from "./components/SectionWrapper";
 import GitHubStats from "./components/GitHubStats";
 import { getGithubUsername } from "@/lib/github";
 
-export default function ProjectsListLayout({
+export default async function ProjectsListLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const username = getGithubUsername();
+  const username = await getGithubUsername();
   return (
     <div className="min-h-screen py-24 px-4 sm:px-6">
       <div className="text-center space-y-3 mb-12 max-w-xl mx-auto">

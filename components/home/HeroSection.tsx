@@ -6,8 +6,6 @@ import { ArrowRight, Briefcase, FolderGit2 } from "lucide-react";
 import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { contactInfo } from "@/config/contact-info";
-import { socialLinks as defaultSocialLinks } from "@/data/aboutMe";
 import ToggleProfileQR from "./ToggleProfileQR";
 import SocialLinks from "./SocialLinks";
 import { siteConfig } from "@/config/site-config";
@@ -16,7 +14,7 @@ import type { SocialLinkConfig } from "@/types/social";
 import { SOCIAL_PLATFORMS } from "@/types/social";
 
 function buildSocialLinks(configs: SocialLinkConfig[]) {
-  if (!configs.length) return defaultSocialLinks;
+  if (!configs.length) return [];
 
   const platformMap = SOCIAL_PLATFORMS;
 
@@ -26,7 +24,7 @@ function buildSocialLinks(configs: SocialLinkConfig[]) {
       const platform = platformMap[c.platform];
       return {
         link: c.url,
-        icon: platform?.icon || defaultSocialLinks[0].icon,
+        icon: platform?.icon,
         type: c.platform,
         label: platform?.label || c.platform,
         handle: c.handle,
@@ -47,7 +45,7 @@ const HeroSection = ({
   const info = initialPersonalInfo;
   const socialItems = initialSocialLinks
     ? buildSocialLinks(initialSocialLinks)
-    : defaultSocialLinks;
+    : [];
 
   useEffect(() => {
     const img = new Image();
@@ -104,9 +102,9 @@ const HeroSection = ({
 
   const displayName = info
     ? `${info.name.first} ${info.name.last}`
-    : contactInfo.name.full;
+    : "No Name";
 
-  const title = info?.title || contactInfo.title;
+  const title = info?.title || "No title set";
 
   if (!loaded) {
     return (

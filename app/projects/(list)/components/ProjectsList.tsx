@@ -6,6 +6,7 @@ import ProjectCard from "./ProjectCard";
 import { ProjectItem } from "@/types";
 import ProjectsFilterBar from "./ProjectsFilterBar";
 import ProjectsPagination from "./ProjectsPagination";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 interface ProjectsListProps {
   initialProjects: ProjectItem[];
@@ -69,6 +70,15 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return processedProjects.slice(startIndex, startIndex + itemsPerPage);
   }, [processedProjects, currentPage, itemsPerPage]);
+
+  if (initialProjects.length === 0) {
+    return (
+      <EmptyState
+        title="No projects yet"
+        description="Configure your GitHub username in the admin dashboard to show your repositories here."
+      />
+    );
+  }
 
   return (
     <div className="space-y-4 max-w-7xl mx-auto font-sans">

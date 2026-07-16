@@ -75,6 +75,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   }
 
   const defaultBranch = repo.default_branch || "main";
+  const githubUsername = await getGithubUsername();
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -146,7 +147,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                       }
                       let targetUrl = href;
                       if (!isExternal && href) {
-                        const username = getGithubUsername();
+                        const username = githubUsername;
                         targetUrl = `https://github.com/${username}/${repoName}/blob/${defaultBranch}/${href.replace(
                           /^\.\//,
                           "",
@@ -258,7 +259,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         srcStr.startsWith("//") ||
                         srcStr.startsWith("data:");
                       if (!isExternal && srcStr) {
-                        const username = getGithubUsername();
+                        const username = githubUsername;
                         imageUrl = `https://raw.githubusercontent.com/${username}/${repoName}/${defaultBranch}/${srcStr.replace(
                           /^\.\//,
                           "",

@@ -1,24 +1,13 @@
-import { contactInfo } from "@/config/contact-info";
-import careerData from "@/data/careerData";
-import educationData from "@/data/educationData";
+import { getPersonalInfo } from "@/models/personal-info";
+import { getAllCareer } from "@/models/career";
+import { getAllEducation } from "@/models/education";
 import { getGithubPinnedReposWithReadme } from "@/lib/github";
 import type { ResumeData, JobRole } from "@/types/resume";
 
 function parseStartDate(dateStr: string): number {
   const months: Record<string, number> = {
-    Jan: 0,
-    Feb: 1,
-    Mar: 2,
-    Apr: 3,
-    May: 4,
-    Jun: 5,
-    Jul: 6,
-    Aug: 7,
-    Sept: 8,
-    Sep: 8,
-    Oct: 9,
-    Nov: 10,
-    Dec: 11,
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sept: 8, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
   };
   const parts = dateStr.split(" ");
   if (parts.length < 2) return 0;
@@ -41,10 +30,13 @@ export async function buildResumeContext(): Promise<{
     links: { type: string; url: string }[];
   }[];
 }> {
-  const pinnedRepos = await getGithubPinnedReposWithReadme();
+  const [pinnedRepos, careerItems] = await Promise.all([
+    getGithubPinnedReposWithReadme(),
+    getAllCareer(),
+  ]);
 
   return {
-    work: careerData.map((c) => ({
+    work: careerItems.map((c) => ({
       company: c.company,
       address: c.address,
       highlights: c.achievements,
@@ -108,11 +100,17 @@ RAW DATA:
 ${JSON.stringify(ctx, null, 2)}`;
 }
 
-export function postProcessResume(
+export async function postProcessResume(
   llmOutput: Record<string, unknown>,
   ctx: Awaited<ReturnType<typeof buildResumeContext>>,
-): ResumeData {
-  const workMap = new Map(careerData.map((c) => [c.company, c]));
+): Promise<ResumeData> {
+  const [careerItems, educationItems, personalInfo] = await Promise.all([
+    getAllCareer(),
+    getAllEducation(),
+    getPersonalInfo(),
+  ]);
+
+  const workMap = new Map(careerItems.map((c) => [c.company, c]));
 
   const llmWork = (llmOutput.work || []) as {
     company: string;
@@ -136,11 +134,11 @@ export function postProcessResume(
 
   return {
     basics: {
-      name: contactInfo.name.full,
-      email: contactInfo.email,
-      phone: contactInfo.phone,
-      url: contactInfo.website,
-      summary: (llmOutput.summary as string) || contactInfo.bio,
+      name: personalInfo?.name?.full || "No Name",
+      email: personalInfo?.email || "",
+      phone: personalInfo?.phone,
+      url: personalInfo?.website,
+      summary: (llmOutput.summary as string) || personalInfo?.bio || "",
     },
     work: sortedWork.map((w) => {
       const raw = workMap.get(w.company);
@@ -153,7 +151,7 @@ export function postProcessResume(
         highlights: w.highlights,
       };
     }),
-    education: educationData.map((e) => ({
+    education: educationItems.map((e) => ({
       institution: e.institution,
       degree: e.degree || "",
       area: e.courses?.join(", ") || "",

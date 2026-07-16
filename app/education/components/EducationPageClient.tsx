@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { setEducationData } from "@/store/education-slice";
 import EducationCard from "./EducationCard";
+import { EmptyState } from "@/components/shared/EmptyState";
 import type { EducationItem } from "@/types";
 
 type Item = EducationItem & { _id: string };
@@ -18,6 +19,17 @@ export default function EducationPageClient({
   useEffect(() => {
     dispatch(setEducationData(initialData));
   }, [dispatch, initialData]);
+
+  if (initialData.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <EmptyState
+          title="No education entries yet"
+          description="Educational background will appear here once added from the admin dashboard."
+        />
+      </div>
+    );
+  }
 
   const sorted = [...initialData].sort((a, b) => {
     if (a.highlight && !b.highlight) return -1;

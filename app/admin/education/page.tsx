@@ -116,6 +116,7 @@ export default function EducationPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Institution</label>
               <Input
+                placeholder="University name"
                 value={form.institution || ""}
                 onChange={(e) => setForm({ ...form, institution: e.target.value })}
               />
@@ -123,6 +124,7 @@ export default function EducationPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Degree</label>
               <Input
+                placeholder="B.Tech in Computer Science"
                 value={form.degree || ""}
                 onChange={(e) => setForm({ ...form, degree: e.target.value })}
               />
@@ -130,6 +132,7 @@ export default function EducationPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Start Date</label>
               <Input
+                placeholder="Nov 2021"
                 value={form.startDate || ""}
                 onChange={(e) => setForm({ ...form, startDate: e.target.value })}
               />
@@ -137,6 +140,7 @@ export default function EducationPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">End Date</label>
               <Input
+                placeholder="Apr 2025"
                 value={form.endDate || ""}
                 onChange={(e) => setForm({ ...form, endDate: e.target.value })}
               />
@@ -144,6 +148,7 @@ export default function EducationPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">CGPA</label>
               <Input
+                placeholder="9.11/10"
                 value={form.cgpa || ""}
                 onChange={(e) => setForm({ ...form, cgpa: e.target.value })}
               />
