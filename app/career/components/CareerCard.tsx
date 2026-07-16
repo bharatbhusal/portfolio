@@ -23,7 +23,8 @@ const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>
 const CareerCard = ({
   company,
   role,
-  duration,
+  startDate,
+  endDate,
   address,
   description,
   achievements,
@@ -45,7 +46,7 @@ const CareerCard = ({
             <p className="text-primary font-medium text-sm">{role}</p>
           </div>
           <span className="text-xs text-muted-foreground whitespace-nowrap">
-            {duration}
+            {startDate} – {endDate || "Present"}
           </span>
         </div>
 

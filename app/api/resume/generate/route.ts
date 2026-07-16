@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { buildResumeContext, buildPrompt } from "@/lib/resume";
+import { buildResumeContext, buildSystemPrompt, buildUserPrompt, postProcessResume } from "@/lib/resume";
 import { generateResume } from "@/lib/llm";
 import { getResumesCollection } from "@/lib/mongodb";
 import { checkApiRateLimit, checkPdfRateLimit, extractIp } from "@/lib/rate-limit";
@@ -33,8 +33,10 @@ export async function POST(req: NextRequest) {
     }
 
     const ctx = await buildResumeContext();
-    const prompt = buildPrompt(ctx, role);
-    const resume = await generateResume(prompt);
+    const systemPrompt = buildSystemPrompt(role);
+    const userPrompt = buildUserPrompt(ctx, role);
+    const rawOutput = await generateResume(systemPrompt, userPrompt);
+    const resume = postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
 
     // Save to MongoDB
     const col = await getResumesCollection();

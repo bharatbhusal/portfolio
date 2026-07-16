@@ -15,7 +15,8 @@ export interface CareerLink extends Link {
 export interface CareerItem {
   company: string;
   role: string;
-  duration: string;
+  startDate: string;
+  endDate?: string;
   address: string;
   description: string;
   achievements: string[];
@@ -30,7 +31,8 @@ export interface EducationLink extends Link {
 
 export interface EducationItem {
   institution: string;
-  duration: string;
+  startDate: string;
+  endDate?: string;
   address: string;
   cgpa: string;
   links: EducationLink[];
