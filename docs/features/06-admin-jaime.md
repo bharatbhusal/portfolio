@@ -33,51 +33,38 @@
 - Quick action buttons to each section
 
 ### 3. Admin: Personal Info (app/admin/personal/)
-**page.tsx:** Form to edit personal details
-**components/PersonalInfoForm.tsx:**
+- Form to edit personal details
 - Fields: name (first, last), email, phone, website, portfolio, title, tagline, bio, keywords
 - Load from Redux store
 - Save via PUT /api/personal-info
 - Show success/error notifications
 
 ### 4. Admin: Social Links (app/admin/social-links/)
-**page.tsx:** List of predefined social platforms
-**components/SocialLinksForm.tsx:**
-- Display all 7 platforms with icons (from types/social.ts)
+- List of 7 predefined social platforms with icons
 - Each platform: toggle (enabled/disabled), URL input, handle input
 - Icons auto-assigned based on platform type
 - Save via PUT /api/social-links
-- Use DataCard component with toggle
 
 ### 5. Admin: Education (app/admin/education/)
-**page.tsx:** List of education entries
-**components/EducationForm.tsx:**
+- List of education entries
 - Add new education entry
 - Edit existing entry
 - Delete with confirmation dialog
-- Use DataCard component with onEdit/onDelete props
 - Form fields matching education validation schema
 
 ### 6. Admin: Career (app/admin/career/)
-**page.tsx:** List of career entries
-**components/CareerForm.tsx:**
 - Same pattern as education
 - Add/edit/delete with confirmation
-- Form fields matching career validation schema
 
 ### 7. Admin: Resume (app/admin/resume/)
-**page.tsx:** View generated resumes
+- View generated resumes
 - List from Redux store
 - Click to view details
-- No create/edit (resume is LLM-generated)
 
 ### 8. Admin: Image (app/admin/image/)
-**page.tsx:** Profile image management
-**components/ImageUploadForm.tsx:**
 - Show current profile image
 - Upload new image via simple file input
 - Delete current image
-- Use ImageUpload shared component
 
 ### 9. Navbar Update (components/layout/Header.tsx)
 - Add "Admin" link in navigation
@@ -85,38 +72,14 @@
 - Links to /admin
 
 ### 10. Public Page Refactoring
-
-**app/career/page.tsx:**
-- Use SSR to fetch career data via prefetchCareer()
-- Pass as props to client component
-- Client component hydrates Redux store
-- Use DataCard WITHOUT onEdit/onDelete props
-
-**app/education/page.tsx:**
-- Same pattern as career
-- Use DataCard WITHOUT edit/delete props
-
-**app/page.tsx (Home):**
-- SSR prefetch for personal info and social links
-- Pass as props to HeroSection and SocialLinks
+- Career page: SSR prefetch via prefetchCareer(), client component hydrates Redux
+- Education page: Same pattern
+- Home page: SSR prefetch personal info + social links, HeroSection uses server data
 
 ### 11. Write Feature Doc
-Write `docs/features/06-admin-jaime.md`
+- docs/features/06-admin-jaime.md
 
-## Commit
-
-```
-Git config (scoped to worktree):
-  user.name = "Jaime Lannister"
-  user.email = "jaime@casterlyrock.dev"
-
-Commit message:
-feat(admin): admin dashboard, CRUD pages, public page refactoring
-
-- Created admin layout with sidebar navigation
-- Built admin pages: personal info, social links, education, career, resume, image
-- Added Admin link to navbar (visible when authenticated)
-- Refactored public pages to use SSR + Redux hydration
-- Used DataCard with optional edit/delete props (admin vs public)
-- All admin forms use shared components and validation schemas
-```
+## Commits
+- `feat: admin dashboard + header auth link` — admin pages, header Admin link
+- `fix: resume page type error for optional _id`
+- `feat: SSR + Redux hydration for public pages` — career, education, home SSR refactoring
