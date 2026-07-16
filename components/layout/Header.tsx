@@ -3,13 +3,14 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, GraduationCap, FolderGit2, FileText, Moon, Sun } from "lucide-react";
+import { Home, Briefcase, GraduationCap, FolderGit2, FileText, Moon, Sun, Shield } from "lucide-react";
 import { useTheme } from "next-themes";
 import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { contactInfo } from "@/config/contact-info";
+import { useAuth } from "@/components/providers/auth-provider";
 import MobileNav from "./MobileNav";
 
 const navItems = [
@@ -26,6 +27,7 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -80,6 +82,20 @@ const Header = () => {
                 </Link>
               );
             })}
+            {isAuthenticated && (
+              <Link
+                href="/admin"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                  pathname.startsWith("/admin")
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                )}
+              >
+                <Shield className="h-4 w-4" />
+                Admin
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-2">
