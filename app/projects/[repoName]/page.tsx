@@ -251,14 +251,15 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                       />
                     ),
                     img: ({ src, alt, width, height, ...props }) => {
-                      let imageUrl = src;
+                      const srcStr = typeof src === "string" ? src : "";
+                      let imageUrl = srcStr;
                       const isExternal =
-                        src?.startsWith("http") ||
-                        src?.startsWith("//") ||
-                        src?.startsWith("data:");
-                      if (!isExternal && src) {
+                        srcStr.startsWith("http") ||
+                        srcStr.startsWith("//") ||
+                        srcStr.startsWith("data:");
+                      if (!isExternal && srcStr) {
                         const username = getGithubUsername();
-                        imageUrl = `https://raw.githubusercontent.com/${username}/${repoName}/${defaultBranch}/${src.replace(
+                        imageUrl = `https://raw.githubusercontent.com/${username}/${repoName}/${defaultBranch}/${srcStr.replace(
                           /^\.\//,
                           "",
                         )}`;
