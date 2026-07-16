@@ -32,8 +32,8 @@ export default function ResumePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.map((resume) => (
             <Link
-              key={resume._id}
-              href={`/resume/${resume._id}`}
+              key={String(resume._id)}
+              href={`/resume/${String(resume._id)}`}
               className="p-4 rounded-xl border border-border/50 bg-card/50 hover:bg-card/80 transition-colors"
             >
               <h3 className="font-medium">{resume.role}</h3>
