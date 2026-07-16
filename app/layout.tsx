@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "@/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import Header from "@/components/layout/Header";
 import { contactInfo } from "@/config/contact-info";
 import { siteConfig } from "@/config/site-config";
@@ -78,8 +79,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <Header />
-          <main className="min-h-screen">{children}</main>
+          <AuthProvider>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+          </AuthProvider>
         </ThemeProvider>
         <Analytics />
       </body>
