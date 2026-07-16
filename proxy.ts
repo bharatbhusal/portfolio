@@ -1,9 +1,42 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { verifyJwt, getAuthFromCookies } from "@/services/auth";
 
-export function proxy(request: NextRequest) {
-  // Auth check placeholder — JON SNOW will implement
-  const response = NextResponse.next();
-  return response;
+const protectedRoutes = ["/admin"];
+const authRoutes = ["/login"];
+
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Check if path needs auth protection
+  const isProtected = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
+  const isAuthRoute = authRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
+
+  // If not a protected or auth route, continue
+  if (!isProtected && !isAuthRoute) {
+    return NextResponse.next();
+  }
+
+  // Get token from cookies
+  const token = getAuthFromCookies(request.cookies);
+  const user = token ? await verifyJwt(token) : null;
+
+  // Protect admin routes — redirect to login if not authenticated
+  if (isProtected && !user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // If authenticated and trying to access login, redirect to admin
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
