@@ -1,27 +1,35 @@
-import { MongoClient, Db, WithId, Document } from "mongodb";
+import mongoose from "mongoose";
 
-let cachedClient: MongoClient | null = null;
-let cachedDb: Db | null = null;
+const MONGODB_URI = process.env.DATABASE_URL || "mongodb://localhost:27017/resume";
 
-export async function getDb(): Promise<Db> {
-  if (cachedDb) return cachedDb;
-  const uri = process.env.DATABASE_URL;
-  if (!uri) throw new Error("DATABASE_URL not set");
-  cachedClient = await MongoClient.connect(uri);
-  cachedDb = cachedClient.db();
-  return cachedDb;
+let isConnected = false;
+
+export async function connectDB(): Promise<typeof mongoose> {
+  if (isConnected) return mongoose;
+  await mongoose.connect(MONGODB_URI);
+  isConnected = true;
+  return mongoose;
 }
 
-export function serializeId(doc: WithId<Document>): Record<string, unknown> {
-  return { ...doc, _id: doc._id.toString() };
+export async function getDb() {
+  await connectDB();
+  return mongoose.connection.db!;
 }
 
+export function serializeId(doc: Record<string, unknown>) {
+  if (doc && doc._id) {
+    return { ...doc, _id: doc._id.toString() };
+  }
+  return doc;
+}
+
+// ponytail: backward compat — remove once all callers migrate to models directly
 export async function getResumesCollection() {
-  const db = await getDb();
-  return db.collection("resumes");
+  await connectDB();
+  return mongoose.connection.db!.collection("resumes");
 }
 
 export async function getRateLimitsCollection() {
-  const db = await getDb();
-  return db.collection("rate_limits");
+  await connectDB();
+  return mongoose.connection.db!.collection("rate_limits");
 }
