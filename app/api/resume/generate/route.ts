@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildResumeContext, buildSystemPrompt, buildUserPrompt, postProcessResume } from "@/lib/resume";
 import { generateResume } from "@/lib/llm";
-import { getResumesCollection } from "@/lib/mongodb";
+import Resume from "@/models/resume";
 import { checkApiRateLimit, checkPdfRateLimit, extractIp } from "@/lib/rate-limit";
 import type { JobRole } from "@/types/resume";
 
@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
   try {
     const ip = extractIp(req.headers);
 
-    // Per-user API rate limit (30s)
     const apiCheck = await checkApiRateLimit(ip);
     if (!apiCheck.allowed) {
       return NextResponse.json(
@@ -18,7 +17,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Service-wide PDF rate limit (5min)
     const pdfCheck = checkPdfRateLimit();
     if (!pdfCheck.allowed) {
       return NextResponse.json(
@@ -38,19 +36,12 @@ export async function POST(req: NextRequest) {
     const rawOutput = await generateResume(systemPrompt, userPrompt);
     const resume = await postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
 
-    // Save to MongoDB
-    const col = await getResumesCollection();
-    const doc = {
-      ...resume,
-      role,
-      createdAt: new Date(),
-    };
-    const result = await col.insertOne(doc);
+    const doc = await Resume.create({ ...resume, role });
+    const serialized = { ...doc.toObject(), _id: doc._id.toString() };
 
-    return NextResponse.json(
-      { ...doc, _id: result.insertedId.toString() },
-      { headers: { "Cache-Control": "no-store" } }
-    );
+    return NextResponse.json(serialized, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("Resume generation failed:", message);

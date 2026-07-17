@@ -1,8 +1,66 @@
-import { Db, Collection, ObjectId } from "mongodb";
-import { getDb, serializeId } from "@/lib/mongodb";
+import mongoose from "mongoose";
+
+const SchemaName = "Resume";
+
+const resumeSchema = new mongoose.Schema(
+  {
+    role: { type: String, required: true },
+    basics: {
+      name: { type: String, required: true },
+      email: { type: String, required: true },
+      phone: String,
+      url: String,
+      summary: { type: String, default: "" },
+      location: String,
+      profiles: [
+        {
+          network: String,
+          url: String,
+        },
+      ],
+    },
+    work: [
+      {
+        company: String,
+        position: String,
+        startDate: String,
+        endDate: String,
+        location: String,
+        summary: String,
+        highlights: { type: [String], default: [] },
+      },
+    ],
+    education: [
+      {
+        institution: String,
+        degree: String,
+        area: String,
+        startDate: String,
+        endDate: String,
+        gpa: String,
+      },
+    ],
+    skills: [
+      {
+        category: String,
+        keywords: { type: [String], default: [] },
+      },
+    ],
+    projects: [
+      {
+        name: String,
+        description: String,
+        highlights: { type: [String], default: [] },
+        techStack: { type: [String], default: [] },
+        url: String,
+      },
+    ],
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
 
 export interface ResumeDocument {
-  _id?: ObjectId;
+  _id: mongoose.Types.ObjectId;
   role: string;
   basics: {
     name: string;
@@ -43,39 +101,35 @@ export interface ResumeDocument {
   createdAt: Date;
 }
 
-let cachedCollection: Collection<ResumeDocument> | null = null;
+const Resume =
+  mongoose.models[SchemaName] || mongoose.model(SchemaName, resumeSchema);
 
-async function getCollection(): Promise<Collection<ResumeDocument>> {
-  if (cachedCollection) return cachedCollection;
-  const db: Db = await getDb();
-  cachedCollection = db.collection<ResumeDocument>("resumes");
-  // Ensure index for efficient sorting
-  await cachedCollection.createIndex({ createdAt: -1 });
-  return cachedCollection;
+export function serializeResume(doc: Record<string, unknown>) {
+  if (doc && doc._id) {
+    return { ...doc, _id: doc._id.toString() };
+  }
+  return doc;
 }
 
 export async function getLatestResume(): Promise<ResumeDocument | null> {
-  const collection = await getCollection();
-  const doc = await collection.findOne({}, { sort: { createdAt: -1 } });
-  return doc ? (serializeId(doc) as unknown as ResumeDocument) : null;
+  const doc = await Resume.findOne({}).sort({ createdAt: -1 }).lean();
+  return doc ? (serializeResume(doc) as unknown as ResumeDocument) : null;
 }
 
 export async function getResumeHistory(
   page: number = 1,
   limit: number = 10,
 ): Promise<{ docs: ResumeDocument[]; total: number; page: number; pages: number }> {
-  const collection = await getCollection();
   const skip = (page - 1) * limit;
-  const total = await collection.countDocuments();
-  const docs = await collection
-    .find({})
+  const total = await Resume.countDocuments();
+  const docs = await Resume.find({})
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
-    .toArray();
+    .lean();
 
   return {
-    docs: docs.map((doc) => serializeId(doc) as unknown as ResumeDocument),
+    docs: docs.map((d) => serializeResume(d) as unknown as ResumeDocument),
     total,
     page,
     pages: Math.ceil(total / limit),
@@ -85,20 +139,17 @@ export async function getResumeHistory(
 export async function getResumeById(
   id: string,
 ): Promise<ResumeDocument | null> {
-  const collection = await getCollection();
-  const doc = await collection.findOne({ _id: new ObjectId(id) });
-  return doc ? (serializeId(doc) as unknown as ResumeDocument) : null;
+  const doc = await Resume.findById(id).lean();
+  return doc ? (serializeResume(doc) as unknown as ResumeDocument) : null;
 }
 
 export async function saveResume(
   data: Omit<ResumeDocument, "_id" | "createdAt">,
 ): Promise<ResumeDocument> {
-  const collection = await getCollection();
-  const doc = {
-    ...data,
-    createdAt: new Date(),
-  };
-  const result = await collection.insertOne(doc as ResumeDocument);
-  const saved = await collection.findOne({ _id: result.insertedId });
-  return serializeId(saved!) as unknown as ResumeDocument;
+  const doc = await Resume.create(data);
+  const obj = doc.toObject();
+  (obj as Record<string, unknown>)._id = obj._id.toString();
+  return obj as unknown as ResumeDocument;
 }
+
+export default Resume;

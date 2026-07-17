@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getResumesCollection, serializeId } from "@/lib/mongodb";
+import Resume from "@/models/resume";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -7,17 +7,16 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(20, Math.max(1, parseInt(searchParams.get("limit") || "6", 10)));
   const skip = (page - 1) * limit;
 
-  const col = await getResumesCollection();
   const [raw, total] = await Promise.all([
-    col.find({}, { projection: { basics: 1, createdAt: 1 } })
+    Resume.find({}, { basics: 1, createdAt: 1 })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .toArray(),
-    col.countDocuments(),
+      .lean(),
+    Resume.countDocuments(),
   ]);
 
-  const docs = raw.map(serializeId);
+  const docs = raw.map((doc) => ({ ...doc, _id: doc._id.toString() }));
 
   return NextResponse.json({
     docs,

@@ -1,63 +1,76 @@
-import { Db, Collection, ObjectId } from "mongodb";
-import { getDb, serializeId } from "@/lib/mongodb";
+import mongoose from "mongoose";
 import type { CareerItem } from "@/types";
 
+const SchemaName = "Career";
+
+const schema = new mongoose.Schema(
+  {
+    company: { type: String, required: true },
+    role: { type: String, required: true },
+    startDate: { type: String, required: true },
+    endDate: String,
+    address: { type: String, required: true },
+    description: { type: String, required: true },
+    achievements: { type: [String], default: [] },
+    links: {
+      type: [
+        {
+          link: String,
+          icon: mongoose.Schema.Types.Mixed,
+          type: String,
+        },
+      ],
+      default: [],
+    },
+    highlight: String,
+  },
+  { timestamps: true },
+);
+
 export interface CareerDocument extends CareerItem {
-  _id?: ObjectId;
+  _id: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
-let cachedCollection: Collection<CareerDocument> | null = null;
+const Career =
+  mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
-async function getCollection(): Promise<Collection<CareerDocument>> {
-  if (cachedCollection) return cachedCollection;
-  const db: Db = await getDb();
-  cachedCollection = db.collection<CareerDocument>("career_items");
-  return cachedCollection;
+function serialize(doc: Record<string, unknown>) {
+  if (doc && doc._id) doc._id = doc._id.toString();
+  return doc;
 }
 
 export async function getAllCareer(): Promise<CareerDocument[]> {
-  const collection = await getCollection();
-  const docs = await collection.find({}).sort({ startDate: -1 }).toArray();
-  return docs.map((doc) => serializeId(doc) as unknown as CareerDocument);
+  const docs = await Career.find({}).sort({ startDate: -1 }).lean();
+  return docs.map((d) => serialize(d) as unknown as CareerDocument);
 }
 
 export async function getCareerById(
   id: string,
 ): Promise<CareerDocument | null> {
-  const collection = await getCollection();
-  const doc = await collection.findOne({ _id: new ObjectId(id) });
-  return doc ? (serializeId(doc) as unknown as CareerDocument) : null;
+  const doc = await Career.findById(id).lean();
+  return doc ? (serialize(doc) as unknown as CareerDocument) : null;
 }
 
 export async function createCareer(data: CareerItem): Promise<CareerDocument> {
-  const collection = await getCollection();
-  const now = new Date();
-  const result = await collection.insertOne({
-    ...data,
-    createdAt: now,
-    updatedAt: now,
-  } as CareerDocument);
-  const doc = await collection.findOne({ _id: result.insertedId });
-  return serializeId(doc!) as unknown as CareerDocument;
+  const doc = await Career.create(data);
+  const obj = doc.toObject();
+  (obj as Record<string, unknown>)._id = obj._id.toString();
+  return obj as unknown as CareerDocument;
 }
 
 export async function updateCareer(
   id: string,
   data: Partial<CareerItem>,
 ): Promise<CareerDocument | null> {
-  const collection = await getCollection();
-  const result = await collection.findOneAndUpdate(
-    { _id: new ObjectId(id) },
-    { $set: { ...data, updatedAt: new Date() } },
-    { returnDocument: "after" },
-  );
-  return result ? (serializeId(result) as unknown as CareerDocument) : null;
+  const doc = await Career.findByIdAndUpdate(id, data, { new: true }).lean();
+  return doc ? (serialize(doc) as unknown as CareerDocument) : null;
 }
 
 export async function deleteCareer(id: string): Promise<boolean> {
-  const collection = await getCollection();
-  const result = await collection.deleteOne({ _id: new ObjectId(id) });
-  return result.deletedCount > 0;
+  const result = await Career.findByIdAndDelete(id);
+  return !!result;
 }
+
+export default Career;

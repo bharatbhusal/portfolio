@@ -1,9 +1,12 @@
-import { GridFSBucket, ObjectId } from "mongodb";
+import mongoose from "mongoose";
 import { getDb } from "@/lib/mongodb";
 
-let cachedBucket: GridFSBucket | null = null;
+const { GridFSBucket } = mongoose.mongo;
+const ObjectId = mongoose.Types.ObjectId;
 
-async function getBucket(): Promise<GridFSBucket> {
+let cachedBucket: InstanceType<typeof GridFSBucket> | null = null;
+
+async function getBucket() {
   if (cachedBucket) return cachedBucket;
   const db = await getDb();
   cachedBucket = new GridFSBucket(db, { bucketName: "images" });
@@ -40,7 +43,7 @@ export async function getImage(
     return new Promise((resolve, reject) => {
       const downloadStream = bucket.openDownloadStream(new ObjectId(id));
 
-      downloadStream.on("data", (chunk) => chunks.push(chunk));
+      downloadStream.on("data", (chunk: Buffer) => chunks.push(chunk));
       downloadStream.on("error", () => resolve(null));
       downloadStream.on("end", async () => {
         const db = await getDb();
@@ -50,7 +53,7 @@ export async function getImage(
 
         resolve({
           buffer: Buffer.concat(chunks),
-          contentType: file?.contentType || "image/jpeg",
+          contentType: (file as Record<string, unknown>)?.contentType as string || "image/jpeg",
         });
       });
     });
