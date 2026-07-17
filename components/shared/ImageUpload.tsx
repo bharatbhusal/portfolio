@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   currentImageId?: string | null;
+  cacheKey?: number;
   onUpload: (file: File) => Promise<void>;
   onDelete?: () => Promise<void>;
 }
 
 export function ImageUpload({
   currentImageId,
+  cacheKey,
   onUpload,
   onDelete,
 }: ImageUploadProps) {
@@ -37,9 +39,9 @@ export function ImageUpload({
         <div className="relative inline-block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`/api/image?id=${currentImageId}`}
+            src={`/api/image?id=${currentImageId}${cacheKey ? `&t=${cacheKey}` : ""}`}
             alt="Profile"
-            className="w-32 h-32 rounded-full object-cover border-2 border-border"
+            className="w-48 h-48 rounded-full object-cover border-2 border-border"
           />
         </div>
       )}

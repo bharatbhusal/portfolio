@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowRight, Briefcase, FolderGit2 } from "lucide-react";
 import gsap from "gsap";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import ToggleProfileQR from "./ToggleProfileQR";
 import SocialLinks from "./SocialLinks";
 import { siteConfig } from "@/config/site-config";
@@ -39,7 +38,7 @@ const HeroSection = ({
   initialPersonalInfo?: PersonalInfoDocument | null;
   initialSocialLinks?: SocialLinkConfig[];
 }) => {
-  const [loaded, setLoaded] = useState(false);
+  const [imageId, setImageId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const info = initialPersonalInfo;
@@ -48,14 +47,18 @@ const HeroSection = ({
     : [];
 
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => setLoaded(true);
-    img.onerror = () => setLoaded(true);
-    img.src = "/name.jpeg";
+    fetch("/api/image")
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.id) {
+          setImageId(json.data.id);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (!loaded || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -98,7 +101,7 @@ const HeroSection = ({
     }, containerRef);
 
     return () => ctx.revert();
-  }, [loaded]);
+  }, []);
 
   const displayName = info
     ? `${info.name.first} ${info.name.last}`
@@ -106,37 +109,15 @@ const HeroSection = ({
 
   const title = info?.title || "No title set";
 
-  if (!loaded) {
-    return (
-      <section className="min-h-screen flex items-center justify-center pt-16">
-        <div className="max-w-2xl mx-auto px-4 text-center">
-          <Skeleton className="w-[260px] h-[260px] rounded-full mx-auto mb-5" />
-          <div className="space-y-4 mt-6">
-            <Skeleton className="h-14 sm:h-16 w-3/4 mx-auto rounded-lg" />
-            <Skeleton className="h-6 w-1/2 mx-auto rounded-lg" />
-          </div>
-          <div className="flex justify-center gap-2 mt-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-10 rounded-full" />
-            ))}
-          </div>
-          <div className="flex flex-wrap justify-center gap-3 my-4">
-            <Skeleton className="h-10 w-36 rounded-full" />
-            <Skeleton className="h-10 w-40 rounded-full" />
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section className="min-h-screen flex items-center justify-center pt-16">
       <div ref={containerRef} className="max-w-2xl mx-auto px-4 text-center">
         <div className="hero-avatar">
           <ToggleProfileQR
-            profileUrl="/name.jpeg"
+            profileUrl={imageId ? `/api/image?id=${imageId}` : "/name.jpeg"}
             qrValue={`${siteConfig.url}/api/contact/vcard`}
             name={displayName}
+            fallback="NN"
           />
         </div>
 
