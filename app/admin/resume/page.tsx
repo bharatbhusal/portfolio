@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import Link from "next/link";
 import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/components/shared/NotificationProvider";
@@ -149,84 +148,88 @@ export default function AdminResumePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Resume" subtitle="Generate and manage your resumes" />
-
-      <div className="flex items-center gap-3">
-        <Button onClick={generate} disabled={disabled}>
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin mr-2" />
-          ) : (
-            <Plus className="h-4 w-4 mr-2" />
-          )}
-          {loading
+      <PageHeader
+        title="Resume Versions"
+        subtitle="Preview and manage your generated resume versions"
+        action={{
+          label: loading
             ? "Generating..."
             : cooldown > 0
               ? `Generate in ${formatTimer(cooldown)}`
-              : "Generate New Resume"}
-        </Button>
-      </div>
+              : "Generate New",
+          onClick: generate,
+          icon: loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />,
+        }}
+      />
 
-      {resume && (
-        <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm rounded-lg">
-              <Loader2 className="h-8 w-8 animate-spin mb-3 text-primary" />
-              <p className="text-sm font-medium">Generating new resume...</p>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+        {/* Left: Resume preview */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          {resume && (
+            <div className="relative">
+              {loading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm rounded-lg">
+                  <Loader2 className="h-8 w-8 animate-spin mb-3 text-primary" />
+                  <p className="text-sm font-medium">Generating new resume...</p>
+                </div>
+              )}
+              <div className={loading ? "pointer-events-none" : ""}>
+                <ResumePreview data={resume} />
+              </div>
             </div>
           )}
-          <div className={loading ? "pointer-events-none" : ""}>
-            <ResumePreview data={resume} />
-          </div>
+
+          {!resume && !loading && (
+            <EmptyState
+              title="No resumes yet"
+              description="Click 'Generate New' to create your first resume."
+            />
+          )}
         </div>
-      )}
 
-      {!resume && !loading && (
-        <EmptyState
-          title="No resumes yet"
-          description="Click 'Generate New Resume' to create your first resume."
-        />
-      )}
-
-      {history && history?.docs?.length > 0 && (
-        <div className="space-y-4 border-t pt-6">
-          <h2 className="text-xl font-semibold">History</h2>
+        {/* Right: History */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">History</h2>
           {historyLoading ? (
             <div className="flex justify-center py-10">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </div>
+          ) : history && history.docs.length > 0 ? (
+            <>
+              <div className="space-y-3">
+                {history.docs.map((doc) => (
+                  <ResumeCard key={String(doc._id)} resume={doc} />
+                ))}
+              </div>
+              {history.pages > 1 && (
+                <div className="flex justify-center gap-2 pt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={historyPage <= 1}
+                    onClick={() => fetchHistory(historyPage - 1)}
+                  >
+                    Previous
+                  </Button>
+                  <span className="flex items-center px-3 text-sm text-muted-foreground">
+                    {historyPage} / {history.pages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={historyPage >= history.pages}
+                    onClick={() => fetchHistory(historyPage + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
+            </>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {history.docs.map((doc) => (
-                <ResumeCard key={String(doc._id)} resume={doc} />
-              ))}
-            </div>
-          )}
-
-          {history.pages > 1 && (
-            <div className="flex justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={historyPage <= 1}
-                onClick={() => fetchHistory(historyPage - 1)}
-              >
-                Previous
-              </Button>
-              <span className="flex items-center px-3 text-sm text-muted-foreground">
-                {historyPage} / {history.pages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={historyPage >= history.pages}
-                onClick={() => fetchHistory(historyPage + 1)}
-              >
-                Next
-              </Button>
-            </div>
+            <p className="text-sm text-muted-foreground">No history yet.</p>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

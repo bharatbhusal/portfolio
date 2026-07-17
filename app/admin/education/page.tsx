@@ -15,7 +15,24 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { EducationItem } from "@/types";
+import { Plus, X } from "lucide-react";
+import type { EducationItem, EducationLink } from "@/types";
+
+const EDUCATION_LINK_TYPES = ["website", "linkedin", "twitter", "instagram", "facebook"] as const;
+const HIGHLIGHT_OPTIONS = ["", "LATEST", "GOLD", "PINNED"] as const;
+
+const EMPTY_FORM: Partial<EducationItem> = {
+  institution: "",
+  degree: "",
+  startDate: "",
+  endDate: "",
+  address: "",
+  cgpa: "",
+  description: "",
+  courses: [],
+  links: [],
+  highlight: undefined,
+};
 
 export default function EducationPage() {
   const dispatch = useAppDispatch();
@@ -35,22 +52,13 @@ export default function EducationPage() {
 
   const handleEdit = (item: EducationItem & { _id: string }) => {
     setEditing(item);
-    setForm(item);
+    setForm({ ...item, links: item.links || [], courses: item.courses || [] });
     setShowForm(true);
   };
 
   const handleAdd = () => {
     setEditing(null);
-    setForm({
-      institution: "",
-      degree: "",
-      startDate: "",
-      endDate: "",
-      address: "",
-      cgpa: "",
-      description: "",
-      courses: [],
-    });
+    setForm({ ...EMPTY_FORM });
     setShowForm(true);
   };
 
@@ -95,6 +103,34 @@ export default function EducationPage() {
       });
     }
     setDeleteId(null);
+  };
+
+  const addCourse = () => {
+    setForm({ ...form, courses: [...(form.courses || []), ""] });
+  };
+
+  const updateCourse = (index: number, value: string) => {
+    const next = [...(form.courses || [])];
+    next[index] = value;
+    setForm({ ...form, courses: next });
+  };
+
+  const removeCourse = (index: number) => {
+    setForm({ ...form, courses: (form.courses || []).filter((_, i) => i !== index) });
+  };
+
+  const addLink = () => {
+    setForm({ ...form, links: [...(form.links || []), { type: "website", link: "" }] });
+  };
+
+  const updateLink = (index: number, partial: Partial<EducationLink>) => {
+    const next = [...(form.links || [])];
+    next[index] = { ...next[index], ...partial } as EducationLink;
+    setForm({ ...form, links: next });
+  };
+
+  const removeLink = (index: number) => {
+    setForm({ ...form, links: (form.links || []).filter((_, i) => i !== index) });
   };
 
   if (loading) return <FormSkeleton />;
@@ -171,6 +207,84 @@ export default function EducationPage() {
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
           </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Highlight</label>
+            <select
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+              value={form.highlight || ""}
+              onChange={(e) => setForm({ ...form, highlight: (e.target.value || undefined) as EducationItem["highlight"] })}
+            >
+              {HIGHLIGHT_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>{opt || "None"}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Courses */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Courses</label>
+            <div className="space-y-2">
+              {(form.courses || []).map((c, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input
+                    placeholder={`Course ${i + 1}`}
+                    value={c}
+                    onChange={(e) => updateCourse(i, e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 h-10 w-10 text-destructive hover:text-destructive"
+                    onClick={() => removeCourse(i)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addCourse}>
+              <Plus className="h-4 w-4 mr-1" /> Add Course
+            </Button>
+          </div>
+
+          {/* Links */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Links</label>
+            <div className="space-y-2">
+              {(form.links || []).map((lk, i) => (
+                <div key={i} className="flex gap-2">
+                  <select
+                    className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                    value={lk.type}
+                    onChange={(e) => updateLink(i, { type: e.target.value as EducationLink["type"] })}
+                  >
+                    {EDUCATION_LINK_TYPES.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <Input
+                    placeholder="https://..."
+                    value={lk.link}
+                    onChange={(e) => updateLink(i, { link: e.target.value })}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 h-10 w-10 text-destructive hover:text-destructive"
+                    onClick={() => removeLink(i)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addLink}>
+              <Plus className="h-4 w-4 mr-1" /> Add Link
+            </Button>
+          </div>
+
           <div className="flex gap-2">
             <Button onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
@@ -190,14 +304,30 @@ export default function EducationPage() {
             subtitle={item.degree || item.startDate}
             badges={[
               item.cgpa ? { label: `CGPA: ${item.cgpa}` } : null,
-              item.highlight ? { label: item.highlight, variant: "secondary" } : null,
+              item.highlight ? { label: item.highlight, variant: "secondary" as const } : null,
             ].filter(Boolean) as { label: string; variant?: "default" | "secondary" | "destructive" | "outline" }[]}
+            links={(item.links || []).map((lk) => ({
+              label: lk.type,
+              url: lk.link,
+            }))}
             onEdit={() => handleEdit(item)}
             onDelete={() => setDeleteId(item._id)}
           >
             <p className="text-sm text-muted-foreground">
               {item.startDate} - {item.endDate || "Present"}
             </p>
+            {item.description && (
+              <p className="text-sm mt-2 line-clamp-2">{item.description}</p>
+            )}
+            {item.courses && item.courses.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {item.courses.map((c, i) => (
+                  <span key={i} className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            )}
           </DataCard>
         ))}
       </div>

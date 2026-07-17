@@ -15,7 +15,21 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { CareerItem } from "@/types";
+import { Plus, X } from "lucide-react";
+import type { CareerItem, CareerLink } from "@/types";
+
+const CAREER_LINK_TYPES = ["website", "twitter", "telegram", "game", "linkedin"] as const;
+
+const EMPTY_FORM: Partial<CareerItem> = {
+  company: "",
+  role: "",
+  startDate: "",
+  endDate: "",
+  address: "",
+  description: "",
+  achievements: [],
+  links: [],
+};
 
 export default function CareerPage() {
   const dispatch = useAppDispatch();
@@ -35,21 +49,13 @@ export default function CareerPage() {
 
   const handleEdit = (item: CareerItem & { _id: string }) => {
     setEditing(item);
-    setForm(item);
+    setForm({ ...item, links: item.links || [], achievements: item.achievements || [] });
     setShowForm(true);
   };
 
   const handleAdd = () => {
     setEditing(null);
-    setForm({
-      company: "",
-      role: "",
-      startDate: "",
-      endDate: "",
-      address: "",
-      description: "",
-      achievements: [],
-    });
+    setForm({ ...EMPTY_FORM });
     setShowForm(true);
   };
 
@@ -94,6 +100,34 @@ export default function CareerPage() {
       });
     }
     setDeleteId(null);
+  };
+
+  const addAchievement = () => {
+    setForm({ ...form, achievements: [...(form.achievements || []), ""] });
+  };
+
+  const updateAchievement = (index: number, value: string) => {
+    const next = [...(form.achievements || [])];
+    next[index] = value;
+    setForm({ ...form, achievements: next });
+  };
+
+  const removeAchievement = (index: number) => {
+    setForm({ ...form, achievements: (form.achievements || []).filter((_, i) => i !== index) });
+  };
+
+  const addLink = () => {
+    setForm({ ...form, links: [...(form.links || []), { type: "website", link: "" }] });
+  };
+
+  const updateLink = (index: number, partial: Partial<CareerLink>) => {
+    const next = [...(form.links || [])];
+    next[index] = { ...next[index], ...partial } as CareerLink;
+    setForm({ ...form, links: next });
+  };
+
+  const removeLink = (index: number) => {
+    setForm({ ...form, links: (form.links || []).filter((_, i) => i !== index) });
   };
 
   if (loading) return <FormSkeleton />;
@@ -162,6 +196,72 @@ export default function CareerPage() {
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
           </div>
+
+          {/* Achievements */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Achievements</label>
+            <div className="space-y-2">
+              {(form.achievements || []).map((a, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input
+                    placeholder={`Achievement ${i + 1}`}
+                    value={a}
+                    onChange={(e) => updateAchievement(i, e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 h-10 w-10 text-destructive hover:text-destructive"
+                    onClick={() => removeAchievement(i)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addAchievement}>
+              <Plus className="h-4 w-4 mr-1" /> Add Achievement
+            </Button>
+          </div>
+
+          {/* Links */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Links</label>
+            <div className="space-y-2">
+              {(form.links || []).map((lk, i) => (
+                <div key={i} className="flex gap-2">
+                  <select
+                    className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                    value={lk.type}
+                    onChange={(e) => updateLink(i, { type: e.target.value as CareerLink["type"] })}
+                  >
+                    {CAREER_LINK_TYPES.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <Input
+                    placeholder="https://..."
+                    value={lk.link}
+                    onChange={(e) => updateLink(i, { link: e.target.value })}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 h-10 w-10 text-destructive hover:text-destructive"
+                    onClick={() => removeLink(i)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addLink}>
+              <Plus className="h-4 w-4 mr-1" /> Add Link
+            </Button>
+          </div>
+
           <div className="flex gap-2">
             <Button onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
@@ -184,6 +284,10 @@ export default function CareerPage() {
                 ? [{ label: item.highlight, variant: "secondary" as const }]
                 : undefined
             }
+            links={(item.links || []).map((lk) => ({
+              label: lk.type,
+              url: lk.link,
+            }))}
             onEdit={() => handleEdit(item)}
             onDelete={() => setDeleteId(item._id)}
           >
@@ -192,6 +296,13 @@ export default function CareerPage() {
             </p>
             {item.description && (
               <p className="text-sm mt-2 line-clamp-2">{item.description}</p>
+            )}
+            {item.achievements && item.achievements.length > 0 && (
+              <ul className="text-sm mt-2 ml-4 list-disc space-y-0.5">
+                {item.achievements.map((a, i) => (
+                  <li key={i}>{a}</li>
+                ))}
+              </ul>
             )}
           </DataCard>
         ))}

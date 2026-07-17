@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import ResumePreview from "./ResumePreview";
 import { ResumePDFLink } from "./ResumePDF";
 import ResumeCard from "./ResumeCard";
@@ -77,57 +76,59 @@ export default function ResumePageClient() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
-      <div id="resume-preview">
-        <ResumePreview data={resume} />
-      </div>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+        {/* Left: Resume preview */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <div id="resume-preview">
+            <ResumePreview data={resume} />
+          </div>
+          <div className="flex justify-center mt-4">
+            <ResumePDFLink data={resume} />
+          </div>
+        </div>
 
-      <div className="flex justify-center">
-        <ResumePDFLink data={resume} />
-      </div>
-
-      {history && history.docs.length > 0 && (
-        <div className="space-y-4 border-t pt-8">
-          <h2 className="text-2xl font-bold tracking-tight">
-            Resume History
-          </h2>
+        {/* Right: History */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Resume History</h2>
           {historyLoading ? (
             <div className="flex justify-center py-10">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </div>
+          ) : history && history.docs.length > 0 ? (
+            <>
+              <div className="space-y-3">
+                {history.docs.map((doc) => (
+                  <ResumeCard key={String(doc._id)} resume={doc} />
+                ))}
+              </div>
+              {history.pages > 1 && (
+                <div className="flex justify-center gap-2 pt-2">
+                  <button
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                    disabled={historyPage <= 1}
+                    onClick={() => fetchHistory(historyPage - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="flex items-center px-3 text-sm text-muted-foreground">
+                    {historyPage} / {history.pages}
+                  </span>
+                  <button
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
+                    disabled={historyPage >= history.pages}
+                    onClick={() => fetchHistory(historyPage + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {history.docs.map((doc) => (
-                <ResumeCard key={String(doc._id)} resume={doc} />
-              ))}
-            </div>
-          )}
-
-          {history.pages > 1 && (
-            <div className="flex justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={historyPage <= 1}
-                onClick={() => fetchHistory(historyPage - 1)}
-              >
-                Previous
-              </Button>
-              <span className="flex items-center px-3 text-sm text-muted-foreground">
-                {historyPage} / {history.pages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={historyPage >= history.pages}
-                onClick={() => fetchHistory(historyPage + 1)}
-              >
-                Next
-              </Button>
-            </div>
+            <p className="text-sm text-muted-foreground">No history yet.</p>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
