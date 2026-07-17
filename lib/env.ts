@@ -1,9 +1,6 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  // Existing
-  GITHUB_TOKEN: z.string().optional(),
-  GITHUB_USERNAME: z.string().optional(),
   GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
   DATABASE_URL: z.string().default("mongodb://localhost:27017/resume"),
   HOSTED_URL: z.string().url().default("http://localhost:3000"),

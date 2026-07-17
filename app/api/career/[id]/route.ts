@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import type { CareerItem } from "@/types";
 import { getCareerById, updateCareer, deleteCareer } from "@/services/career";
 import { careerSchema } from "@/validations/career";
@@ -13,21 +13,12 @@ export async function GET(
     const career = await getCareerById(id);
 
     if (!career) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Career not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.CAREER_NOT_FOUND, "Career not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<typeof career>>({
-      success: true,
-      data: career,
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to fetch career" },
-      { status: 500 },
-    );
+    return apiSuccess(career);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -41,35 +32,20 @@ export async function PUT(
     const result = careerSchema.partial().safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json<ApiResponse<never>>(
-        {
-          success: false,
-          error: Object.values(result.error.flatten().fieldErrors)
-            .flat()
-            .join(", "),
-        },
-        { status: 400 },
+      return apiError(
+        ErrorCode.VALIDATION_ERROR,
+        Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
 
     const updated = await updateCareer(id, result.data as Partial<CareerItem>);
     if (!updated) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Career not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.CAREER_NOT_FOUND, "Career not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<typeof updated>>({
-      success: true,
-      data: updated,
-      message: "Career updated",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to update career" },
-      { status: 500 },
-    );
+    return apiSuccess(updated, "Career updated");
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -82,20 +58,11 @@ export async function DELETE(
     const deleted = await deleteCareer(id);
 
     if (!deleted) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Career not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.CAREER_NOT_FOUND, "Career not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<null>>({
-      success: true,
-      message: "Career deleted",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to delete career" },
-      { status: 500 },
-    );
+    return apiSuccess(null, "Career deleted");
+  } catch (error) {
+    return handleApiError(error);
   }
 }

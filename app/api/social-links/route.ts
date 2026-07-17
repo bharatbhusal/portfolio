@@ -1,20 +1,14 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import { getSocialLinks, updateSocialLinks } from "@/services/social-links";
 import { socialLinksArraySchema } from "@/validations/social-links";
 
 export async function GET() {
   try {
     const links = await getSocialLinks();
-    return NextResponse.json<ApiResponse<typeof links>>({
-      success: true,
-      data: links,
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to fetch social links" },
-      { status: 500 },
-    );
+    return apiSuccess(links);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -24,27 +18,15 @@ export async function PUT(request: Request) {
     const result = socialLinksArraySchema.safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json<ApiResponse<never>>(
-        {
-          success: false,
-          error: Object.values(result.error.flatten().fieldErrors)
-            .flat()
-            .join(", "),
-        },
-        { status: 400 },
+      return apiError(
+        ErrorCode.VALIDATION_ERROR,
+        Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
 
     const updated = await updateSocialLinks(result.data);
-    return NextResponse.json<ApiResponse<typeof updated>>({
-      success: true,
-      data: updated,
-      message: "Social links updated",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to update social links" },
-      { status: 500 },
-    );
+    return apiSuccess(updated, "Social links updated");
+  } catch (error) {
+    return handleApiError(error);
   }
 }

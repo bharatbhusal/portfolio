@@ -41,8 +41,8 @@ interface GraphQLReposData {
 
 export async function getGithubUsername(): Promise<string> {
   const dbUsername = await getSetting("github_username");
-  if (dbUsername) return dbUsername;
-  return process.env.GITHUB_USERNAME || "";
+  if (!dbUsername) throw new Error("GitHub username not configured in settings");
+  return dbUsername;
 }
 
 // Dedicated central client for all GitHub API requests
@@ -50,8 +50,7 @@ async function githubFetch<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T | null> {
-  const dbToken = await getSetting("github_token");
-  const token = dbToken || process.env.GITHUB_TOKEN;
+  const token = await getSetting("github_token");
   const headers = new Headers();
   headers.set("Accept", "application/vnd.github+json");
   headers.set("User-Agent", "bharatbhusal-portfolio");
@@ -104,8 +103,7 @@ async function githubGraphQLFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T | null> {
-  const dbToken = await getSetting("github_token");
-  const token = dbToken || process.env.GITHUB_TOKEN;
+  const token = await getSetting("github_token");
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
   headers.set("Accept", "application/vnd.github+json");

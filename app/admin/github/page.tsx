@@ -96,7 +96,7 @@ export default function GitHubSettingsPage() {
         <div className="space-y-2">
           <label className="text-sm font-medium">GitHub Username</label>
           <Input
-            placeholder="e.g. octocat"
+            placeholder="e.g. bharatbhusal"
             value={settings.github_username}
             onChange={(e) =>
               setSettings({ ...settings, github_username: e.target.value })
@@ -165,9 +165,7 @@ export default function GitHubSettingsPage() {
               </p>
             </div>
             <div>
-              <p className="font-medium text-foreground">
-                Can I skip this?
-              </p>
+              <p className="font-medium text-foreground">Can I skip this?</p>
               <p>
                 Yes. If you have fewer than 60 public repos and don&apos;t
                 update often, the portfolio works fine without it.

@@ -1,12 +1,7 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess } from "@/lib/api-utils";
 import { clearAuthCookie } from "@/services/auth";
 
 export async function POST() {
-  const response = NextResponse.json<ApiResponse<null>>({
-    success: true,
-    message: "Logged out",
-  });
-
+  const response = apiSuccess(null, "Logged out");
   return clearAuthCookie(response);
 }

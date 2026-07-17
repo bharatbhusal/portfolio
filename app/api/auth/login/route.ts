@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import { loginSchema } from "@/validations/auth";
 import {
   comparePassword,
@@ -13,16 +13,9 @@ export async function POST(request: Request) {
     const result = loginSchema.safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json<ApiResponse<never>>(
-        {
-          success: false,
-          error: result.error.flatten().fieldErrors
-            ? Object.values(result.error.flatten().fieldErrors)
-                .flat()
-                .join(", ")
-            : "Invalid input",
-        },
-        { status: 400 },
+      return apiError(
+        ErrorCode.VALIDATION_ERROR,
+        Object.values(result.error.flatten().fieldErrors).flat().join(", ") || "Invalid input",
       );
     }
 
@@ -31,40 +24,18 @@ export async function POST(request: Request) {
     const adminPassword = process.env.ADMIN_PASSWORD;
 
     if (!adminUsername || !adminPassword) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Admin credentials not configured" },
-        { status: 500 },
-      );
+      return apiError(ErrorCode.INTERNAL_ERROR, "Admin credentials not configured", 500);
     }
 
-    if (username !== adminUsername) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Invalid credentials" },
-        { status: 401 },
-      );
-    }
-
-    // For env-based auth, compare plaintext (admin password from env)
-    // If using bcrypt, store hash in env and compare with comparePassword()
-    if (password !== adminPassword) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Invalid credentials" },
-        { status: 401 },
-      );
+    if (username !== adminUsername || password !== adminPassword) {
+      return apiError(ErrorCode.AUTH_INVALID_CREDENTIALS, "Invalid credentials", 401);
     }
 
     const token = await signJwt({ username });
-    const response = NextResponse.json<ApiResponse<{ username: string }>>({
-      success: true,
-      data: { username },
-      message: "Login successful",
-    });
+    const response = apiSuccess({ username }, "Login successful");
 
     return setAuthCookie(response, token);
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Internal server error" },
-      { status: 500 },
-    );
+  } catch (error) {
+    return handleApiError(error);
   }
 }

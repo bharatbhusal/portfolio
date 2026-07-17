@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getAllSettings, setSetting } from "@/models/settings";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 
 export async function GET() {
   try {
@@ -11,10 +13,9 @@ export async function GET() {
           ? "••••" + s.value.slice(-4)
           : s.value,
     }));
-    return NextResponse.json({ success: true, data: masked });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return apiSuccess(masked);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -26,21 +27,17 @@ export async function PUT(req: NextRequest) {
     };
 
     if (!key || typeof value !== "string") {
-      return NextResponse.json(
-        { error: "key and value are required" },
-        { status: 400 },
-      );
+      return apiError(ErrorCode.MISSING_REQUIRED_FIELD, "key and value are required");
     }
 
     const allowedKeys = ["github_username", "github_token"];
     if (!allowedKeys.includes(key)) {
-      return NextResponse.json({ error: "Invalid key" }, { status: 400 });
+      return apiError(ErrorCode.VALIDATION_ERROR, "Invalid key");
     }
 
     await setSetting(key, value);
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return apiSuccess(null);
+  } catch (error) {
+    return handleApiError(error);
   }
 }

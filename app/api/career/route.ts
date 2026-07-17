@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import type { CareerItem } from "@/types";
 import { getAllCareer, createCareer } from "@/services/career";
 import { careerSchema } from "@/validations/career";
@@ -7,15 +7,9 @@ import { careerSchema } from "@/validations/career";
 export async function GET() {
   try {
     const career = await getAllCareer();
-    return NextResponse.json<ApiResponse<typeof career>>({
-      success: true,
-      data: career,
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to fetch career" },
-      { status: 500 },
-    );
+    return apiSuccess(career);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -25,27 +19,15 @@ export async function POST(request: Request) {
     const result = careerSchema.safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json<ApiResponse<never>>(
-        {
-          success: false,
-          error: Object.values(result.error.flatten().fieldErrors)
-            .flat()
-            .join(", "),
-        },
-        { status: 400 },
+      return apiError(
+        ErrorCode.VALIDATION_ERROR,
+        Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
 
     const created = await createCareer(result.data as CareerItem);
-    return NextResponse.json<ApiResponse<typeof created>>({
-      success: true,
-      data: created,
-      message: "Career created",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to create career" },
-      { status: 500 },
-    );
+    return apiSuccess(created, "Career created");
+  } catch (error) {
+    return handleApiError(error);
   }
 }

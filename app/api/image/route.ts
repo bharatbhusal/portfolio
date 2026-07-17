@@ -1,19 +1,13 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import { uploadImage, getProfileImageId, deleteImage } from "@/services/image";
 
 export async function GET() {
   try {
     const imageId = await getProfileImageId();
-    return NextResponse.json<ApiResponse<{ id: string | null }>>({
-      success: true,
-      data: { id: imageId },
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to get profile image" },
-      { status: 500 },
-    );
+    return apiSuccess({ id: imageId });
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -23,45 +17,26 @@ export async function POST(request: Request) {
     const file = formData.get("file") as File | null;
 
     if (!file) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "No file provided" },
-        { status: 400 },
-      );
+      return apiError(ErrorCode.MISSING_REQUIRED_FIELD, "No file provided");
     }
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "File must be an image" },
-        { status: 400 },
-      );
+      return apiError(ErrorCode.VALIDATION_ERROR, "File must be an image");
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "File size must be less than 5MB" },
-        { status: 400 },
-      );
+      return apiError(ErrorCode.VALIDATION_ERROR, "File size must be less than 5MB");
     }
 
-    // Delete existing profile image
     const existingId = await getProfileImageId();
     if (existingId) {
       await deleteImage(existingId);
     }
 
     const id = await uploadImage(file, file.name);
-    return NextResponse.json<ApiResponse<{ id: string }>>({
-      success: true,
-      data: { id },
-      message: "Image uploaded",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to upload image" },
-      { status: 500 },
-    );
+    return apiSuccess({ id }, "Image uploaded");
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -69,21 +44,12 @@ export async function DELETE() {
   try {
     const imageId = await getProfileImageId();
     if (!imageId) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "No image to delete" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.IMAGE_NOT_FOUND, "No image to delete", 404);
     }
 
     await deleteImage(imageId);
-    return NextResponse.json<ApiResponse<null>>({
-      success: true,
-      message: "Image deleted",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to delete image" },
-      { status: 500 },
-    );
+    return apiSuccess(null, "Image deleted");
+  } catch (error) {
+    return handleApiError(error);
   }
 }

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "@/types/api";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 import type { EducationItem } from "@/types";
 import {
   getEducationById,
@@ -17,21 +17,12 @@ export async function GET(
     const education = await getEducationById(id);
 
     if (!education) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Education not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.EDUCATION_NOT_FOUND, "Education not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<typeof education>>({
-      success: true,
-      data: education,
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to fetch education" },
-      { status: 500 },
-    );
+    return apiSuccess(education);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -45,35 +36,20 @@ export async function PUT(
     const result = educationSchema.partial().safeParse(body);
 
     if (!result.success) {
-      return NextResponse.json<ApiResponse<never>>(
-        {
-          success: false,
-          error: Object.values(result.error.flatten().fieldErrors)
-            .flat()
-            .join(", "),
-        },
-        { status: 400 },
+      return apiError(
+        ErrorCode.VALIDATION_ERROR,
+        Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
 
     const updated = await updateEducation(id, result.data as Partial<EducationItem>);
     if (!updated) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Education not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.EDUCATION_NOT_FOUND, "Education not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<typeof updated>>({
-      success: true,
-      data: updated,
-      message: "Education updated",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to update education" },
-      { status: 500 },
-    );
+    return apiSuccess(updated, "Education updated");
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
@@ -86,20 +62,11 @@ export async function DELETE(
     const deleted = await deleteEducation(id);
 
     if (!deleted) {
-      return NextResponse.json<ApiResponse<never>>(
-        { success: false, error: "Education not found" },
-        { status: 404 },
-      );
+      return apiError(ErrorCode.EDUCATION_NOT_FOUND, "Education not found", 404);
     }
 
-    return NextResponse.json<ApiResponse<null>>({
-      success: true,
-      message: "Education deleted",
-    });
-  } catch {
-    return NextResponse.json<ApiResponse<never>>(
-      { success: false, error: "Failed to delete education" },
-      { status: 500 },
-    );
+    return apiSuccess(null, "Education deleted");
+  } catch (error) {
+    return handleApiError(error);
   }
 }

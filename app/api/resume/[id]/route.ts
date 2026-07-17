@@ -1,21 +1,27 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { ObjectId } from "mongodb";
 import { getResumesCollection, serializeId } from "@/lib/mongodb";
+import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
+import { ErrorCode } from "@/lib/errors";
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
-  if (!ObjectId.isValid(id)) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-  }
+  try {
+    const { id } = await params;
+    if (!ObjectId.isValid(id)) {
+      return apiError(ErrorCode.VALIDATION_ERROR, "Invalid ID");
+    }
 
-  const col = await getResumesCollection();
-  const doc = await col.findOne({ _id: new ObjectId(id) });
-  if (!doc) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
+    const col = await getResumesCollection();
+    const doc = await col.findOne({ _id: new ObjectId(id) });
+    if (!doc) {
+      return apiError(ErrorCode.RESUME_NOT_FOUND, "Resume not found", 404);
+    }
 
-  return NextResponse.json(serializeId(doc), { headers: { "Cache-Control": "public, max-age=300" } });
+    return apiSuccess(serializeId(doc));
+  } catch (error) {
+    return handleApiError(error);
+  }
 }
