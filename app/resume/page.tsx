@@ -7,6 +7,7 @@ import ResumePreview from "./components/ResumePreview";
 import { ResumePDFLink } from "./components/ResumePDF";
 import ResumeCard from "./components/ResumeCard";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { ResumeSkeleton } from "@/components/skeletons/ResumeSkeleton";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
 
 interface HistoryPage {
@@ -56,11 +57,7 @@ export default function ResumePage() {
   }
 
   if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <ResumeSkeleton />;
   }
 
   if (!resume) {
