@@ -1,26 +1,24 @@
-import { Db, Collection } from "mongodb";
-import { getDb } from "@/lib/mongodb";
+import mongoose from "mongoose";
+
+const SchemaName = "Setting";
+
+const schema = new mongoose.Schema({
+  key: { type: String, required: true, unique: true },
+  value: { type: String, required: true },
+});
 
 export interface SettingDocument {
-  _id?: string;
+  _id: mongoose.Types.ObjectId;
   key: string;
   value: string;
   updatedAt: Date;
 }
 
-let cachedCollection: Collection<SettingDocument> | null = null;
-
-async function getCollection(): Promise<Collection<SettingDocument>> {
-  if (cachedCollection) return cachedCollection;
-  const db: Db = await getDb();
-  cachedCollection = db.collection<SettingDocument>("settings");
-  await cachedCollection.createIndex({ key: 1 }, { unique: true });
-  return cachedCollection;
-}
+const Setting =
+  mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
 export async function getSetting(key: string): Promise<string | null> {
-  const collection = await getCollection();
-  const doc = await collection.findOne({ key });
+  const doc = await Setting.findOne({ key }).lean();
   return doc?.value ?? null;
 }
 
@@ -28,21 +26,12 @@ export async function setSetting(
   key: string,
   value: string,
 ): Promise<void> {
-  const collection = await getCollection();
-  await collection.updateOne(
-    { key },
-    { $set: { value, updatedAt: new Date() } },
-    { upsert: true },
-  );
+  await Setting.updateOne({ key }, { $set: { value } }, { upsert: true });
 }
 
-export async function getAllSettings(): Promise<
-  { key: string; value: string }[]
-> {
-  const collection = await getCollection();
-  const docs = await collection.find({}).toArray();
-  return docs.map((doc) => ({
-    key: doc.key,
-    value: doc.value,
-  }));
+export async function getAllSettings(): Promise<{ key: string; value: string }[]> {
+  const docs = await Setting.find({}).lean();
+  return docs.map((d) => ({ key: d.key, value: d.value }));
 }
+
+export default Setting;

@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { ObjectId } from "mongodb";
-import { getResumesCollection, serializeId } from "@/lib/mongodb";
+import Resume from "@/models/resume";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
 
@@ -10,17 +9,12 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    if (!ObjectId.isValid(id)) {
-      return apiError(ErrorCode.VALIDATION_ERROR, "Invalid ID");
-    }
-
-    const col = await getResumesCollection();
-    const doc = await col.findOne({ _id: new ObjectId(id) });
+    const doc = await Resume.findById(id).lean();
     if (!doc) {
       return apiError(ErrorCode.RESUME_NOT_FOUND, "Resume not found", 404);
     }
-
-    return apiSuccess(serializeId(doc));
+    const serialized = { ...doc, _id: doc._id.toString() };
+    return apiSuccess(serialized);
   } catch (error) {
     return handleApiError(error);
   }

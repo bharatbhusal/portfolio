@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { buildResumeContext, buildSystemPrompt, buildUserPrompt, postProcessResume } from "@/lib/resume";
 import { generateResume } from "@/lib/llm";
-import { getResumesCollection } from "@/lib/mongodb";
+import Resume from "@/models/resume";
 import { checkApiRateLimit, checkPdfRateLimit, extractIp } from "@/lib/rate-limit";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
@@ -40,15 +40,10 @@ export async function POST(req: NextRequest) {
     const rawOutput = await generateResume(systemPrompt, userPrompt);
     const resume = await postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
 
-    const col = await getResumesCollection();
-    const doc = {
-      ...resume,
-      role,
-      createdAt: new Date(),
-    };
-    const result = await col.insertOne(doc);
+    const doc = await Resume.create({ ...resume, role });
+    const serialized = { ...doc.toObject(), _id: doc._id.toString() };
 
-    return apiSuccess({ ...doc, _id: result.insertedId.toString() });
+    return apiSuccess(serialized);
   } catch (error) {
     console.error("Resume generation failed:", error);
     return handleApiError(error);

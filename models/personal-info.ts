@@ -1,8 +1,28 @@
-import { Db, Collection, ObjectId } from "mongodb";
-import { getDb, serializeId } from "@/lib/mongodb";
+import mongoose from "mongoose";
+
+const SchemaName = "PersonalInfo";
+
+const schema = new mongoose.Schema(
+  {
+    name: {
+      full: { type: String, required: true },
+      first: { type: String, required: true },
+      last: { type: String, required: true },
+    },
+    email: { type: String, required: true },
+    phone: String,
+    website: String,
+    portfolio: String,
+    title: { type: String, required: true },
+    tagline: String,
+    bio: String,
+    keywords: [String],
+  },
+  { timestamps: true },
+);
 
 export interface PersonalInfoDocument {
-  _id?: ObjectId;
+  _id: mongoose.Types.ObjectId;
   name: {
     full: string;
     first: string;
@@ -20,36 +40,29 @@ export interface PersonalInfoDocument {
   updatedAt: Date;
 }
 
-let cachedCollection: Collection<PersonalInfoDocument> | null = null;
+const PersonalInfo =
+  mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
-async function getCollection(): Promise<Collection<PersonalInfoDocument>> {
-  if (cachedCollection) return cachedCollection;
-  const db: Db = await getDb();
-  cachedCollection = db.collection<PersonalInfoDocument>("personal_info");
-  return cachedCollection;
+function serialize(doc: Record<string, unknown>) {
+  if (doc && doc._id) doc._id = doc._id.toString();
+  return doc;
 }
 
 export async function getPersonalInfo(): Promise<PersonalInfoDocument | null> {
-  const collection = await getCollection();
-  const doc = await collection.findOne({});
-  return doc ? (serializeId(doc) as unknown as PersonalInfoDocument) : null;
+  const doc = await PersonalInfo.findOne({}).lean();
+  return doc ? (serialize(doc) as unknown as PersonalInfoDocument) : null;
 }
 
 export async function updatePersonalInfo(
   data: Partial<PersonalInfoDocument>,
 ): Promise<PersonalInfoDocument> {
-  const collection = await getCollection();
-  const now = new Date();
-
-  const result = await collection.findOneAndUpdate(
-    {},
-    {
-      $set: { ...data, updatedAt: now },
-      $setOnInsert: { createdAt: now },
-    },
-    { upsert: true, returnDocument: "after" },
-  );
-
-  if (!result) throw new Error("Failed to update personal info");
-  return serializeId(result) as unknown as PersonalInfoDocument;
+  const doc = await PersonalInfo.findOneAndUpdate({}, data, {
+    new: true,
+    upsert: true,
+    runValidators: true,
+  }).lean();
+  if (!doc) throw new Error("Failed to update personal info");
+  return serialize(doc) as unknown as PersonalInfoDocument;
 }
+
+export default PersonalInfo;
