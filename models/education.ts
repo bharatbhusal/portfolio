@@ -8,8 +8,8 @@ const schema = new mongoose.Schema(
     institution: { type: String, required: true },
     startDate: { type: String, required: true },
     endDate: String,
-    address: { type: String, required: true },
-    cgpa: { type: String, required: true },
+    address: String,
+    cgpa: String,
     links: {
       type: [
         {

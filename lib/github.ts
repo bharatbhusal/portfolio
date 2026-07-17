@@ -1,5 +1,6 @@
 import { ProjectItem, ProjectLink } from "@/types";
 import { getSetting } from "@/models/settings";
+import { decrypt } from "@/lib/encryption";
 
 export interface GithubRepo {
   name: string;
@@ -44,12 +45,22 @@ export async function getGithubUsername(): Promise<string> {
   return dbUsername || "";
 }
 
+async function getGithubToken(): Promise<string> {
+  const encrypted = await getSetting("github_token");
+  if (!encrypted) return "";
+  try {
+    return decrypt(encrypted);
+  } catch {
+    return "";
+  }
+}
+
 // Dedicated central client for all GitHub API requests
 async function githubFetch<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T | null> {
-  const token = await getSetting("github_token");
+  const token = await getGithubToken();
   const headers = new Headers();
   headers.set("Accept", "application/vnd.github+json");
   headers.set("User-Agent", "bharatbhusal-portfolio");
@@ -102,7 +113,7 @@ async function githubGraphQLFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T | null> {
-  const token = await getSetting("github_token");
+  const token = await getGithubToken();
   if (!token) return null;
 
   const headers = new Headers();

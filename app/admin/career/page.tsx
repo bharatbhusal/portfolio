@@ -144,6 +144,14 @@ export default function CareerPage() {
                 onChange={(e) => setForm({ ...form, endDate: e.target.value })}
               />
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Address</label>
+              <Input
+                placeholder="City, Country"
+                value={form.address || ""}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Description</label>

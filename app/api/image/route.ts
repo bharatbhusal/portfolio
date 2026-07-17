@@ -1,9 +1,26 @@
+import { NextRequest } from "next/server";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
-import { uploadImage, getProfileImageId, deleteImage } from "@/services/image";
+import { uploadImage, getProfileImageId, deleteImage, getImage } from "@/services/image";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (id) {
+      const image = await getImage(id);
+      if (!image) {
+        return apiError(ErrorCode.IMAGE_NOT_FOUND, "Image not found", 404);
+      }
+      return new Response(image.buffer, {
+        headers: {
+          "Content-Type": image.contentType,
+          "Cache-Control": "public, max-age=86400",
+        },
+      });
+    }
+
     const imageId = await getProfileImageId();
     return apiSuccess({ id: imageId });
   } catch (error) {

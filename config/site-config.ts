@@ -6,7 +6,7 @@
 export const siteConfig = {
   url: "https://bharatbhusal.com",
 
-  ogImage: "/name.jpeg",
+  ogImage: "/icon",
   twitterHandle: "@bharatbhusal02",
 
   defaultTheme: "dark" as const,

@@ -9,8 +9,8 @@ const schema = new mongoose.Schema(
     role: { type: String, required: true },
     startDate: { type: String, required: true },
     endDate: String,
-    address: { type: String, required: true },
-    description: { type: String, required: true },
+    address: String,
+    description: String,
     achievements: { type: [String], default: [] },
     links: {
       type: [

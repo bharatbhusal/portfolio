@@ -21,6 +21,9 @@ const envSchema = z.object({
 
   // Cache (in seconds)
   CACHE_DURATION: z.string().default("3600").transform(Number),
+
+  // Encryption
+  GITHUB_TOKEN_ENCRYPTION_KEY: z.string().min(64, "GITHUB_TOKEN_ENCRYPTION_KEY must be 64 hex characters (32 bytes)"),
 });
 
 function validateEnv() {

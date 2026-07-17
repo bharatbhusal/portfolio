@@ -20,15 +20,11 @@ NEXT_PUBLIC_GITHUB_USERNAME=yourusername
 GITHUB_TOKEN=ghp_yourpersonaltokenhere
 ```
 
-### Step 2: Personal Profile Photos
-To replace the avatar images and favicons:
-1. **Profile Photo**: Replace the image at `public/name.jpeg` with your own profile photo. Keep the filename as `name.jpeg`.
-2. **Favicon/Logo**: Replace the image at `app/icon.jpg` with your own square logo/icon. Next.js will automatically detect this and render it as your site's favicon.
+### Step 2: Personal Profile Photo
+Upload your profile photo via the admin dashboard at `/admin/image`. The image is stored in MongoDB and served via the API. The app uses "NN" initials as the default avatar when no image is uploaded.
 
 ### Step 3: Bio, Name & Contact Details
-Open [config/contact-info.ts](portfolio/config/contact-info.ts) and modify it with your name, job title, email, short bio, keywords, and social links:
-```typescript
-export const contactInfo = {
+Go to the admin dashboard at `/admin/personal` and update your personal information (name, title, bio, email, etc.). All data is stored in MongoDB.
   name: {
     first: "YourName",
     last: "LastName",

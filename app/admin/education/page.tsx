@@ -153,6 +153,23 @@ export default function EducationPage() {
                 onChange={(e) => setForm({ ...form, cgpa: e.target.value })}
               />
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Address</label>
+              <Input
+                placeholder="City, Country"
+                value={form.address || ""}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Description</label>
+            <textarea
+              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="What did you study? Key achievements..."
+              value={form.description || ""}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
           </div>
           <div className="flex gap-2">
             <Button onClick={handleSave} disabled={saving}>

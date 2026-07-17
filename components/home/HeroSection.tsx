@@ -114,7 +114,7 @@ const HeroSection = ({
       <div ref={containerRef} className="max-w-2xl mx-auto px-4 text-center">
         <div className="hero-avatar">
           <ToggleProfileQR
-            profileUrl={imageId ? `/api/image?id=${imageId}` : "/name.jpeg"}
+            profileUrl={imageId ? `/api/image?id=${imageId}` : undefined}
             qrValue={`${siteConfig.url}/api/contact/vcard`}
             name={displayName}
             fallback="NN"

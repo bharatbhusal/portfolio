@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getAllSettings, setSetting } from "@/models/settings";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
+import { encrypt } from "@/lib/encryption";
 
 export async function GET() {
   try {
@@ -10,7 +11,7 @@ export async function GET() {
       key: s.key,
       value:
         s.key === "github_token" && s.value
-          ? "••••" + s.value.slice(-4)
+          ? "••••encrypted"
           : s.value,
     }));
     return apiSuccess(masked);
@@ -35,7 +36,8 @@ export async function PUT(req: NextRequest) {
       return apiError(ErrorCode.VALIDATION_ERROR, "Invalid key");
     }
 
-    await setSetting(key, value);
+    const storedValue = key === "github_token" ? encrypt(value) : value;
+    await setSetting(key, storedValue);
     return apiSuccess(null);
   } catch (error) {
     return handleApiError(error);

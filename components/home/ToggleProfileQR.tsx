@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 
 interface ToggleProfileQRProps {
-  profileUrl: string;
+  profileUrl?: string;
   qrValue: string;
   name?: string;
   fallback?: string;

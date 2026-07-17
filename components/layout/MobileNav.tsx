@@ -23,8 +23,18 @@ interface MobileNavProps {
 
 const MobileNav = ({ navItems, pathname, personalInfo }: MobileNavProps) => {
   const [open, setOpen] = React.useState(false);
+  const [imageId, setImageId] = React.useState<string | null>(null);
   const fullName = personalInfo?.name?.full || "Portfolio";
   const firstName = personalInfo?.name?.first || "P";
+
+  React.useEffect(() => {
+    fetch("/api/image")
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.id) setImageId(json.data.id);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -49,7 +59,7 @@ const MobileNav = ({ navItems, pathname, personalInfo }: MobileNavProps) => {
           {/* Profile card */}
           <div className="flex items-center gap-3 px-4 py-6 border-b">
             <Avatar className="w-10 h-10">
-              <AvatarImage src="/name.jpeg" alt={fullName} className="object-cover" />
+              <AvatarImage src={imageId ? `/api/image?id=${imageId}` : undefined} alt={fullName} className="object-cover" />
               <AvatarFallback className="text-sm font-semibold">
                 {firstName.charAt(0)}
               </AvatarFallback>
