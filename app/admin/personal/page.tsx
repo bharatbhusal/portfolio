@@ -56,7 +56,7 @@ export default function PersonalInfoPage() {
     setSaving(true);
     try {
       await dispatch(updatePersonalInfoAsync(form)).unwrap();
-      addNotification({ type: "info", title: "Personal info updated" });
+      addNotification({ type: "success", title: "Personal info updated" });
     } catch (err) {
       addNotification({
         type: "error",

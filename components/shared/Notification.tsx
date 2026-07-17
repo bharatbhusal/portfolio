@@ -1,6 +1,6 @@
 "use client";
 
-import { X, AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { X, AlertCircle, AlertTriangle, Info, CheckCircle } from "lucide-react";
 import type { NotificationType } from "./NotificationProvider";
 
 interface NotificationProps {
@@ -12,15 +12,17 @@ interface NotificationProps {
 }
 
 const icons: Record<NotificationType, React.ReactNode> = {
-  error: <AlertCircle className="h-5 w-5 text-red-500" />,
-  warning: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
-  info: <Info className="h-5 w-5 text-blue-500" />,
+  success: <CheckCircle className="h-5 w-5 text-primary" />,
+  error: <AlertCircle className="h-5 w-5 text-destructive" />,
+  warning: <AlertTriangle className="h-5 w-5 text-orange-500" />,
+  info: <Info className="h-5 w-5 text-muted-foreground" />,
 };
 
 const styles: Record<NotificationType, string> = {
-  error: "border-red-500/20 bg-red-500/10",
-  warning: "border-yellow-500/20 bg-yellow-500/10",
-  info: "border-blue-500/20 bg-blue-500/10",
+  success: "border-primary/20 bg-primary/10",
+  error: "border-destructive/20 bg-destructive/10",
+  warning: "border-orange-500/20 bg-orange-500/10",
+  info: "border-border bg-muted/50",
 };
 
 export function Notification({

@@ -9,7 +9,7 @@ import {
 } from "react";
 import { Notification } from "./Notification";
 
-export type NotificationType = "error" | "warning" | "info";
+export type NotificationType = "error" | "warning" | "info" | "success";
 
 export interface NotificationItem {
   id: string;

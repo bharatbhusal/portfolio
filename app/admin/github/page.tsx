@@ -72,10 +72,10 @@ export default function GitHubSettingsPage() {
       }
 
       await Promise.all(updates);
-      addNotification({ type: "info", title: "GitHub settings saved" });
+      addNotification({ type: "success", title: "GitHub settings saved" });
       setSettings((prev) => ({ ...prev, github_token: "" }));
-    } catch {
-      addNotification({ type: "error", title: "Failed to save settings" });
+    } catch (err) {
+      addNotification({ type: "error", title: "Failed to save settings", message: err instanceof Error ? err.message : "Unknown error" });
     } finally {
       setSaving(false);
     }
