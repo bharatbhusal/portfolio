@@ -9,8 +9,8 @@ import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { contactInfo } from "@/config/contact-info";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useAppSelector } from "@/store/hooks";
 import MobileNav from "./MobileNav";
 
 const navItems = [
@@ -28,6 +28,10 @@ const Header = () => {
   const [mounted, setMounted] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const { isAuthenticated } = useAuth();
+  const { data: personalInfo } = useAppSelector(
+    (state) => state.persistedReducer.personalInfo
+  );
+  const displayName = personalInfo?.name?.first || "Portfolio";
 
   useEffect(() => {
     setMounted(true);
@@ -59,7 +63,7 @@ const Header = () => {
             href="/"
             className="text-lg font-semibold tracking-tight hover:text-primary transition-colors"
           >
-            {contactInfo.name.first}
+            {displayName}
             <span className="text-primary">.</span>
           </Link>
 
@@ -118,7 +122,11 @@ const Header = () => {
             )}
 
             {mounted ? (
-              <MobileNav navItems={navItems} pathname={pathname} />
+              <MobileNav
+                navItems={navItems}
+                pathname={pathname}
+                personalInfo={personalInfo}
+              />
             ) : (
               <Skeleton className="h-10 w-10 rounded-full" />
             )}
