@@ -53,7 +53,8 @@ export default function ResumeBuilder() {
   useEffect(() => {
     fetch("/api/resume/latest")
       .then((r) => r.json())
-      .then((doc: ResumeDocument | null) => {
+      .then((json: { success: boolean; data: ResumeDocument | null }) => {
+        const doc = json.data;
         if (doc) {
           setResume(doc);
           localStorage.setItem(
@@ -77,9 +78,9 @@ export default function ResumeBuilder() {
     const ts = bustCache ? `&t=${Date.now()}` : "";
     fetch(`/api/resume/history?page=${page}&limit=6${ts}`)
       .then((r) => r.json())
-      .then((d: HistoryPage) => {
-        setHistory(d);
-        setHistoryPage(page);
+      .then((json: { success: boolean; data: HistoryPage["docs"]; total: number; page: number; pages: number }) => {
+        setHistory({ docs: json.data, total: json.total, page: json.page, pages: json.pages });
+        setHistoryPage(json.page);
         setHistoryLoading(false);
       })
       .catch(() => setHistoryLoading(false));
@@ -99,7 +100,8 @@ export default function ResumeBuilder() {
         const err = await res.json();
         throw new Error(err.error || "Generation failed");
       }
-      const doc = await res.json();
+      const json = await res.json();
+      const doc = json.data;
       setResume(doc);
       const now = Date.now().toString();
       localStorage.setItem(LATEST_TS_KEY, now);

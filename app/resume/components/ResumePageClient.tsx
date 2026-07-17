@@ -27,7 +27,8 @@ export default function ResumePageClient() {
   useEffect(() => {
     fetch("/api/resume/latest")
       .then((r) => r.json())
-      .then((doc: ResumeDocument | null) => {
+      .then((json: { success: boolean; data: ResumeDocument | null }) => {
+        const doc = json.data;
         if (doc) {
           setResume({
             basics: doc.basics,
@@ -48,9 +49,9 @@ export default function ResumePageClient() {
     setHistoryLoading(true);
     fetch(`/api/resume/history?page=${page}&limit=6`)
       .then((r) => r.json())
-      .then((d: HistoryPage) => {
-        setHistory(d);
-        setHistoryPage(page);
+      .then((json: { success: boolean; data: HistoryPage["docs"]; total: number; page: number; pages: number }) => {
+        setHistory({ docs: json.data, total: json.total, page: json.page, pages: json.pages });
+        setHistoryPage(json.page);
       })
       .catch(() => {})
       .finally(() => setHistoryLoading(false));

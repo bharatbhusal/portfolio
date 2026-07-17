@@ -55,7 +55,8 @@ export default function AdminResumePage() {
   useEffect(() => {
     fetch("/api/resume/latest")
       .then((r) => r.json())
-      .then((doc: ResumeDocument | null) => {
+      .then((json: { success: boolean; data: ResumeDocument | null }) => {
+        const doc = json.data;
         if (doc) {
           setResume({
             basics: doc.basics,
@@ -85,10 +86,23 @@ export default function AdminResumePage() {
     const ts = bustCache ? `&t=${Date.now()}` : "";
     fetch(`/api/resume/history?page=${page}&limit=6${ts}`)
       .then((r) => r.json())
-      .then((d: HistoryPage) => {
-        setHistory(d);
-        setHistoryPage(page);
-      })
+      .then(
+        (json: {
+          success: boolean;
+          data: HistoryPage["docs"];
+          total: number;
+          page: number;
+          pages: number;
+        }) => {
+          setHistory({
+            docs: json.data,
+            total: json.total,
+            page: json.page,
+            pages: json.pages,
+          });
+          setHistoryPage(json.page);
+        },
+      )
       .catch(() => {})
       .finally(() => setHistoryLoading(false));
   }
@@ -105,8 +119,15 @@ export default function AdminResumePage() {
         const err = await res.json();
         throw new Error(err.error || "Generation failed");
       }
-      const doc = await res.json();
-      setResume(doc);
+      const json = await res.json();
+      const doc = json.data;
+      setResume({
+        basics: doc.basics,
+        work: doc.work,
+        education: doc.education,
+        skills: doc.skills,
+        projects: doc.projects,
+      });
       const now = Date.now().toString();
       localStorage.setItem(LATEST_TS_KEY, now);
       localStorage.setItem(USER_TS_KEY, now);
@@ -128,10 +149,7 @@ export default function AdminResumePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Resume"
-        subtitle="Generate and manage your resumes"
-      />
+      <PageHeader title="Resume" subtitle="Generate and manage your resumes" />
 
       <div className="flex items-center gap-3">
         <Button onClick={generate} disabled={disabled}>
@@ -169,7 +187,7 @@ export default function AdminResumePage() {
         />
       )}
 
-      {history && history.docs.length > 0 && (
+      {history && history?.docs?.length > 0 && (
         <div className="space-y-4 border-t pt-6">
           <h2 className="text-xl font-semibold">History</h2>
           {historyLoading ? (
