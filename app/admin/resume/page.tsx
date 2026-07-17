@@ -30,7 +30,10 @@ function getCooldown(): number {
   const now = Date.now();
   const last = parseInt(localStorage.getItem(LAST_GEN_KEY) || "0", 10);
   if (!last) return 0;
-  const service = parseInt(localStorage.getItem(SERVICE_COOLDOWN_KEY) || "0", 10);
+  const service = parseInt(
+    localStorage.getItem(SERVICE_COOLDOWN_KEY) || "0",
+    10,
+  );
   const user = parseInt(localStorage.getItem(USER_COOLDOWN_KEY) || "0", 10);
   return Math.max(service - (now - last), user - (now - last), 0);
 }
@@ -89,7 +92,7 @@ export default function AdminResumePage() {
   function fetchHistory(page: number, bustCache = false) {
     setHistoryLoading(true);
     const ts = bustCache ? `&t=${Date.now()}` : "";
-    fetch(`/api/resume/history?page=${page}&limit=6${ts}`)
+    fetch(`/api/resume/history?page=${page}&limit=4${ts}`)
       .then((r) => r.json())
       .then(
         (json: {
@@ -195,7 +198,9 @@ export default function AdminResumePage() {
               {loading && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm rounded-lg">
                   <Loader2 className="h-8 w-8 animate-spin mb-3 text-primary" />
-                  <p className="text-sm font-medium">Generating new resume...</p>
+                  <p className="text-sm font-medium">
+                    Generating new resume...
+                  </p>
                 </div>
               )}
               <div className={loading ? "pointer-events-none" : ""}>

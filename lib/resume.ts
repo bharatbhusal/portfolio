@@ -3,12 +3,24 @@ import { getAllCareer } from "@/models/career";
 import { getAllEducation } from "@/models/education";
 import { getSocialLinks } from "@/models/social-links";
 import { getGithubPinnedReposWithReadme } from "@/lib/github";
+import { buildSocialUrl } from "@/types/social";
 import type { ResumeData, JobRole } from "@/types/resume";
 
 function parseStartDate(dateStr: string): number {
   const months: Record<string, number> = {
-    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-    Jul: 6, Aug: 7, Sept: 8, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sept: 8,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
   };
   const parts = dateStr.split(" ");
   if (parts.length < 2) return 0;
@@ -105,21 +117,23 @@ export async function postProcessResume(
   llmOutput: Record<string, unknown>,
   ctx: Awaited<ReturnType<typeof buildResumeContext>>,
 ): Promise<ResumeData> {
-  const [careerItems, educationItems, personalInfo, socialLinks] = await Promise.all([
-    getAllCareer(),
-    getAllEducation(),
-    getPersonalInfo(),
-    getSocialLinks(),
-  ]);
+  const [careerItems, educationItems, personalInfo, socialLinks] =
+    await Promise.all([
+      getAllCareer(),
+      getAllEducation(),
+      getPersonalInfo(),
+      getSocialLinks(),
+    ]);
 
   const socialMap = Object.fromEntries(
     socialLinks
-      .filter((s) => s.enabled && s.url)
-      .map((s) => [s.platform, s.url]),
+      .filter((s) => s.enabled && s.handle)
+      .map((s) => [s.platform, buildSocialUrl(s.platform, s.handle)]),
   );
   const email = socialMap.email || "";
   const phone = socialMap.phone || "";
   const url = socialMap.website || "";
+  const github = socialMap.github || "";
 
   const workMap = new Map(careerItems.map((c) => [c.company, c]));
 
@@ -149,6 +163,7 @@ export async function postProcessResume(
       email,
       phone: phone || undefined,
       url: url || undefined,
+      github: github || undefined,
       summary: (llmOutput.summary as string) || personalInfo?.bio || "",
     },
     work: sortedWork.map((w) => {

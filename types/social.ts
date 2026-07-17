@@ -20,7 +20,6 @@ export type SocialPlatform = keyof typeof SOCIAL_PLATFORMS;
 
 export interface SocialLinkConfig {
   platform: SocialPlatform;
-  url: string;
   handle: string;
   enabled: boolean;
 }

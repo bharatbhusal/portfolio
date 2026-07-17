@@ -10,7 +10,6 @@ export async function getSocialLinks(): Promise<SocialLinkConfig[]> {
   const docs = await getModelLinks();
   return docs.map((doc) => ({
     platform: doc.platform,
-    url: doc.url,
     handle: doc.handle,
     enabled: doc.enabled,
   }));
@@ -22,7 +21,6 @@ export async function updateSocialLinks(
   const docs = await modelUpdateLinks(links);
   return docs.map((doc) => ({
     platform: doc.platform,
-    url: doc.url,
     handle: doc.handle,
     enabled: doc.enabled,
   }));

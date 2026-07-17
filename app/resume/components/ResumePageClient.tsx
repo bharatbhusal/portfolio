@@ -50,7 +50,7 @@ export default function ResumePageClient() {
 
   function fetchHistory(page: number) {
     setHistoryLoading(true);
-    fetch(`/api/resume/history?page=${page}&limit=6`)
+    fetch(`/api/resume/history?page=${page}&limit=4`)
       .then((r) => r.json())
       .then(
         (json: {

@@ -43,6 +43,17 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                 {basics.url.replace(/^https?:\/\//, "")}
               </a>
             )}
+            {basics.github && (
+              <a
+                href={basics.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+                style={{ color: GREEN }}
+              >
+                {basics.github.replace(/^https?:\/\//, "")}
+              </a>
+            )}
           </div>
         </div>
         {basics.summary && (

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPersonalInfo } from "@/models/personal-info";
 import { getSocialLinks } from "@/models/social-links";
+import { buildSocialUrl } from "@/types/social";
 
 /**
  * vCard API Route
@@ -11,12 +12,17 @@ import { getSocialLinks } from "@/models/social-links";
 export async function GET() {
   const info = await getPersonalInfo();
   if (!info) {
-    return NextResponse.json({ error: "No personal info found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "No personal info found" },
+      { status: 404 },
+    );
   }
 
   const socialLinks = await getSocialLinks();
   const socialMap = Object.fromEntries(
-    socialLinks.filter((s) => s.enabled && s.url).map((s) => [s.platform, s.url])
+    socialLinks
+      .filter((s) => s.enabled && s.handle)
+      .map((s) => [s.platform, buildSocialUrl(s.platform, s.handle)]),
   );
 
   const vCardContent = generateVCard(info, socialMap);
@@ -37,8 +43,8 @@ function generateVCard(
   social: Record<string, string>,
 ): string {
   const { name, title, tagline } = info;
-  const email = social.email;
-  const phone = social.phone;
+  const email = social.email?.replace(/^mailto:/, "");
+  const phone = social.phone?.replace(/^tel:/, "");
 
   const vCard = [
     "BEGIN:VCARD",

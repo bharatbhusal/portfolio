@@ -6,7 +6,6 @@ const SchemaName = "SocialLink";
 const schema = new mongoose.Schema(
   {
     platform: { type: String, required: true },
-    url: { type: String, default: "" },
     handle: { type: String, default: "" },
     enabled: { type: Boolean, default: false },
   },
@@ -45,14 +44,14 @@ export async function initializeSocialLinks(): Promise<void> {
   if (count > 0) return;
 
   const defaultPlatforms: SocialLinkConfig[] = [
-    { platform: "github" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "twitter" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "telegram" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "email" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "substack" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "linkedin" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "instagram" as SocialPlatform, url: "", handle: "", enabled: false },
-    { platform: "phone" as SocialPlatform, url: "", handle: "", enabled: false },
+    { platform: "github" as SocialPlatform, handle: "", enabled: false },
+    { platform: "twitter" as SocialPlatform, handle: "", enabled: false },
+    { platform: "telegram" as SocialPlatform, handle: "", enabled: false },
+    { platform: "email" as SocialPlatform, handle: "", enabled: false },
+    { platform: "substack" as SocialPlatform, handle: "", enabled: false },
+    { platform: "linkedin" as SocialPlatform, handle: "", enabled: false },
+    { platform: "instagram" as SocialPlatform, handle: "", enabled: false },
+    { platform: "phone" as SocialPlatform, handle: "", enabled: false },
   ];
   await SocialLink.insertMany(defaultPlatforms);
 }

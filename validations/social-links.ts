@@ -9,8 +9,8 @@ export const socialLinkSchema = z.object({
     "substack",
     "linkedin",
     "instagram",
+    "phone",
   ]),
-  url: z.string().url("Invalid URL").or(z.literal("")),
   handle: z.string(),
   enabled: z.boolean(),
 });

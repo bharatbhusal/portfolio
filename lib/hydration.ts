@@ -41,7 +41,6 @@ export async function prefetchSocialLinks(): Promise<SocialLinkConfig[]> {
     const docs = await getSocialLinks();
     return docs.map((doc) => ({
       platform: doc.platform,
-      url: doc.url,
       handle: doc.handle,
       enabled: doc.enabled,
     }));

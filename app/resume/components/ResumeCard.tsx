@@ -11,7 +11,11 @@ interface ResumeCardProps {
   onSelect?: (id: string) => void;
 }
 
-export default function ResumeCard({ resume, isActive, onSelect }: ResumeCardProps) {
+export default function ResumeCard({
+  resume,
+  isActive,
+  onSelect,
+}: ResumeCardProps) {
   const date = new Date(resume.createdAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -32,20 +36,35 @@ export default function ResumeCard({ resume, isActive, onSelect }: ResumeCardPro
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex gap-2 items-center min-w-0">
-          <FileText className={cn("h-4 w-4 shrink-0", isActive ? "text-primary" : "text-muted-foreground")} />
+          <FileText
+            className={cn(
+              "h-4 w-4 shrink-0",
+              isActive ? "text-primary" : "text-muted-foreground",
+            )}
+          />
           <span className="text-sm font-medium">Generated on</span>
-          <p className={cn("text-xs shrink-0", isActive ? "text-primary" : "text-muted-foreground")}>
+          <p
+            className={cn(
+              "text-xs shrink-0",
+              isActive ? "text-primary" : "text-muted-foreground",
+            )}
+          >
             {date} {time}
           </p>
         </div>
         <ResumePDFLink data={null} minimal id={String(resume._id)} />
       </div>
 
-      <p className="text-sm text-muted-foreground line-clamp-2">{resume.basics.summary}</p>
+      <p className="text-sm text-muted-foreground">{resume.basics.summary}</p>
 
       <div className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-primary">
         {isActive ? "Currently viewing" : "Click to view"}
-        <ArrowRight className={cn("h-3.5 w-3.5 transition-transform", isActive && "translate-x-0.5")} />
+        <ArrowRight
+          className={cn(
+            "h-3.5 w-3.5 transition-transform",
+            isActive && "translate-x-0.5",
+          )}
+        />
       </div>
     </div>
   );

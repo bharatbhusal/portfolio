@@ -10,7 +10,7 @@ import SocialLinks from "./SocialLinks";
 import { siteConfig } from "@/config/site-config";
 import type { PersonalInfoDocument } from "@/models/personal-info";
 import type { SocialLinkConfig } from "@/types/social";
-import { SOCIAL_PLATFORMS } from "@/types/social";
+import { SOCIAL_PLATFORMS, buildSocialUrl } from "@/types/social";
 
 function buildSocialLinks(configs: SocialLinkConfig[]) {
   if (!configs.length) return [];
@@ -18,11 +18,11 @@ function buildSocialLinks(configs: SocialLinkConfig[]) {
   const platformMap = SOCIAL_PLATFORMS;
 
   return configs
-    .filter((c) => c.enabled && c.url)
+    .filter((c) => c.enabled && c.handle)
     .map((c) => {
       const platform = platformMap[c.platform];
       return {
-        link: c.url,
+        link: buildSocialUrl(c.platform, c.handle),
         icon: platform?.icon,
         type: c.platform,
         label: platform?.label || c.platform,

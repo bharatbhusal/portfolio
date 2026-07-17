@@ -3,6 +3,7 @@ export interface ResumeBasics {
   email: string;
   phone?: string;
   url?: string;
+  github?: string;
   summary: string;
   location?: string;
   profiles?: { network: string; url: string }[];

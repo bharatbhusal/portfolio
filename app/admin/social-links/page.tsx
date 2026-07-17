@@ -48,7 +48,6 @@ export default function SocialLinksPage() {
       (p) =>
         byPlatform.get(p) ?? {
           platform: p,
-          url: "",
           handle: "",
           enabled: false,
         },
@@ -63,7 +62,6 @@ export default function SocialLinksPage() {
           ? {
               ...l,
               handle,
-              url: buildSocialUrl(platform, handle),
             }
           : l,
       ),
@@ -107,7 +105,9 @@ export default function SocialLinksPage() {
         {links.map((link) => {
           const platform = SOCIAL_PLATFORMS[link.platform];
           const Icon = platform?.icon;
-          const previewUrl = buildSocialUrl(link.platform, link.handle);
+          const previewUrl = link.handle
+            ? buildSocialUrl(link.platform, link.handle)
+            : "";
 
           return (
             <div
