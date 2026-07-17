@@ -24,12 +24,24 @@ export async function handleApiError(error: unknown): Promise<NextResponse<ApiRe
   console.error("API Error:", error);
 
   if (error instanceof Error) {
-    if (error.message.includes("not found") || error.message.includes("Not Found")) {
-      return apiError(ErrorCode.NOT_FOUND, error.message, 404);
+    const msg = error.message;
+    if (msg.includes("not found") || msg.includes("Not Found")) {
+      return apiError(ErrorCode.NOT_FOUND, msg, 404);
     }
-    if (error.message.includes("validation") || error.message.includes("Validation")) {
-      return apiError(ErrorCode.VALIDATION_ERROR, error.message, 422);
+    if (msg.includes("Cast to") || msg.includes("CastError")) {
+      return apiError(ErrorCode.VALIDATION_ERROR, "Invalid data format: " + msg, 422);
     }
+    if (msg.includes("validation") || msg.includes("Validation")) {
+      return apiError(ErrorCode.VALIDATION_ERROR, msg, 422);
+    }
+    if (msg.includes("duplicate") || msg.includes("E11000")) {
+      return apiError(ErrorCode.VALIDATION_ERROR, "A record with this value already exists", 409);
+    }
+    if (msg.includes("timeout") || msg.includes("ECONNREFUSED")) {
+      return apiError(ErrorCode.DATABASE_ERROR, "Database connection failed", 503);
+    }
+    // Surface the actual error message for other known errors
+    return apiError(ErrorCode.INTERNAL_ERROR, msg, 500);
   }
 
   return apiError(ErrorCode.INTERNAL_ERROR, undefined, 500);

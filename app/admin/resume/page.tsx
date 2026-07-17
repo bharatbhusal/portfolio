@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/components/shared/NotificationProvider";
@@ -10,10 +10,9 @@ import ResumePreview from "@/app/resume/components/ResumePreview";
 import ResumeCard from "@/app/resume/components/ResumeCard";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
 
-const LATEST_TS_KEY = "resume_latest_ts";
-const USER_TS_KEY = "resume_user_ts";
-const SERVICE_WINDOW_MS = 2 * 60 * 60_000;
-const USER_WINDOW_MS = 10 * 60_000;
+const SERVICE_COOLDOWN_KEY = "resume_service_cooldown";
+const USER_COOLDOWN_KEY = "resume_user_cooldown";
+const LAST_GEN_KEY = "resume_last_gen";
 
 interface HistoryPage {
   docs: Pick<ResumeDocument, "_id" | "createdAt" | "basics">[];
@@ -22,15 +21,18 @@ interface HistoryPage {
   pages: number;
 }
 
+interface CooldownInfo {
+  service: number;
+  user: number;
+}
+
 function getCooldown(): number {
   const now = Date.now();
-  const latest = parseInt(localStorage.getItem(LATEST_TS_KEY) || "0", 10);
-  const user = parseInt(localStorage.getItem(USER_TS_KEY) || "0", 10);
-  const serviceRemaining = latest
-    ? Math.max(0, SERVICE_WINDOW_MS - (now - latest))
-    : 0;
-  const userRemaining = user ? Math.max(0, USER_WINDOW_MS - (now - user)) : 0;
-  return Math.max(serviceRemaining, userRemaining);
+  const last = parseInt(localStorage.getItem(LAST_GEN_KEY) || "0", 10);
+  if (!last) return 0;
+  const service = parseInt(localStorage.getItem(SERVICE_COOLDOWN_KEY) || "0", 10);
+  const user = parseInt(localStorage.getItem(USER_COOLDOWN_KEY) || "0", 10);
+  return Math.max(service - (now - last), user - (now - last), 0);
 }
 
 function formatTimer(ms: number): string {
@@ -43,6 +45,7 @@ function formatTimer(ms: number): string {
 }
 
 export default function AdminResumePage() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
@@ -50,13 +53,15 @@ export default function AdminResumePage() {
   const [historyPage, setHistoryPage] = useState(1);
   const [historyLoading, setHistoryLoading] = useState(false);
   const { addNotification } = useNotifications();
+  const previewRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetch("/api/resume/latest")
+  const fetchResumeById = useCallback((id: string) => {
+    setLoading(true);
+    fetch(`/api/resume/${id}`)
       .then((r) => r.json())
-      .then((json: { success: boolean; data: ResumeDocument | null }) => {
-        const doc = json.data;
-        if (doc) {
+      .then((json: { success: boolean; data: ResumeDocument }) => {
+        if (json.success) {
+          const doc = json.data;
           setResume({
             basics: doc.basics,
             work: doc.work,
@@ -64,20 +69,21 @@ export default function AdminResumePage() {
             skills: doc.skills,
             projects: doc.projects,
           });
-          localStorage.setItem(
-            LATEST_TS_KEY,
-            new Date(doc.createdAt).getTime().toString(),
-          );
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
-    fetchHistory(1);
-
+  useEffect(() => {
+    setCooldown(getCooldown());
     const tick = () => setCooldown(getCooldown());
-    tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    fetchHistory(1);
   }, []);
 
   function fetchHistory(page: number, bustCache = false) {
@@ -100,11 +106,23 @@ export default function AdminResumePage() {
             pages: json.pages,
           });
           setHistoryPage(json.page);
+          if (!selectedId && json.data.length > 0) {
+            setSelectedId(String(json.data[0]._id));
+            fetchResumeById(String(json.data[0]._id));
+          }
         },
       )
       .catch(() => {})
       .finally(() => setHistoryLoading(false));
   }
+
+  const handleSelect = (id: string) => {
+    setSelectedId(id);
+    fetchResumeById(id);
+    if (window.innerWidth < 1024 && previewRef.current) {
+      previewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   const generate = useCallback(async () => {
     setLoading(true);
@@ -127,9 +145,12 @@ export default function AdminResumePage() {
         skills: doc.skills,
         projects: doc.projects,
       });
-      const now = Date.now().toString();
-      localStorage.setItem(LATEST_TS_KEY, now);
-      localStorage.setItem(USER_TS_KEY, now);
+      setSelectedId(String(doc._id));
+      const now = Date.now();
+      localStorage.setItem(LAST_GEN_KEY, now.toString());
+      const cd: CooldownInfo = json.cooldown || { service: 0, user: 0 };
+      localStorage.setItem(SERVICE_COOLDOWN_KEY, cd.service.toString());
+      localStorage.setItem(USER_COOLDOWN_KEY, cd.user.toString());
       setCooldown(getCooldown());
       fetchHistory(1, true);
       addNotification({ type: "success", title: "Resume generated" });
@@ -158,13 +179,17 @@ export default function AdminResumePage() {
               ? `Generate in ${formatTimer(cooldown)}`
               : "Generate New",
           onClick: generate,
-          icon: loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />,
+          icon: loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          ),
         }}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
         {/* Left: Resume preview */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div ref={previewRef} className="lg:sticky lg:top-24 lg:self-start">
           {resume && (
             <div className="relative">
               {loading && (
@@ -198,7 +223,12 @@ export default function AdminResumePage() {
             <>
               <div className="space-y-3">
                 {history.docs.map((doc) => (
-                  <ResumeCard key={String(doc._id)} resume={doc} />
+                  <ResumeCard
+                    key={String(doc._id)}
+                    resume={doc}
+                    isActive={selectedId === String(doc._id)}
+                    onSelect={handleSelect}
+                  />
                 ))}
               </div>
               {history.pages > 1 && (

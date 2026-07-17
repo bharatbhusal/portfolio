@@ -24,6 +24,7 @@ const platformOrder: SocialPlatform[] = [
   "linkedin",
   "telegram",
   "email",
+  "phone",
   "substack",
   "instagram",
 ];
@@ -42,13 +43,17 @@ export default function SocialLinksPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (data.length > 0) {
-      const sorted = [...data].sort(
-        (a, b) =>
-          platformOrder.indexOf(a.platform) - platformOrder.indexOf(b.platform),
-      );
-      setLinks(sorted);
-    }
+    const byPlatform = new Map(data.map((l) => [l.platform, l]));
+    const merged = platformOrder.map(
+      (p) =>
+        byPlatform.get(p) ?? {
+          platform: p,
+          url: "",
+          handle: "",
+          enabled: false,
+        },
+    );
+    setLinks(merged);
   }, [data]);
 
   const updateHandle = (platform: SocialPlatform, handle: string) => {

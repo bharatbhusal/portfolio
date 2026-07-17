@@ -11,6 +11,7 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import { Download } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { ResumeData } from "@/types/resume";
 
 Font.register({
@@ -23,9 +24,22 @@ const GREEN = "#16a34a";
 const styles = StyleSheet.create({
   page: {
     padding: 40,
+    paddingBottom: 56,
     fontSize: 10,
     fontFamily: "Helvetica",
     color: "#1a1a1a",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 40,
+    right: 40,
+    fontSize: 8,
+    color: "#999",
+    textAlign: "center",
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    paddingTop: 6,
   },
   name: { fontSize: 22, fontWeight: "bold", marginBottom: 4 },
   headerRow: {
@@ -79,8 +93,14 @@ const styles = StyleSheet.create({
   projectLink: { fontSize: 8.5, color: GREEN, marginTop: 2 },
 });
 
-function ResumeDoc({ data }: { data: ResumeData }) {
+function ResumeDoc({ data, createdAt }: { data: ResumeData; createdAt?: string }) {
   const { basics, work, education, skills, projects } = data;
+  const generatedLine = createdAt
+    ? `Generated from bharatbhusal.com · ${new Date(createdAt).toLocaleString(
+        "en-US",
+        { dateStyle: "medium", timeStyle: "short" },
+      )}`
+    : "Generated from bharatbhusal.com";
 
   return (
     <Document>
@@ -208,12 +228,30 @@ function ResumeDoc({ data }: { data: ResumeData }) {
             ))}
           </>
         )}
+
+        <Text style={styles.footer} fixed>
+          {generatedLine}
+        </Text>
       </Page>
     </Document>
   );
 }
 
-export function ResumePDFLink({ data }: { data: ResumeData | null }) {
+export function ResumePDFLink({
+  data,
+  createdAt,
+  minimal,
+  id,
+}: {
+  data: ResumeData | null;
+  createdAt?: string;
+  minimal?: boolean;
+  id?: string;
+}) {
+  if (minimal && id) {
+    return <MinimalDownloadButton id={id} />;
+  }
+
   if (!data) {
     return (
       <button
@@ -228,7 +266,7 @@ export function ResumePDFLink({ data }: { data: ResumeData | null }) {
 
   return (
     <PDFDownloadLink
-      document={<ResumeDoc data={data} />}
+      document={<ResumeDoc data={data} createdAt={createdAt} />}
       fileName={`${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
       className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
     >
@@ -238,6 +276,55 @@ export function ResumePDFLink({ data }: { data: ResumeData | null }) {
           {loading ? "Generating PDF..." : "Download PDF"}
         </>
       )}
+    </PDFDownloadLink>
+  );
+}
+
+function MinimalDownloadButton({ id }: { id: string }) {
+  const [data, setData] = useState<ResumeData | null>(null);
+  const [createdAt, setCreatedAt] = useState<string | undefined>();
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/resume/${id}`)
+      .then((r) => r.json())
+      .then((json: { success: boolean; data: any }) => {
+        if (json.success && !cancelled) {
+          setData({
+            basics: json.data.basics,
+            work: json.data.work,
+            education: json.data.education,
+            skills: json.data.skills,
+            projects: json.data.projects,
+          });
+          setCreatedAt(json.data.createdAt);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (!data) {
+    return (
+      <span
+        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+        title="Download PDF"
+      >
+        <Download className="h-4 w-4" />
+      </span>
+    );
+  }
+
+  return (
+    <PDFDownloadLink
+      document={<ResumeDoc data={data} createdAt={createdAt} />}
+      fileName={`${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
+      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      title="Download PDF"
+    >
+      <Download className="h-4 w-4" />
     </PDFDownloadLink>
   );
 }

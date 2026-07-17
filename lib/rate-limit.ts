@@ -1,9 +1,27 @@
 import { getRateLimitsCollection } from "./mongodb";
+import { env } from "./env";
 
-// Per-IP rate limit (10min) via MongoDB
+// Service-wide PDF cooldown = RATE_LIMIT_WINDOW * RATE_LIMIT_MAX_REQUESTS
+const PDF_WINDOW_MS =
+  env.RATE_LIMIT_WINDOW * env.RATE_LIMIT_MAX_REQUESTS;
+
+// User-specific cooldown = 1/10th of service cooldown
+const USER_WINDOW_MS = Math.floor(PDF_WINDOW_MS / 10);
+
+// Per-IP rate limit window (from env)
+export const API_RATE_WINDOW_MS = env.RATE_LIMIT_WINDOW;
+
+export function getCooldownWindows() {
+  return {
+    serviceCooldown: PDF_WINDOW_MS,
+    userCooldown: USER_WINDOW_MS,
+  };
+}
+
+// Per-IP rate limit via MongoDB
 export async function checkApiRateLimit(
   ip: string,
-  windowMs = 10 * 60_000,
+  windowMs = API_RATE_WINDOW_MS,
 ): Promise<{ allowed: boolean; retryAfterMs?: number }> {
   if (process.env.NODE_ENV === "development") return { allowed: true };
 
@@ -22,9 +40,8 @@ export async function checkApiRateLimit(
   return { allowed: true };
 }
 
-// Service-wide PDF rate limit (2 hours) via in-memory
+// Service-wide PDF rate limit via in-memory
 let lastPdfGeneration = 0;
-const PDF_WINDOW_MS = 2 * 60 * 60 * 1000;
 
 export function checkPdfRateLimit(): {
   allowed: boolean;

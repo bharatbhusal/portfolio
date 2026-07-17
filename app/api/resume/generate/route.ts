@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { buildResumeContext, buildSystemPrompt, buildUserPrompt, postProcessResume } from "@/lib/resume";
 import { generateResume } from "@/lib/llm";
 import Resume from "@/models/resume";
-import { checkApiRateLimit, checkPdfRateLimit, extractIp } from "@/lib/rate-limit";
+import { checkApiRateLimit, checkPdfRateLimit, extractIp, getCooldownWindows } from "@/lib/rate-limit";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
 import type { JobRole } from "@/types/resume";
@@ -43,7 +43,12 @@ export async function POST(req: NextRequest) {
     const doc = await Resume.create({ ...resume, role });
     const serialized = { ...doc.toObject(), _id: doc._id.toString() };
 
-    return apiSuccess(serialized);
+    const { serviceCooldown, userCooldown } = getCooldownWindows();
+    return NextResponse.json({
+      success: true,
+      data: serialized,
+      cooldown: { service: serviceCooldown, user: userCooldown },
+    });
   } catch (error) {
     console.error("Resume generation failed:", error);
     return handleApiError(error);

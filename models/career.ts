@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
         {
           link: String,
           icon: mongoose.Schema.Types.Mixed,
-          type: String,
+          type: { type: String },
         },
       ],
       default: [],

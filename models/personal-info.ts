@@ -9,10 +9,6 @@ const schema = new mongoose.Schema(
       first: { type: String, required: true },
       last: { type: String, required: true },
     },
-    email: { type: String, required: true },
-    phone: String,
-    website: String,
-    portfolio: String,
     title: { type: String, required: true },
     tagline: String,
     bio: String,
@@ -28,10 +24,6 @@ export interface PersonalInfoDocument {
     first: string;
     last: string;
   };
-  email: string;
-  phone?: string;
-  website?: string;
-  portfolio?: string;
   title: string;
   tagline?: string;
   bio?: string;

@@ -1,6 +1,7 @@
 import { getPersonalInfo } from "@/models/personal-info";
 import { getAllCareer } from "@/models/career";
 import { getAllEducation } from "@/models/education";
+import { getSocialLinks } from "@/models/social-links";
 import { getGithubPinnedReposWithReadme } from "@/lib/github";
 import type { ResumeData, JobRole } from "@/types/resume";
 
@@ -104,11 +105,21 @@ export async function postProcessResume(
   llmOutput: Record<string, unknown>,
   ctx: Awaited<ReturnType<typeof buildResumeContext>>,
 ): Promise<ResumeData> {
-  const [careerItems, educationItems, personalInfo] = await Promise.all([
+  const [careerItems, educationItems, personalInfo, socialLinks] = await Promise.all([
     getAllCareer(),
     getAllEducation(),
     getPersonalInfo(),
+    getSocialLinks(),
   ]);
+
+  const socialMap = Object.fromEntries(
+    socialLinks
+      .filter((s) => s.enabled && s.url)
+      .map((s) => [s.platform, s.url]),
+  );
+  const email = socialMap.email || "";
+  const phone = socialMap.phone || "";
+  const url = socialMap.website || "";
 
   const workMap = new Map(careerItems.map((c) => [c.company, c]));
 
@@ -135,9 +146,9 @@ export async function postProcessResume(
   return {
     basics: {
       name: personalInfo?.name?.full || "No Name",
-      email: personalInfo?.email || "",
-      phone: personalInfo?.phone,
-      url: personalInfo?.website,
+      email,
+      phone: phone || undefined,
+      url: url || undefined,
       summary: (llmOutput.summary as string) || personalInfo?.bio || "",
     },
     work: sortedWork.map((w) => {

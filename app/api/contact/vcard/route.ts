@@ -36,7 +36,9 @@ function generateVCard(
   info: NonNullable<Awaited<ReturnType<typeof getPersonalInfo>>>,
   social: Record<string, string>,
 ): string {
-  const { name, email, phone, portfolio, title, tagline } = info;
+  const { name, title, tagline } = info;
+  const email = social.email;
+  const phone = social.phone;
 
   const vCard = [
     "BEGIN:VCARD",
@@ -46,7 +48,6 @@ function generateVCard(
     `TITLE:${title}`,
     email ? `EMAIL;TYPE=INTERNET,Personal:${email}` : null,
     phone ? `TEL;TYPE=CELL:${phone}` : null,
-    portfolio ? `URL;TYPE=Portfolio:${portfolio}` : null,
     social.github ? `URL;TYPE=GitHub:${social.github}` : null,
     social.twitter ? `URL;TYPE=Twitter:${social.twitter}` : null,
     social.linkedin ? `URL;TYPE=LinkedIn:${social.linkedin}` : null,

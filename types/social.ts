@@ -2,9 +2,10 @@ import { FaGithub, FaLinkedin, FaTelegram, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { HiOutlineMail } from "react-icons/hi";
 import { SiSubstack } from "react-icons/si";
+import { Phone } from "lucide-react";
 import type { IconType } from "react-icons";
 
-export const SOCIAL_PLATFORMS = {
+export const SOCIAL_PLATFORMS: Record<string, { label: string; icon: IconType }> = {
   github: { label: "GitHub", icon: FaGithub },
   twitter: { label: "Twitter/X", icon: FaXTwitter },
   telegram: { label: "Telegram", icon: FaTelegram },
@@ -12,7 +13,8 @@ export const SOCIAL_PLATFORMS = {
   substack: { label: "Substack", icon: SiSubstack },
   linkedin: { label: "LinkedIn", icon: FaLinkedin },
   instagram: { label: "Instagram", icon: FaInstagram },
-} as const;
+  phone: { label: "Phone", icon: Phone },
+};
 
 export type SocialPlatform = keyof typeof SOCIAL_PLATFORMS;
 
@@ -44,6 +46,8 @@ export function buildSocialUrl(
       return `https://linkedin.com/in/${h}`;
     case "instagram":
       return `https://instagram.com/${h}`;
+    case "phone":
+      return `tel:${h.startsWith("+") ? h : `+${h}`}`;
     default:
       return "";
   }

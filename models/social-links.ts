@@ -52,6 +52,7 @@ export async function initializeSocialLinks(): Promise<void> {
     { platform: "substack" as SocialPlatform, url: "", handle: "", enabled: false },
     { platform: "linkedin" as SocialPlatform, url: "", handle: "", enabled: false },
     { platform: "instagram" as SocialPlatform, url: "", handle: "", enabled: false },
+    { platform: "phone" as SocialPlatform, url: "", handle: "", enabled: false },
   ];
   await SocialLink.insertMany(defaultPlatforms);
 }
