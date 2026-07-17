@@ -97,19 +97,19 @@ export async function fetchGithubRepos(): Promise<GithubRepo[]> {
   return repos || [];
 }
 
-// GraphQL client for batch queries
+// GraphQL client for batch queries (requires token)
 async function githubGraphQLFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
 ): Promise<T | null> {
   const token = await getSetting("github_token");
+  if (!token) return null;
+
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
   headers.set("Accept", "application/vnd.github+json");
   headers.set("User-Agent", "bharatbhusal-portfolio");
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
+  headers.set("Authorization", `Bearer ${token}`);
 
   try {
     const response = await fetch("https://api.github.com/graphql", {
@@ -140,6 +140,9 @@ async function githubGraphQLFetch<T>(
 }
 
 export async function getGithubProjects(): Promise<ProjectItem[]> {
+  const username = await getGithubUsername();
+  if (!username) return [];
+
   const repos = await fetchGithubRepos();
 
   if (repos.length === 0) {
@@ -272,6 +275,9 @@ export interface PinnedRepoWithReadme {
 export async function getGithubPinnedReposWithReadme(): Promise<
   PinnedRepoWithReadme[]
 > {
+  const username = await getGithubUsername();
+  if (!username) return [];
+
   const repos = await fetchGithubRepos();
   const shyTopics = ["shy"];
 
