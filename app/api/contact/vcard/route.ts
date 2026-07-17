@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { contactInfo } from "@/config/contact-info";
+import { getPersonalInfo } from "@/models/personal-info";
+import { getSocialLinks } from "@/models/social-links";
 
 /**
  * vCard API Route
@@ -8,58 +9,52 @@ import { contactInfo } from "@/config/contact-info";
  */
 
 export async function GET() {
-  const vCardContent = generateVCard();
+  const info = await getPersonalInfo();
+  if (!info) {
+    return NextResponse.json({ error: "No personal info found" }, { status: 404 });
+  }
+
+  const socialLinks = await getSocialLinks();
+  const socialMap = Object.fromEntries(
+    socialLinks.filter((s) => s.enabled && s.url).map((s) => [s.platform, s.url])
+  );
+
+  const vCardContent = generateVCard(info, socialMap);
+  const filename = `${info.name.first.toLowerCase()}_${info.name.last.toLowerCase()}_contact.vcf`;
 
   return new NextResponse(vCardContent, {
     status: 200,
     headers: {
       "Content-Type": "text/vcard; charset=utf-8",
-      "Content-Disposition": `attachment; filename="${contactInfo.name.first.toLocaleLowerCase()}_${contactInfo.name.last.toLocaleLowerCase()}_contact.vcf"`,
+      "Content-Disposition": `attachment; filename="${filename}"`,
       "Cache-Control": "public, max-age=3600",
     },
   });
 }
-/**
- * Generate vCard 3.0 format content
- * Updated for structured contactInfo fields
- */
-function generateVCard(): string {
-  const { name, email, phone, portfolio, social, title, tagline } = contactInfo;
+
+function generateVCard(
+  info: NonNullable<Awaited<ReturnType<typeof getPersonalInfo>>>,
+  social: Record<string, string>,
+): string {
+  const { name, email, phone, portfolio, title, tagline } = info;
 
   const vCard = [
     "BEGIN:VCARD",
     "VERSION:3.0",
-
-    // Name
     `FN:${name.full}`,
     `N:${name.last};${name.first};;;`,
-
-    // Title/Organization
     `TITLE:${title}`,
-
-    // Emails
     email ? `EMAIL;TYPE=INTERNET,Personal:${email}` : null,
-
-    // Phones
     phone ? `TEL;TYPE=CELL:${phone}` : null,
-
-    // Portfolio (instead of website)
     portfolio ? `URL;TYPE=Portfolio:${portfolio}` : null,
-
-    // Social Profiles
-    social?.github ? `URL;TYPE=GitHub:${social.github}` : null,
-    social?.twitter ? `URL;TYPE=Twitter:${social.twitter}` : null,
-    social?.linkedin ? `URL;TYPE=LinkedIn:${social.linkedin}` : null,
-    social?.telegram ? `URL;TYPE=Telegram:${social.telegram}` : null,
-    social?.instagram ? `URL;TYPE=Instagram:${social.instagram}` : null,
-    social?.substack ? `URL;TYPE=Substack:${social.substack}` : null,
-
-    // Note or tagline
+    social.github ? `URL;TYPE=GitHub:${social.github}` : null,
+    social.twitter ? `URL;TYPE=Twitter:${social.twitter}` : null,
+    social.linkedin ? `URL;TYPE=LinkedIn:${social.linkedin}` : null,
+    social.telegram ? `URL;TYPE=Telegram:${social.telegram}` : null,
+    social.instagram ? `URL;TYPE=Instagram:${social.instagram}` : null,
+    social.substack ? `URL;TYPE=Substack:${social.substack}` : null,
     tagline ? `NOTE:${tagline}` : null,
-
-    // Last updated timestamp
     `REV:${new Date().toISOString()}`,
-
     "END:VCARD",
   ]
     .filter(Boolean)
@@ -67,9 +62,7 @@ function generateVCard(): string {
 
   return vCard;
 }
-/**
- * POST method (alias for GET)
- */
+
 export async function POST() {
   return GET();
 }

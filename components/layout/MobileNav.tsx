@@ -13,15 +13,18 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { contactInfo } from "@/config/contact-info";
+import type { PersonalInfo } from "@/services/personal-info";
 
 interface MobileNavProps {
   navItems: { href: string; label: string; icon: React.ElementType }[];
   pathname: string;
+  personalInfo?: PersonalInfo | null;
 }
 
-const MobileNav = ({ navItems, pathname }: MobileNavProps) => {
+const MobileNav = ({ navItems, pathname, personalInfo }: MobileNavProps) => {
   const [open, setOpen] = React.useState(false);
+  const fullName = personalInfo?.name?.full || "Portfolio";
+  const firstName = personalInfo?.name?.first || "P";
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -46,14 +49,14 @@ const MobileNav = ({ navItems, pathname }: MobileNavProps) => {
           {/* Profile card */}
           <div className="flex items-center gap-3 px-4 py-6 border-b">
             <Avatar className="w-10 h-10">
-              <AvatarImage src="/name.jpeg" alt={contactInfo.name.full} className="object-cover" />
+              <AvatarImage src="/name.jpeg" alt={fullName} className="object-cover" />
               <AvatarFallback className="text-sm font-semibold">
-                {contactInfo.name.first.charAt(0)}
+                {firstName.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{contactInfo.name.full}</p>
-              <p className="text-xs text-muted-foreground">{contactInfo.title}</p>
+              <p className="text-sm font-medium">{fullName}</p>
+              <p className="text-xs text-muted-foreground">{personalInfo?.title || ""}</p>
             </div>
           </div>
 
@@ -97,7 +100,7 @@ const MobileNav = ({ navItems, pathname }: MobileNavProps) => {
 
           {/* Footer hint */}
           <p className="px-4 py-4 text-xs text-muted-foreground/50 border-t text-center">
-            {contactInfo.name.first} &mdash; {new Date().getFullYear()}
+            {firstName} &mdash; {new Date().getFullYear()}
           </p>
         </div>
       </SheetContent>

@@ -1,58 +1,24 @@
 /**
- * Site Configuration
- * Global settings and metadata for the portfolio
+ * Site Configuration — UI settings only
+ * Personal info comes from the database
  */
 
-import { contactInfo } from "./contact-info";
-
 export const siteConfig = {
-  // Site Metadata
-  name: contactInfo.name.full,
-  title: contactInfo.name.full,
-  description: contactInfo.tagline,
-  url: contactInfo.website,
-  author: contactInfo.name.full,
+  url: "https://bharatbhusal.com",
 
-  // SEO
-  keywords: contactInfo.keywords,
-
-  // Open Graph / Social Media
   ogImage: "/name.jpeg",
   twitterHandle: "@bharatbhusal02",
 
-  // Theme
   defaultTheme: "dark" as const,
 
-  // Navigation
   mainNav: [
-    {
-      title: "Home",
-      href: "/",
-      icon: "FaHome",
-    },
-    {
-      title: "Career",
-      href: "/career",
-      icon: "PiBagSimpleFill",
-    },
-    {
-      title: "Education",
-      href: "/education",
-      icon: "FaGraduationCap",
-    },
-    {
-      title: "Projects",
-      href: "/projects",
-      icon: "GrProjects",
-    },
-    {
-      title: "Resume",
-      href: "/resume",
-      icon: "FaFileAlt",
-    },
+    { title: "Home", href: "/", icon: "FaHome" },
+    { title: "Career", href: "/career", icon: "PiBagSimpleFill" },
+    { title: "Education", href: "/education", icon: "FaGraduationCap" },
+    { title: "Projects", href: "/projects", icon: "GrProjects" },
+    { title: "Resume", href: "/resume", icon: "FaFileAlt" },
   ],
 
-  // Features
   features: {
     vCard: true,
     darkMode: true,

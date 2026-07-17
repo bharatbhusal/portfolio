@@ -1,12 +1,10 @@
 import type { MetadataRoute } from "next";
-import { contactInfo } from "@/config/contact-info";
-import { siteConfig } from "@/config/site-config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${contactInfo.name.full} - ${contactInfo.title}`,
-    short_name: siteConfig.name,
-    description: siteConfig.description,
+    name: "Portfolio",
+    short_name: "Portfolio",
+    description: "Software Engineer Portfolio",
     start_url: "/",
     display: "standalone",
     background_color: "#0a0a0a",

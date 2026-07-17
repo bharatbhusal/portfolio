@@ -6,7 +6,6 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { StoreProvider } from "@/components/providers/store-provider";
 import { NotificationProvider } from "@/components/shared/NotificationProvider";
 import Header from "@/components/layout/Header";
-import { contactInfo } from "@/config/contact-info";
 import { siteConfig } from "@/config/site-config";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -24,20 +23,17 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  applicationName: siteConfig.name,
   title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.title}`,
+    default: "Portfolio",
+    template: "%s | Portfolio",
   },
-  description: siteConfig.description,
-  keywords: [...siteConfig.keywords],
-  authors: [{ name: contactInfo.name.full }],
+  description: "Software Engineer Portfolio",
   category: "portfolio",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: siteConfig.name,
+    title: "Portfolio",
   },
   robots: {
     index: true,
@@ -47,15 +43,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: `${contactInfo.name.full} - ${contactInfo.title}`,
-    description: contactInfo.bio,
     images: [siteConfig.ogImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${contactInfo.name.full} - ${contactInfo.title}`,
-    description: contactInfo.bio,
     images: [siteConfig.ogImage],
     site: siteConfig.twitterHandle,
     creator: siteConfig.twitterHandle,
