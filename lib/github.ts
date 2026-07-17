@@ -41,8 +41,7 @@ interface GraphQLReposData {
 
 export async function getGithubUsername(): Promise<string> {
   const dbUsername = await getSetting("github_username");
-  if (!dbUsername) throw new Error("GitHub username not configured in settings");
-  return dbUsername;
+  return dbUsername || "";
 }
 
 // Dedicated central client for all GitHub API requests
@@ -243,11 +242,13 @@ export async function getGithubRepoDetails(
   repoName: string,
 ): Promise<GithubRepo | null> {
   const username = await getGithubUsername();
+  if (!username) return null;
   return githubFetch<GithubRepo>(`repos/${username}/${repoName}`);
 }
 
 export async function getGithubRepoReadme(repoName: string): Promise<string> {
   const username = await getGithubUsername();
+  if (!username) return "";
   const data = await githubFetch<{ content: string; encoding: string }>(
     `repos/${username}/${repoName}/readme`,
   );
