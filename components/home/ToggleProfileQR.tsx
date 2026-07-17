@@ -21,12 +21,14 @@ interface ToggleProfileQRProps {
   profileUrl: string;
   qrValue: string;
   name?: string;
+  fallback?: string;
 }
 
 const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
   profileUrl,
   qrValue,
   name = "Profile",
+  fallback,
 }) => {
   const [showQR, setShowQR] = useState<boolean>(false);
 
@@ -47,7 +49,7 @@ const ToggleProfileQR: React.FC<ToggleProfileQRProps> = ({
           <Avatar className="w-full h-full shadow-xl transition-all duration-300">
             <AvatarImage src={profileUrl} alt={name} className="object-cover" />
             <AvatarFallback className="text-6xl bg-muted">
-              {name.charAt(0)}
+              {fallback || name.charAt(0)}
             </AvatarFallback>
           </Avatar>
         </div>

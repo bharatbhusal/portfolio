@@ -9,6 +9,7 @@ import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 export default function ImagePage() {
   const [imageId, setImageId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cacheKey, setCacheKey] = useState(Date.now());
   const { addNotification } = useNotifications();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function ImagePage() {
     }
 
     setImageId(json.data.id);
+    setCacheKey(Date.now());
     addNotification({ type: "info", title: "Image uploaded" });
   };
 
@@ -68,6 +70,7 @@ export default function ImagePage() {
       <div className="p-6 rounded-xl border border-border/50 bg-card/50">
         <ImageUpload
           currentImageId={imageId}
+          cacheKey={cacheKey}
           onUpload={handleUpload}
           onDelete={imageId ? handleDelete : undefined}
         />
