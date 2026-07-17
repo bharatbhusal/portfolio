@@ -44,19 +44,19 @@ export default function ImagePage() {
     }
 
     setImageId(json.data.id);
-    addNotification({ type: "info", title: "Image uploaded" });
+    addNotification({ type: "success", title: "Image uploaded" });
   };
 
   const handleDelete = async () => {
     const res = await fetch("/api/image", { method: "DELETE" });
     const json = await res.json();
     if (!json.success) {
-      addNotification({ type: "error", title: "Failed to delete image" });
+      addNotification({ type: "error", title: "Failed to delete image", message: json.error });
       return;
     }
 
     setImageId(null);
-    addNotification({ type: "info", title: "Image deleted" });
+    addNotification({ type: "success", title: "Image deleted" });
   };
 
   if (loading) return <FormSkeleton />;

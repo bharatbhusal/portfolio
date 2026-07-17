@@ -65,7 +65,7 @@ export default function EducationPage() {
         await dispatch(addEducation(form as EducationItem)).unwrap();
       }
       addNotification({
-        type: "info",
+        type: "success",
         title: editing ? "Education updated" : "Education added",
       });
       setShowForm(false);
@@ -86,7 +86,7 @@ export default function EducationPage() {
     if (!deleteId) return;
     try {
       await dispatch(deleteEducationAsync(deleteId)).unwrap();
-      addNotification({ type: "info", title: "Education deleted" });
+      addNotification({ type: "success", title: "Education deleted" });
     } catch (err) {
       addNotification({
         type: "error",

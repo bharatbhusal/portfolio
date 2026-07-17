@@ -64,7 +64,7 @@ export default function CareerPage() {
         await dispatch(addCareer(form as CareerItem)).unwrap();
       }
       addNotification({
-        type: "info",
+        type: "success",
         title: editing ? "Career updated" : "Career added",
       });
       setShowForm(false);
@@ -85,7 +85,7 @@ export default function CareerPage() {
     if (!deleteId) return;
     try {
       await dispatch(deleteCareerAsync(deleteId)).unwrap();
-      addNotification({ type: "info", title: "Career deleted" });
+      addNotification({ type: "success", title: "Career deleted" });
     } catch (err) {
       addNotification({
         type: "error",

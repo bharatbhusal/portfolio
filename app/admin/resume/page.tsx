@@ -112,7 +112,7 @@ export default function AdminResumePage() {
       localStorage.setItem(USER_TS_KEY, now);
       setCooldown(getCooldown());
       fetchHistory(1, true);
-      addNotification({ type: "info", title: "Resume generated" });
+      addNotification({ type: "success", title: "Resume generated" });
     } catch (err) {
       addNotification({
         type: "error",

@@ -77,7 +77,7 @@ export default function SocialLinksPage() {
     setSaving(true);
     try {
       await dispatch(updateSocialLinksAsync(links)).unwrap();
-      addNotification({ type: "info", title: "Social links updated" });
+      addNotification({ type: "success", title: "Social links updated" });
     } catch (err) {
       addNotification({
         type: "error",
