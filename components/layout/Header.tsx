@@ -3,8 +3,16 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, GraduationCap, FolderGit2, FileText, Moon, Sun, Shield } from "lucide-react";
-import { useTheme } from "next-themes";
+import {
+  Home,
+  Briefcase,
+  GraduationCap,
+  FolderGit2,
+  FileText,
+  Moon,
+  Sun,
+  Shield,
+} from "lucide-react";
 import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +25,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/components/providers/auth-provider";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setTheme } from "@/store/ui-slice";
 import MobileNav from "./MobileNav";
 
 const navItems = [
@@ -30,13 +39,14 @@ const navItems = [
 
 const Header = () => {
   const pathname = usePathname();
-  const { theme, setTheme, resolvedTheme } = useTheme();
   const headerRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const { isAuthenticated } = useAuth();
+  const dispatch = useAppDispatch();
+  const theme = useAppSelector((state) => state.persistedReducer.ui.theme);
   const { data: personalInfo } = useAppSelector(
-    (state) => state.persistedReducer.personalInfo
+    (state) => state.persistedReducer.personalInfo,
   );
   const displayName = personalInfo?.name?.first || "Portfolio";
 
@@ -48,7 +58,7 @@ const Header = () => {
     gsap.fromTo(
       headerRef.current,
       { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }
+      { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
     );
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -61,7 +71,7 @@ const Header = () => {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
           ? "bg-background/80 backdrop-blur-xl border-b shadow-sm"
-          : "bg-transparent"
+          : "bg-transparent",
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -88,7 +98,7 @@ const Header = () => {
                           "flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200",
                           isActive
                             ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                            : "text-muted-foreground hover:text-foreground hover:bg-accent",
                         )}
                       >
                         <item.icon className="h-4 w-4" />
@@ -98,25 +108,23 @@ const Header = () => {
                   </NavigationMenuItem>
                 );
               })}
-              {isAuthenticated && (
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/admin"
-                      className={cn(
-                        navigationMenuTriggerStyle(),
-                        "flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200",
-                        pathname.startsWith("/admin")
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                      )}
-                    >
-                      <Shield className="h-4 w-4" />
-                      Admin
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              )}
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href="/admin"
+                    className={cn(
+                      navigationMenuTriggerStyle(),
+                      "flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200",
+                      pathname.startsWith("/admin")
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-accent",
+                    )}
+                  >
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -125,11 +133,13 @@ const Header = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                onClick={() => {
+                  dispatch(setTheme(theme === "dark" ? "light" : "dark"));
+                }}
                 className="rounded-full"
                 aria-label="Toggle theme"
               >
-                {resolvedTheme === "dark" ? (
+                {theme === "dark" ? (
                   <Sun className="h-5 w-5" />
                 ) : (
                   <Moon className="h-5 w-5" />

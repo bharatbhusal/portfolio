@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   User,
   Share2,
@@ -9,8 +9,10 @@ import {
   Briefcase,
   FileText,
   Github,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const navItems = [
   { href: "/admin/personal", label: "Personal Info", icon: User },
@@ -23,10 +25,12 @@ const navItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
 
   return (
     <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border/50 bg-card/30 p-4 sticky top-16 h-[calc(100vh-4rem)]">
-      <nav className="space-y-1">
+      <nav className="space-y-1 flex-1">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
@@ -47,6 +51,16 @@ export function AdminSidebar() {
           );
         })}
       </nav>
+      <button
+        onClick={() => {
+          logout();
+          router.push("/");
+        }}
+        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors w-full"
+      >
+        <LogOut className="h-4 w-4" />
+        Logout
+      </button>
     </aside>
   );
 }

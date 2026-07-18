@@ -27,6 +27,7 @@ import socialLinksReducer from "./social-links-slice";
 import educationReducer from "./education-slice";
 import careerReducer from "./career-slice";
 import resumeReducer from "./resume-slice";
+import uiReducer from "./ui-slice";
 
 const rootReducer = combineReducers({
   personalInfo: personalInfoReducer,
@@ -34,13 +35,14 @@ const rootReducer = combineReducers({
   education: educationReducer,
   career: careerReducer,
   resume: resumeReducer,
+  ui: uiReducer,
 });
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["personalInfo", "socialLinks"],
+  whitelist: ["personalInfo", "socialLinks", "ui", "career", "education"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

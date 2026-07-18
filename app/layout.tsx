@@ -81,21 +81,16 @@ export default function RootLayout({
       <body
         className={`${poppins.className} min-h-screen transition-colors duration-300 bg-background text-foreground overflow-x-hidden`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme={siteConfig.defaultTheme}
-          enableSystem
-          disableTransitionOnChange={false}
-        >
-          <StoreProvider>
+        <StoreProvider>
+          <ThemeProvider>
             <AuthProvider>
               <NotificationProvider>
                 <Header />
                 <main className="min-h-screen">{children}</main>
               </NotificationProvider>
             </AuthProvider>
-          </StoreProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </StoreProvider>
         <Analytics />
       </body>
     </html>

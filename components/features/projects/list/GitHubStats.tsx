@@ -1,27 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useAppSelector } from "@/store/hooks";
 
 interface GitHubStatsProps {
   username: string;
 }
 
 const GitHubStats = ({ username }: GitHubStatsProps) => {
-  const { theme, systemTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  const currentTheme = theme === "system" ? systemTheme : theme;
-  const isDark = currentTheme === "dark";
+  const theme = useAppSelector((state) => state.persistedReducer.ui.theme);
+  const isDark = theme === "dark";
   const themeParam = isDark ? "dark" : "default";
 
   if (!username) {
