@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getPersonalInfo } from "@/models/personal-info";
 import { getSocialLinks } from "@/models/social-links";
 import { buildSocialUrl } from "@/types/social";
+import { handleApiError } from "@/lib/api-utils";
 
 /**
  * vCard API Route
@@ -12,10 +13,7 @@ import { buildSocialUrl } from "@/types/social";
 export async function GET() {
   const info = await getPersonalInfo();
   if (!info) {
-    return NextResponse.json(
-      { error: "No personal info found" },
-      { status: 404 },
-    );
+    return handleApiError("No personal info found");
   }
 
   const socialLinks = await getSocialLinks();

@@ -75,7 +75,7 @@ export default function ProjectsList({ initialProjects }: ProjectsListProps) {
     return (
       <EmptyState
         title="No projects yet"
-        description="Configure your GitHub username in the admin dashboard to show your repositories here."
+        description="Configure your GitHub username and token in the admin dashboard to show your repositories here."
         action={{
           label: "Configure Github",
           onClick: () => (window.location.href = "/admin/github"),
