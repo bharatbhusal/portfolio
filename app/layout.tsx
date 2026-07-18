@@ -7,6 +7,7 @@ import { StoreProvider } from "@/components/providers/store-provider";
 import { NotificationProvider } from "@/components/shared/NotificationProvider";
 import Header from "@/components/layout/Header";
 import { siteConfig } from "@/config/site-config";
+import { getProfileImageId } from "@/services/image";
 import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
@@ -21,15 +22,28 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: "Portfolio",
-    template: "%s | Portfolio",
-  },
-  description: "Software Engineer Portfolio",
-  category: "portfolio",
-  manifest: "/manifest.webmanifest",
+export async function generateMetadata(): Promise<Metadata> {
+  let imageId: string | null = null;
+  try {
+    imageId = await getProfileImageId();
+  } catch {
+    imageId = null;
+  }
+  const favicon = imageId ? `/api/image?id=${imageId}` : "/api/fallback-icon";
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: "Portfolio",
+      template: "%s | Portfolio",
+    },
+    description: "Software Engineer Portfolio",
+    category: "portfolio",
+    manifest: "/manifest.webmanifest",
+    icons: {
+      icon: favicon,
+      apple: favicon,
+    },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -54,7 +68,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
-};
+  };
+}
 
 export default function RootLayout({
   children,
