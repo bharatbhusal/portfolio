@@ -24,6 +24,16 @@ const GitHubStats = ({ username }: GitHubStatsProps) => {
   const isDark = currentTheme === "dark";
   const themeParam = isDark ? "dark" : "default";
 
+  if (!username) {
+    return (
+      <div className="w-full">
+        <p className="text-center text-gray-500 dark:text-gray-400">
+          GitHub username is not configured. Please set your GitHub username in
+          the admin dashboard.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
