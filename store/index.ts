@@ -9,7 +9,19 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+
+const isBrowser = typeof window !== "undefined";
+
+const noopStorage = {
+  getItem: () => Promise.resolve(null),
+  setItem: () => Promise.resolve(),
+  removeItem: () => Promise.resolve(),
+};
+
+const storage = isBrowser
+  ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require("redux-persist/lib/storage/createWebStorage").default("local")
+  : noopStorage;
 import personalInfoReducer from "./personal-info-slice";
 import socialLinksReducer from "./social-links-slice";
 import educationReducer from "./education-slice";

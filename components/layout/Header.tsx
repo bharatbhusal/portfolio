@@ -80,8 +80,9 @@ const Header = () => {
                 const isActive = pathname === item.href;
                 return (
                   <NavigationMenuItem key={item.href}>
-                    <Link href={item.href} legacyBehavior passHref>
-                      <NavigationMenuLink
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={item.href}
                         className={cn(
                           navigationMenuTriggerStyle(),
                           "flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200",
@@ -92,15 +93,16 @@ const Header = () => {
                       >
                         <item.icon className="h-4 w-4" />
                         {item.label}
-                      </NavigationMenuLink>
-                    </Link>
+                      </Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                 );
               })}
               {isAuthenticated && (
                 <NavigationMenuItem>
-                  <Link href="/admin" legacyBehavior passHref>
-                    <NavigationMenuLink
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/admin"
                       className={cn(
                         navigationMenuTriggerStyle(),
                         "flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200",
@@ -111,8 +113,8 @@ const Header = () => {
                     >
                       <Shield className="h-4 w-4" />
                       Admin
-                    </NavigationMenuLink>
-                  </Link>
+                    </Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               )}
             </NavigationMenuList>
