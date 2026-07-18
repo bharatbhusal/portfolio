@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ResumePageClient from "./components/ResumePageClient";
+import ResumePageClient from "@/components/features/resume/ResumePageClient";
 
 export const metadata: Metadata = {
   title: "Resume",

@@ -2,24 +2,16 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Loader2, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
-import ResumePreview from "@/app/resume/components/ResumePreview";
-import ResumeCard from "@/app/resume/components/ResumeCard";
+import ResumePreview from "@/components/features/resume/ResumePreview";
+import ResumeHistory, { type ResumeHistoryData } from "@/components/features/resume/ResumeHistory";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
 
 const SERVICE_COOLDOWN_KEY = "resume_service_cooldown";
 const USER_COOLDOWN_KEY = "resume_user_cooldown";
 const LAST_GEN_KEY = "resume_last_gen";
-
-interface HistoryPage {
-  docs: Pick<ResumeDocument, "_id" | "createdAt" | "basics">[];
-  total: number;
-  page: number;
-  pages: number;
-}
 
 interface CooldownInfo {
   service: number;
@@ -52,8 +44,7 @@ export default function AdminResumePage() {
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
-  const [history, setHistory] = useState<HistoryPage | null>(null);
-  const [historyPage, setHistoryPage] = useState(1);
+  const [history, setHistory] = useState<ResumeHistoryData | null>(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const { addNotification } = useNotifications();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -97,7 +88,7 @@ export default function AdminResumePage() {
       .then(
         (json: {
           success: boolean;
-          data: HistoryPage["docs"];
+          data: ResumeHistoryData["docs"];
           total: number;
           page: number;
           pages: number;
@@ -108,7 +99,6 @@ export default function AdminResumePage() {
             page: json.page,
             pages: json.pages,
           });
-          setHistoryPage(json.page);
           if (!selectedId && json.data.length > 0) {
             setSelectedId(String(json.data[0]._id));
             fetchResumeById(String(json.data[0]._id));
@@ -218,52 +208,13 @@ export default function AdminResumePage() {
         </div>
 
         {/* Right: History */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">History</h2>
-          {historyLoading ? (
-            <div className="flex justify-center py-10">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-          ) : history && history.docs.length > 0 ? (
-            <>
-              <div className="space-y-3">
-                {history.docs.map((doc) => (
-                  <ResumeCard
-                    key={String(doc._id)}
-                    resume={doc}
-                    isActive={selectedId === String(doc._id)}
-                    onSelect={handleSelect}
-                  />
-                ))}
-              </div>
-              {history.pages > 1 && (
-                <div className="flex justify-center gap-2 pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={historyPage <= 1}
-                    onClick={() => fetchHistory(historyPage - 1)}
-                  >
-                    Previous
-                  </Button>
-                  <span className="flex items-center px-3 text-sm text-muted-foreground">
-                    {historyPage} / {history.pages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={historyPage >= history.pages}
-                    onClick={() => fetchHistory(historyPage + 1)}
-                  >
-                    Next
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">No history yet.</p>
-          )}
-        </div>
+        <ResumeHistory
+          history={history}
+          historyLoading={historyLoading}
+          selectedId={selectedId}
+          onSelect={handleSelect}
+          onPageChange={(page) => fetchHistory(page, true)}
+        />
       </div>
     </div>
   );

@@ -2,10 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { EducationItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import { CgWebsite } from "react-icons/cg";
 import { FaLinkedin, FaTelegram, FaGamepad, FaInstagram, FaFacebook } from "react-icons/fa";
@@ -21,6 +22,11 @@ const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>
   facebook: FaFacebook,
 };
 
+interface EducationCardProps extends EducationItem {
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
 const EducationCard = ({
   institution,
   degree,
@@ -32,7 +38,9 @@ const EducationCard = ({
   courses,
   links,
   highlight,
-}: EducationItem) => {
+  onEdit,
+  onDelete,
+}: EducationCardProps) => {
   return (
     <Card
       className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
@@ -94,6 +102,33 @@ const EducationCard = ({
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {(onEdit || onDelete) && (
+          <div className="flex gap-2 pt-4 border-t mt-4">
+            {onEdit && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onEdit}
+                className="h-8 w-8"
+                aria-label="Edit"
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onDelete}
+                className="h-8 w-8 text-destructive hover:text-destructive"
+                aria-label="Delete"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         )}
       </CardContent>

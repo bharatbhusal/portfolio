@@ -1,6 +1,6 @@
 import React from "react";
 import { getGithubProjects } from "@/lib/github";
-import ProjectsList from "./components/ProjectsList";
+import ProjectsList from "@/components/features/projects/list/ProjectsList";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

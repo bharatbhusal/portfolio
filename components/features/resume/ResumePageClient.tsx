@@ -1,25 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import ResumePreview from "./ResumePreview";
-import ResumeCard from "./ResumeCard";
+import ResumeHistory, { type ResumeHistoryData } from "./ResumeHistory";
 import { ResumeSkeleton } from "@/components/skeletons/ResumeSkeleton";
 import { EmptyState } from "@/components/shared/EmptyState";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
-
-interface HistoryPage {
-  docs: Pick<ResumeDocument, "_id" | "createdAt" | "basics">[];
-  total: number;
-  page: number;
-  pages: number;
-}
 
 export default function ResumePageClient() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [history, setHistory] = useState<HistoryPage | null>(null);
+  const [history, setHistory] = useState<ResumeHistoryData | null>(null);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyLoading, setHistoryLoading] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -55,7 +47,7 @@ export default function ResumePageClient() {
       .then(
         (json: {
           success: boolean;
-          data: HistoryPage["docs"];
+          data: ResumeHistoryData["docs"];
           total: number;
           page: number;
           pages: number;
@@ -115,50 +107,13 @@ export default function ResumePageClient() {
         </div>
 
         {/* Right: History */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Resume History</h2>
-          {historyLoading ? (
-            <div className="flex justify-center py-10">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-          ) : history && history.docs.length > 0 ? (
-            <>
-              <div className="space-y-3">
-                {history.docs.map((doc) => (
-                  <ResumeCard
-                    key={String(doc._id)}
-                    resume={doc}
-                    isActive={selectedId === String(doc._id)}
-                    onSelect={handleSelect}
-                  />
-                ))}
-              </div>
-              {history.pages > 1 && (
-                <div className="flex justify-center gap-2 pt-2">
-                  <button
-                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
-                    disabled={historyPage <= 1}
-                    onClick={() => fetchHistory(historyPage - 1)}
-                  >
-                    Previous
-                  </button>
-                  <span className="flex items-center px-3 text-sm text-muted-foreground">
-                    {historyPage} / {history.pages}
-                  </span>
-                  <button
-                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
-                    disabled={historyPage >= history.pages}
-                    onClick={() => fetchHistory(historyPage + 1)}
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">No history yet.</p>
-          )}
-        </div>
+        <ResumeHistory
+          history={history}
+          historyLoading={historyLoading}
+          selectedId={selectedId}
+          onSelect={handleSelect}
+          onPageChange={fetchHistory}
+        />
       </div>
     </div>
   );

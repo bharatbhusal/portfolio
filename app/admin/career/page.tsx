@@ -10,7 +10,7 @@ import {
 } from "@/store/career-slice";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { DataCard } from "@/components/shared/DataCard";
+import CareerCard from "@/components/features/career/CareerCard";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
@@ -275,36 +275,12 @@ export default function CareerPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.map((item) => (
-          <DataCard
+          <CareerCard
             key={item._id}
-            title={item.company}
-            subtitle={item.role}
-            badges={
-              item.highlight
-                ? [{ label: item.highlight, variant: "secondary" as const }]
-                : undefined
-            }
-            links={(item.links || []).map((lk) => ({
-              label: lk.type,
-              url: lk.link,
-            }))}
+            {...item}
             onEdit={() => handleEdit(item)}
             onDelete={() => setDeleteId(item._id)}
-          >
-            <p className="text-sm text-muted-foreground">
-              {item.startDate} - {item.endDate || "Present"}
-            </p>
-            {item.description && (
-              <p className="text-sm mt-2 line-clamp-2">{item.description}</p>
-            )}
-            {item.achievements && item.achievements.length > 0 && (
-              <ul className="text-sm mt-2 ml-4 list-disc space-y-0.5">
-                {item.achievements.map((a, i) => (
-                  <li key={i}>{a}</li>
-                ))}
-              </ul>
-            )}
-          </DataCard>
+          />
         ))}
       </div>
 

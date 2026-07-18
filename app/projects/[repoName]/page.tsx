@@ -18,7 +18,7 @@ import {
   getGithubRepoReadme,
   getGithubUsername,
 } from "@/lib/github";
-import MermaidRenderer from "./components/MermaidRenderer";
+import MermaidRenderer from "@/components/features/projects/repo/MermaidRenderer";
 
 import type { Metadata } from "next";
 

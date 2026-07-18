@@ -10,7 +10,7 @@ import {
 } from "@/store/education-slice";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { DataCard } from "@/components/shared/DataCard";
+import EducationCard from "@/components/features/education/EducationCard";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
@@ -298,37 +298,12 @@ export default function EducationPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.map((item) => (
-          <DataCard
+          <EducationCard
             key={item._id}
-            title={item.institution}
-            subtitle={item.degree || item.startDate}
-            badges={[
-              item.cgpa ? { label: `CGPA: ${item.cgpa}` } : null,
-              item.highlight ? { label: item.highlight, variant: "secondary" as const } : null,
-            ].filter(Boolean) as { label: string; variant?: "default" | "secondary" | "destructive" | "outline" }[]}
-            links={(item.links || []).map((lk) => ({
-              label: lk.type,
-              url: lk.link,
-            }))}
+            {...item}
             onEdit={() => handleEdit(item)}
             onDelete={() => setDeleteId(item._id)}
-          >
-            <p className="text-sm text-muted-foreground">
-              {item.startDate} - {item.endDate || "Present"}
-            </p>
-            {item.description && (
-              <p className="text-sm mt-2 line-clamp-2">{item.description}</p>
-            )}
-            {item.courses && item.courses.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {item.courses.map((c, i) => (
-                  <span key={i} className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
-                    {c}
-                  </span>
-                ))}
-              </div>
-            )}
-          </DataCard>
+          />
         ))}
       </div>
 

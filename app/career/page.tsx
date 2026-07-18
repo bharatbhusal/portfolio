@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { prefetchCareer } from "@/lib/hydration";
-import CareerPageClient from "./components/CareerPageClient";
+import CareerPageClient from "@/components/features/career/CareerPageClient";
 
 export const metadata: Metadata = {
   title: "Career",

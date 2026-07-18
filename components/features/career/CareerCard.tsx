@@ -2,9 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { CareerItem } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 import { CgWebsite } from "react-icons/cg";
 import { FaLinkedin, FaTelegram, FaGamepad, FaInstagram, FaFacebook } from "react-icons/fa";
@@ -20,6 +21,11 @@ const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>
   facebook: FaFacebook,
 };
 
+interface CareerCardProps extends CareerItem {
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
 const CareerCard = ({
   company,
   role,
@@ -30,7 +36,9 @@ const CareerCard = ({
   achievements,
   links,
   highlight,
-}: CareerItem) => {
+  onEdit,
+  onDelete,
+}: CareerCardProps) => {
   return (
     <Card
       className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
@@ -88,6 +96,33 @@ const CareerCard = ({
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {(onEdit || onDelete) && (
+          <div className="flex gap-2 pt-4 border-t mt-4">
+            {onEdit && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onEdit}
+                className="h-8 w-8"
+                aria-label="Edit"
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onDelete}
+                className="h-8 w-8 text-destructive hover:text-destructive"
+                aria-label="Delete"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         )}
       </CardContent>

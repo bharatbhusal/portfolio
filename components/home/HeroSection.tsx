@@ -64,13 +64,13 @@ const HeroSection = ({
       gsap.fromTo(
         ".hero-avatar",
         { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, ease: "power3.out" }
+        { scale: 1, opacity: 1, duration: 0.6, ease: "power3.out" },
       );
 
       gsap.fromTo(
         ".hero-text",
         { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", delay: 0.2 }
+        { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", delay: 0.2 },
       );
 
       gsap.fromTo(
@@ -83,7 +83,7 @@ const HeroSection = ({
           stagger: 0.05,
           ease: "power3.out",
           delay: 0.35,
-        }
+        },
       );
 
       gsap.fromTo(
@@ -96,18 +96,16 @@ const HeroSection = ({
           stagger: 0.1,
           ease: "power3.out",
           delay: 0.5,
-        }
+        },
       );
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  const displayName = info
-    ? `${info.name.first} ${info.name.last}`
-    : "No Name";
+  const displayName = info ? `${info.name.first} ${info.name.last}` : "No Name";
 
-  const title = info?.title || "No title set";
+  const tagline = info?.tagline || "No data available";
 
   return (
     <section className="min-h-screen flex items-center justify-center pt-16">
@@ -129,7 +127,7 @@ const HeroSection = ({
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto">
-            {title}
+            {tagline}
           </p>
         </div>
 
