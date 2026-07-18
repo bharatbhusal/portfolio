@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "Resume";
 
@@ -105,10 +106,7 @@ const Resume =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, resumeSchema);
 
 export function serializeResume(doc: Record<string, unknown>) {
-  if (doc && doc._id) {
-    return { ...doc, _id: doc._id.toString() };
-  }
-  return doc;
+  return serializeDoc(doc);
 }
 
 export async function getLatestResume(): Promise<ResumeDocument | null> {
@@ -147,9 +145,7 @@ export async function saveResume(
   data: Omit<ResumeDocument, "_id" | "createdAt">,
 ): Promise<ResumeDocument> {
   const doc = await Resume.create(data);
-  const obj = doc.toObject();
-  (obj as Record<string, unknown>)._id = obj._id.toString();
-  return obj as unknown as ResumeDocument;
+  return serializeDoc(doc.toObject() as Record<string, unknown>) as unknown as ResumeDocument;
 }
 
 export default Resume;

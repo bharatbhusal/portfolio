@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import type { EducationItem } from "@/types";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "Education";
 
@@ -38,8 +39,7 @@ const Education =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
 function serialize(doc: Record<string, unknown>) {
-  if (doc && doc._id) doc._id = doc._id.toString();
-  return doc;
+  return serializeDoc(doc);
 }
 
 export async function getAllEducation(): Promise<EducationDocument[]> {
@@ -58,9 +58,7 @@ export async function createEducation(
   data: EducationItem,
 ): Promise<EducationDocument> {
   const doc = await Education.create(data);
-  const obj = doc.toObject();
-  (obj as Record<string, unknown>)._id = obj._id.toString();
-  return obj as unknown as EducationDocument;
+  return serializeDoc(doc.toObject() as Record<string, unknown>) as unknown as EducationDocument;
 }
 
 export async function updateEducation(

@@ -8,10 +8,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 import { CgWebsite } from "react-icons/cg";
-import { FaLinkedin, FaTelegram, FaGamepad, FaInstagram, FaFacebook } from "react-icons/fa";
+import {
+  FaLinkedin,
+  FaTelegram,
+  FaGamepad,
+  FaInstagram,
+  FaFacebook,
+} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+const iconMap: Record<
+  string,
+  React.ComponentType<React.SVGProps<SVGSVGElement>>
+> = {
   website: CgWebsite,
   twitter: FaXTwitter,
   linkedin: FaLinkedin,
@@ -78,53 +87,53 @@ const CareerCard = ({
             </li>
           ))}
         </ul>
-
-        {links.length > 0 && (
-          <div className="flex gap-3 pt-4 border-t mt-auto">
-            {links.map((link, index) => {
-              const Icon = iconMap[link.type] || CgWebsite;
-              return (
-                <Link
-                  key={index}
-                  href={link.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  aria-label={`Visit ${link.type} link`}
+        <div className="flex border-t mt-auto justify-between items-center p-2">
+          {links.length > 0 && (
+            <div className="flex gap-2">
+              {links.map((link, index) => {
+                const Icon = iconMap[link.type] || CgWebsite;
+                return (
+                  <Link
+                    key={index}
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    aria-label={`Visit ${link.type} link`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+          {(onEdit || onDelete) && (
+            <div className="flex gap-2">
+              {onEdit && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onEdit}
+                  className="h-8 w-8"
+                  aria-label="Edit"
                 >
-                  <Icon className="h-4 w-4" />
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
-        {(onEdit || onDelete) && (
-          <div className="flex gap-2 pt-4 border-t mt-4">
-            {onEdit && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onEdit}
-                className="h-8 w-8"
-                aria-label="Edit"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            )}
-            {onDelete && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onDelete}
-                className="h-8 w-8 text-destructive hover:text-destructive"
-                aria-label="Delete"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        )}
+                  <Pencil className="h-4 w-4" />
+                </Button>
+              )}
+              {onDelete && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onDelete}
+                  className="h-8 w-8 text-destructive hover:text-destructive"
+                  aria-label="Delete"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

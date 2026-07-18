@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import type { SocialLinkConfig, SocialPlatform } from "@/types/social";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "SocialLink";
 
@@ -22,8 +23,7 @@ const SocialLink =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
 function serialize(doc: Record<string, unknown>) {
-  if (doc && doc._id) doc._id = doc._id.toString();
-  return doc;
+  return serializeDoc(doc);
 }
 
 export async function getSocialLinks(): Promise<SocialLinkDocument[]> {

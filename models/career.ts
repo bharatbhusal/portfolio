@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import type { CareerItem } from "@/types";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "Career";
 
@@ -37,8 +38,7 @@ const Career =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
 function serialize(doc: Record<string, unknown>) {
-  if (doc && doc._id) doc._id = doc._id.toString();
-  return doc;
+  return serializeDoc(doc);
 }
 
 export async function getAllCareer(): Promise<CareerDocument[]> {
@@ -55,9 +55,7 @@ export async function getCareerById(
 
 export async function createCareer(data: CareerItem): Promise<CareerDocument> {
   const doc = await Career.create(data);
-  const obj = doc.toObject();
-  (obj as Record<string, unknown>)._id = obj._id.toString();
-  return obj as unknown as CareerDocument;
+  return serializeDoc(doc.toObject() as Record<string, unknown>) as unknown as CareerDocument;
 }
 
 export async function updateCareer(

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,9 +19,10 @@ interface MobileNavProps {
   navItems: { href: string; label: string; icon: React.ElementType }[];
   pathname: string;
   personalInfo?: PersonalInfo | null;
+  isAuthenticated?: boolean;
 }
 
-const MobileNav = ({ navItems, pathname, personalInfo }: MobileNavProps) => {
+const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: MobileNavProps) => {
   const [open, setOpen] = React.useState(false);
   const [imageId, setImageId] = React.useState<string | null>(null);
   const fullName = personalInfo?.name?.full || "Portfolio";
@@ -106,6 +107,34 @@ const MobileNav = ({ navItems, pathname, personalInfo }: MobileNavProps) => {
                 </Link>
               );
             })}
+
+            {isAuthenticated && (
+              <Link
+                href="/admin"
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200",
+                  pathname.startsWith("/admin")
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {pathname.startsWith("/admin") && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-primary" />
+                )}
+                <span
+                  className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-lg transition-colors",
+                    pathname.startsWith("/admin")
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted/50 text-muted-foreground"
+                  )}
+                >
+                  <Shield className="h-4 w-4" />
+                </span>
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* Footer hint */}

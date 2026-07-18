@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "User";
 
@@ -17,16 +18,11 @@ export interface UserDocument {
 const User =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
-function serialize(doc: Record<string, unknown>) {
-  if (doc && doc._id) doc._id = doc._id.toString();
-  return doc;
-}
-
 export async function getUserByUsername(
   username: string,
 ): Promise<UserDocument | null> {
   const doc = await User.findOne({ username }).lean();
-  return doc ? (serialize(doc) as unknown as UserDocument) : null;
+  return doc ? (serializeDoc(doc) as unknown as UserDocument) : null;
 }
 
 export async function createUser(
@@ -34,9 +30,7 @@ export async function createUser(
   passwordHash: string,
 ): Promise<UserDocument> {
   const doc = await User.create({ username, passwordHash });
-  const obj = doc.toObject();
-  (obj as Record<string, unknown>)._id = obj._id.toString();
-  return obj as unknown as UserDocument;
+  return serializeDoc(doc.toObject() as Record<string, unknown>) as unknown as UserDocument;
 }
 
 export default User;

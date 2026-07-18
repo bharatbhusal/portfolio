@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { serializeDoc } from "@/lib/serialize";
 
 const SchemaName = "PersonalInfo";
 
@@ -36,8 +37,7 @@ const PersonalInfo =
   mongoose.models[SchemaName] || mongoose.model(SchemaName, schema);
 
 function serialize(doc: Record<string, unknown>) {
-  if (doc && doc._id) doc._id = doc._id.toString();
-  return doc;
+  return serializeDoc(doc);
 }
 
 export async function getPersonalInfo(): Promise<PersonalInfoDocument | null> {

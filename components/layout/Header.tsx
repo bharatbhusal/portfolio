@@ -144,6 +144,7 @@ const Header = () => {
                 navItems={navItems}
                 pathname={pathname}
                 personalInfo={personalInfo}
+                isAuthenticated={isAuthenticated}
               />
             ) : (
               <Skeleton className="h-10 w-10 rounded-full" />
