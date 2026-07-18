@@ -46,16 +46,11 @@ const EducationCard = ({
   description,
   courses,
   links,
-  highlight,
   onEdit,
   onDelete,
 }: EducationCardProps) => {
   return (
-    <Card
-      className={`flex flex-col h-full overflow-hidden transition-all duration-300 ${
-        highlight ? "border-primary/40 ring-1 ring-primary/20 scale-[1.02]" : ""
-      }`}
-    >
+    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300">
       <CardContent className="flex flex-col flex-1 p-6">
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="space-y-1">

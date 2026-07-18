@@ -24,7 +24,6 @@ const schema = new mongoose.Schema(
     courses: { type: [String], default: [] },
     degree: String,
     description: String,
-    highlight: String,
   },
   { timestamps: true },
 );

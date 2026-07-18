@@ -9,6 +9,7 @@ import {
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageUpload } from "@/components/shared/ImageUpload";
@@ -32,6 +33,7 @@ export default function PersonalInfoPage() {
   const [imageId, setImageId] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(true);
   const [cacheKey, setCacheKey] = useState(Date.now());
+  const [confirmDeleteImage, setConfirmDeleteImage] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPersonalInfo());
@@ -107,6 +109,11 @@ export default function PersonalInfoPage() {
     addNotification({ type: "info", title: "Image deleted" });
   };
 
+  const confirmDeleteImageAction = async () => {
+    setConfirmDeleteImage(false);
+    await handleDelete();
+  };
+
   if (loading || imageLoading) return <FormSkeleton />;
 
   return (
@@ -179,10 +186,24 @@ export default function PersonalInfoPage() {
             currentImageId={imageId}
             cacheKey={cacheKey}
             onUpload={handleUpload}
-            onDelete={imageId ? handleDelete : undefined}
+            onDelete={
+              imageId
+                ? async () => {
+                    setConfirmDeleteImage(true);
+                  }
+                : undefined
+            }
           />
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmDeleteImage}
+        onOpenChange={setConfirmDeleteImage}
+        title="Delete Profile Image"
+        description="Are you sure you want to delete your profile image? This action cannot be undone."
+        onConfirm={confirmDeleteImageAction}
+      />
     </div>
   );
 }

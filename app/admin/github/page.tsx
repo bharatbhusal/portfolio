@@ -17,6 +17,7 @@ export default function GitHubSettingsPage() {
     github_username: "",
     github_token: "",
   });
+  const [hasToken, setHasToken] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showToken, setShowToken] = useState(false);
@@ -28,13 +29,18 @@ export default function GitHubSettingsPage() {
       .then((json) => {
         if (json.success) {
           const map: Settings = { github_username: "", github_token: "" };
+          let tokenSet = false;
           for (const s of json.data) {
             if (s.key in map) {
-              map[s.key as keyof Settings] =
-                s.key === "github_token" ? "" : s.value;
+              if (s.key === "github_token") {
+                tokenSet = !!s.value && s.value !== "••••encrypted";
+              } else {
+                map[s.key as keyof Settings] = s.value;
+              }
             }
           }
           setSettings(map);
+          setHasToken(tokenSet);
         }
       })
       .finally(() => setLoading(false));
@@ -114,7 +120,9 @@ export default function GitHubSettingsPage() {
           <div className="relative">
             <Input
               type={showToken ? "text" : "password"}
-              placeholder="ghp_xxxxxxxxxxxx"
+              placeholder={
+                hasToken ? "•••••••• (already set)" : "ghp_xxxxxxxxxxxx"
+              }
               value={settings.github_token}
               onChange={(e) =>
                 setSettings({ ...settings, github_token: e.target.value })
@@ -124,6 +132,7 @@ export default function GitHubSettingsPage() {
               type="button"
               onClick={() => setShowToken(!showToken)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showToken ? "Hide token" : "Show token"}
             >
               {showToken ? (
                 <EyeOff className="h-4 w-4" />
@@ -132,8 +141,24 @@ export default function GitHubSettingsPage() {
               )}
             </button>
           </div>
+          {hasToken && (
+            <p className="text-xs text-green-600">
+              A token is already saved. Leave blank to keep it, or enter a new
+              one to replace it.
+            </p>
+          )}
 
           <div className="rounded-lg bg-muted/50 p-4 space-y-3 text-sm text-muted-foreground">
+            <div>
+              <p className="font-medium text-foreground">
+                How is my token stored?
+              </p>
+              <p>
+                Your token is encrypted at rest before being saved to the
+                database — we never store it in plain text, and it is never
+                exposed back to the client.
+              </p>
+            </div>
             <div>
               <p className="font-medium text-foreground">
                 Why provide a token?

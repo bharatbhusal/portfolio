@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button";
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
-  action?: { label: string; onClick: () => void; icon?: React.ReactNode };
+  action?: {
+    label: string;
+    onClick: () => void;
+    icon?: React.ReactNode;
+    disabled?: boolean;
+  };
 }
 
 export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
@@ -16,7 +21,7 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
         )}
       </div>
       {action && (
-        <Button onClick={action.onClick}>
+        <Button onClick={action.onClick} disabled={action.disabled}>
           {action.icon && <span className="mr-2">{action.icon}</span>}
           {action.label}
         </Button>

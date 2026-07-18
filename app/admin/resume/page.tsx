@@ -172,6 +172,7 @@ export default function AdminResumePage() {
               ? `Generate in ${formatTimer(cooldown)}`
               : "Generate New",
           onClick: generate,
+          disabled,
           icon: loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (

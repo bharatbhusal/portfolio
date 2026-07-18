@@ -6,30 +6,34 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import {
+  SOCIAL_PLATFORMS,
+  buildSocialUrl,
+  type SocialLinkConfig,
+} from "@/types/social";
 
-function SocialLinks({
-  socialLinks,
-}: {
-  socialLinks: { icon: React.ElementType; link: string; label: string }[];
-}) {
-  const handleClick = (link: string) => {
-    window.open(link, "_blank", "noopener,noreferrer");
-  };
-
+function SocialLinks({ socialLinks }: { socialLinks?: SocialLinkConfig[] }) {
   return (
     <div className="mt-6 flex justify-center flex-wrap gap-2">
-      {socialLinks?.map((social, index) => (
-        <Button
-          key={index}
-          variant="outline"
-          size="icon"
-          onClick={() => handleClick(social.link)}
-          title={social.label}
-          aria-label={`Visit ${social.label}`}
-        >
-          <social.icon className="h-5 w-5" />
-        </Button>
-      ))}
+      {socialLinks
+        ?.filter((s) => s.enabled && s.handle)
+        .map((social) => {
+          const platform = SOCIAL_PLATFORMS[social.platform];
+          const url = buildSocialUrl(social.platform, social.handle);
+          return (
+            <Button key={social.platform} variant="outline" size="icon" asChild>
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener,noreferrer"
+                title={social.handle}
+                aria-label={`Visit ${platform?.label || social.platform}`}
+              >
+                {platform?.icon && <platform.icon className="h-5 w-5" />}
+              </a>
+            </Button>
+          );
+        })}
     </div>
   );
 }

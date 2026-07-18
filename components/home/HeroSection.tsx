@@ -10,26 +10,6 @@ import SocialLinks from "./SocialLinks";
 import { siteConfig } from "@/config/site-config";
 import type { PersonalInfoDocument } from "@/models/personal-info";
 import type { SocialLinkConfig } from "@/types/social";
-import { SOCIAL_PLATFORMS, buildSocialUrl } from "@/types/social";
-
-function buildSocialLinks(configs: SocialLinkConfig[]) {
-  if (!configs.length) return [];
-
-  const platformMap = SOCIAL_PLATFORMS;
-
-  return configs
-    .filter((c) => c.enabled && c.handle)
-    .map((c) => {
-      const platform = platformMap[c.platform];
-      return {
-        link: buildSocialUrl(c.platform, c.handle),
-        icon: platform?.icon,
-        type: c.platform,
-        label: platform?.label || c.platform,
-        handle: c.handle,
-      };
-    });
-}
 
 const HeroSection = ({
   initialPersonalInfo,
@@ -42,9 +22,7 @@ const HeroSection = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const info = initialPersonalInfo;
-  const socialItems = initialSocialLinks
-    ? buildSocialLinks(initialSocialLinks)
-    : [];
+  const socialItems = initialSocialLinks ?? [];
 
   useEffect(() => {
     fetch("/api/image")

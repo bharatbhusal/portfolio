@@ -39,7 +39,6 @@ export interface EducationItem {
   courses: string[];
   degree?: string;
   description?: string;
-  highlight?: string;
 }
 
 // Projects Data Types

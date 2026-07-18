@@ -3,7 +3,6 @@ import { getAllCareer } from "@/models/career";
 import { getAllEducation } from "@/models/education";
 import { getSocialLinks } from "@/models/social-links";
 import { getGithubPinnedReposWithReadme } from "@/lib/github";
-import { buildSocialUrl } from "@/types/social";
 import type { ResumeData, JobRole } from "@/types/resume";
 
 function parseStartDate(dateStr: string): number {
@@ -128,8 +127,9 @@ export async function postProcessResume(
   const socialMap = Object.fromEntries(
     socialLinks
       .filter((s) => s.enabled && s.handle)
-      .map((s) => [s.platform, buildSocialUrl(s.platform, s.handle)]),
+      .map((s) => [s.platform, s.handle]),
   );
+
   const email = socialMap.email || "";
   const phone = socialMap.phone || "";
   const url = socialMap.website || "";

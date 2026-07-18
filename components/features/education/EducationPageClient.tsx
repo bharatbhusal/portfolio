@@ -31,13 +31,7 @@ export default function EducationPageClient({
     );
   }
 
-  const sorted = [...initialData].sort((a, b) => {
-    if (a.highlight && !b.highlight) return -1;
-    if (!a.highlight && b.highlight) return 1;
-    return 0;
-  });
-
-  const cleanEducation = sorted.map((item) => ({
+  const cleanEducation = initialData.map((item) => ({
     ...item,
     links: item.links.map((link) => ({
       link: link.link,

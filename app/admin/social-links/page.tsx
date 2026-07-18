@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   SOCIAL_PLATFORMS,
-  buildSocialUrl,
   type SocialLinkConfig,
   type SocialPlatform,
 } from "@/types/social";
@@ -105,41 +104,32 @@ export default function SocialLinksPage() {
         {links.map((link) => {
           const platform = SOCIAL_PLATFORMS[link.platform];
           const Icon = platform?.icon;
-          const previewUrl = link.handle
-            ? buildSocialUrl(link.platform, link.handle)
-            : "";
 
           return (
             <div
               key={link.platform}
-              className="flex items-center gap-4 p-4 rounded-xl border border-border/50 bg-card/50"
+              className="flex flex-wrap items-center gap-4 p-4 rounded-xl border border-border/50 bg-card/50"
             >
-              <div className="flex items-center gap-3 min-w-[140px]">
-                {Icon && <Icon className="h-5 w-5 text-muted-foreground" />}
+              <div className="flex items-center gap-3 min-w-[120px]">
+                {Icon && <Icon className="h-5 w-5 text-muted-foreground shrink-0" />}
                 <span className="font-medium text-sm">{platform?.label}</span>
               </div>
 
-              <div className="flex-1 space-y-1">
+              <div className="flex-1 min-w-[160px]">
                 <Input
-                  placeholder={
-                    link.platform === "email"
-                      ? "your@email.com"
-                      : `username`
-                  }
+                  placeholder={link.platform === "email" ? "your@email.com" : "username"}
                   value={link.handle}
                   onChange={(e) => updateHandle(link.platform, e.target.value)}
                 />
-                {previewUrl && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {previewUrl}
-                  </p>
-                )}
               </div>
 
               <button
                 type="button"
                 onClick={() => toggleEnabled(link.platform)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                role="switch"
+                aria-checked={link.enabled}
+                aria-label={`${link.enabled ? "Disable" : "Enable"} ${platform?.label}`}
+                className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
                   link.enabled ? "bg-primary" : "bg-muted"
                 }`}
               >

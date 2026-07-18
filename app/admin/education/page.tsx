@@ -19,7 +19,6 @@ import { Plus, X } from "lucide-react";
 import type { EducationItem, EducationLink } from "@/types";
 
 const EDUCATION_LINK_TYPES = ["website", "linkedin", "twitter", "instagram", "facebook"] as const;
-const HIGHLIGHT_OPTIONS = ["", "LATEST", "GOLD", "PINNED"] as const;
 
 const EMPTY_FORM: Partial<EducationItem> = {
   institution: "",
@@ -31,7 +30,6 @@ const EMPTY_FORM: Partial<EducationItem> = {
   description: "",
   courses: [],
   links: [],
-  highlight: undefined,
 };
 
 export default function EducationPage() {
@@ -206,18 +204,6 @@ export default function EducationPage() {
               value={form.description || ""}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Highlight</label>
-            <select
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-              value={form.highlight || ""}
-              onChange={(e) => setForm({ ...form, highlight: (e.target.value || undefined) as EducationItem["highlight"] })}
-            >
-              {HIGHLIGHT_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>{opt || "None"}</option>
-              ))}
-            </select>
           </div>
 
           {/* Courses */}
