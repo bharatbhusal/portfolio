@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Download } from "lucide-react";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
 import ResumePreview from "@/components/features/resume/ResumePreview";
 import ResumeHistory, { type ResumeHistoryData } from "@/components/features/resume/ResumeHistory";
+import { ResumePDFLink } from "@/components/features/resume/ResumePDF";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
 
 const SERVICE_COOLDOWN_KEY = "resume_service_cooldown";
@@ -196,6 +197,18 @@ export default function AdminResumePage() {
               )}
               <div className={loading ? "pointer-events-none" : ""}>
                 <ResumePreview data={resume} />
+                <ResumePDFLink
+                  data={resume}
+                  fileName={`${resume.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+                >
+                  {({ loading: pdfLoading }) => (
+                    <>
+                      <Download className="h-4 w-4" />
+                      {pdfLoading ? "Generating PDF..." : "Download PDF"}
+                    </>
+                  )}
+                </ResumePDFLink>
               </div>
             </div>
           )}

@@ -11,7 +11,7 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import { Download } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ResumeData } from "@/types/resume";
 
 Font.register({
@@ -93,7 +93,13 @@ const styles = StyleSheet.create({
   projectLink: { fontSize: 8.5, color: GREEN, marginTop: 2 },
 });
 
-function ResumeDoc({ data, createdAt }: { data: ResumeData; createdAt?: string }) {
+function ResumeDoc({
+  data,
+  createdAt,
+}: {
+  data: ResumeData;
+  createdAt?: string;
+}) {
   const { basics, work, education, skills, projects } = data;
   const generatedLine = createdAt
     ? `Generated from bharatbhusal.com · ${new Date(createdAt).toLocaleString(
@@ -240,18 +246,16 @@ function ResumeDoc({ data, createdAt }: { data: ResumeData; createdAt?: string }
 export function ResumePDFLink({
   data,
   createdAt,
-  minimal,
-  id,
+  fileName,
+  className,
+  children,
 }: {
   data: ResumeData | null;
   createdAt?: string;
-  minimal?: boolean;
-  id?: string;
+  fileName?: string;
+  className?: string;
+  children?: ({ loading }: { loading: boolean }) => React.ReactNode;
 }) {
-  if (minimal && id) {
-    return <MinimalDownloadButton id={id} />;
-  }
-
   if (!data) {
     return (
       <button
@@ -264,67 +268,29 @@ export function ResumePDFLink({
     );
   }
 
-  return (
-    <PDFDownloadLink
-      document={<ResumeDoc data={data} createdAt={createdAt} />}
-      fileName={`${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
-    >
-      {({ loading }) => (
-        <>
-          <Download className="h-4 w-4" />
-          {loading ? "Generating PDF..." : "Download PDF"}
-        </>
-      )}
-    </PDFDownloadLink>
-  );
-}
-
-function MinimalDownloadButton({ id }: { id: string }) {
-  const [data, setData] = useState<ResumeData | null>(null);
-  const [createdAt, setCreatedAt] = useState<string | undefined>();
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(`/api/resume/${id}`)
-      .then((r) => r.json())
-      .then((json: { success: boolean; data: any }) => {
-        if (json.success && !cancelled) {
-          setData({
-            basics: json.data.basics,
-            work: json.data.work,
-            education: json.data.education,
-            skills: json.data.skills,
-            projects: json.data.projects,
-          });
-          setCreatedAt(json.data.createdAt);
-        }
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
-
-  if (!data) {
+  const defaultFileName = `${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`;
+  const renderChildren = (loading: boolean) => {
+    if (typeof children === "function") {
+      return children({ loading });
+    }
     return (
-      <span
-        className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-        title="Download PDF"
-      >
+      <>
         <Download className="h-4 w-4" />
-      </span>
+        {loading ? "Generating PDF..." : "Download PDF"}
+      </>
     );
-  }
+  };
 
   return (
     <PDFDownloadLink
       document={<ResumeDoc data={data} createdAt={createdAt} />}
-      fileName={`${data.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
-      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-      title="Download PDF"
+      fileName={fileName || defaultFileName}
+      className={
+        className ||
+        "inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+      }
     >
-      <Download className="h-4 w-4" />
+      {({ loading }) => renderChildren(loading)}
     </PDFDownloadLink>
   );
 }

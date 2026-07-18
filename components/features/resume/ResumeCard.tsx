@@ -1,7 +1,6 @@
 "use client";
 
-import { FileText, ArrowRight, Download } from "lucide-react";
-import { ResumePDFLink } from "./ResumePDF";
+import { FileText, ArrowRight } from "lucide-react";
 import type { ResumeDocument } from "@/types/resume";
 import { cn } from "@/lib/utils";
 
@@ -52,7 +51,6 @@ export default function ResumeCard({
             {date} {time}
           </p>
         </div>
-        <ResumePDFLink data={null} minimal id={String(resume._id)} />
       </div>
 
       <p className="text-sm text-muted-foreground">{resume.basics.summary}</p>
