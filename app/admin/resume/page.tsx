@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Loader2, Plus, Download } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Loader2, Plus, Download, Trash2, Share2 } from "lucide-react";
 import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
 import ResumePreview from "@/components/features/resume/ResumePreview";
-import ResumeHistory, { type ResumeHistoryData } from "@/components/features/resume/ResumeHistory";
+import ResumeHistory, {
+  type ResumeHistoryData,
+} from "@/components/features/resume/ResumeHistory";
 import { ResumePDFLink } from "@/components/features/resume/ResumePDF";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import type { ResumeData, ResumeDocument } from "@/types/resume";
 
 const SERVICE_COOLDOWN_KEY = "resume_service_cooldown";
@@ -45,6 +49,7 @@ export default function AdminResumePage() {
   const [resume, setResume] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [history, setHistory] = useState<ResumeHistoryData | null>(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const { addNotification } = useNotifications();
@@ -114,9 +119,47 @@ export default function AdminResumePage() {
     setSelectedId(id);
     fetchResumeById(id);
     if (window.innerWidth < 1024 && previewRef.current) {
-      previewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      previewRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   };
+
+  const deleteResume = useCallback(
+    async (id: string) => {
+      try {
+        const res = await fetch(`/api/resume/${id}`, { method: "DELETE" });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || "Delete failed");
+        }
+        addNotification({ type: "success", title: "Resume deleted" });
+        // If we deleted the currently selected resume, select another or clear
+        if (selectedId === id) {
+          const remaining =
+            history?.docs.filter((d) => String(d._id) !== id) ?? [];
+          if (remaining.length > 0) {
+            const nextId = String(remaining[0]._id);
+            setSelectedId(nextId);
+            fetchResumeById(nextId);
+          } else {
+            setSelectedId(null);
+            setResume(null);
+          }
+        }
+        fetchHistory(1, true);
+      } catch (err) {
+        addNotification({
+          type: "error",
+          title: "Delete failed",
+          message: err instanceof Error ? err.message : "Unknown error",
+        });
+      }
+      setDeleteId(null);
+    },
+    [selectedId, history?.docs, addNotification, fetchResumeById],
+  );
 
   const generate = useCallback(async () => {
     setLoading(true);
@@ -197,18 +240,28 @@ export default function AdminResumePage() {
               )}
               <div className={loading ? "pointer-events-none" : ""}>
                 <ResumePreview data={resume} />
-                <ResumePDFLink
-                  data={resume}
-                  fileName={`${resume.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
-                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
-                >
-                  {({ loading: pdfLoading }) => (
-                    <>
-                      <Download className="h-4 w-4" />
-                      {pdfLoading ? "Generating PDF..." : "Download PDF"}
-                    </>
-                  )}
-                </ResumePDFLink>
+                <div className="mt-4 flex items-center gap-2">
+                  <ResumePDFLink
+                    data={resume}
+                    fileName={`${resume.basics.name.replace(/\s+/g, "_")}_Resume.pdf`}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    {({ loading: pdfLoading }) => (
+                      <>
+                        <Download className="h-4 w-4" />
+                        {pdfLoading ? "Generating PDF..." : "Download PDF"}
+                      </>
+                    )}
+                  </ResumePDFLink>
+                  <button
+                    onClick={() => setDeleteId(selectedId!)}
+                    disabled={!selectedId}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-destructive text-destructive-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -230,6 +283,13 @@ export default function AdminResumePage() {
           onPageChange={(page) => fetchHistory(page, true)}
         />
       </div>
+      <ConfirmDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        title="Delete Resume"
+        description="Are you sure you want to delete this resume version?"
+        onConfirm={() => deleteId && deleteResume(deleteId)}
+      />
     </div>
   );
 }

@@ -19,3 +19,19 @@ export async function GET(
     return handleApiError(error);
   }
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const doc = await Resume.findByIdAndDelete(id);
+    if (!doc) {
+      return apiError(ErrorCode.RESUME_NOT_FOUND, "Resume not found", 404);
+    }
+    return apiSuccess({ deleted: true });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
