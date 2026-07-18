@@ -25,9 +25,6 @@ export async function PUT(request: Request) {
     }
 
     const data = result.data;
-    if (data.name && data.name.first && data.name.last) {
-      data.name.full = `${data.name.first} ${data.name.last}`.trim();
-    }
 
     const updated = await updatePersonalInfo(data);
     return apiSuccess(updated, "Personal info updated");

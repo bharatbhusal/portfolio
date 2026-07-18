@@ -77,7 +77,23 @@ export default function ResumePageClient() {
     }
   };
 
-  if (loading) {
+  const hasNoResumes = !historyLoading && history && history.docs.length === 0;
+  if (hasNoResumes) {
+    return (
+      <div className="max-w-5xl mx-auto py-12">
+        <EmptyState
+          title="No resume yet"
+          description="Generate your first resume from the admin dashboard."
+          action={{
+            label: "Request Resume Generation",
+            onClick: () => (window.location.href = "/admin/resume"),
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (loading || historyLoading) {
     return <ResumeSkeleton />;
   }
 
@@ -88,7 +104,7 @@ export default function ResumePageClient() {
           title="No resume yet"
           description="Generate your first resume from the admin dashboard."
           action={{
-            label: "Go to Admin",
+            label: "Request Resume Generation",
             onClick: () => (window.location.href = "/admin/resume"),
           }}
         />

@@ -12,13 +12,20 @@ import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import EducationCard from "@/components/features/education/EducationCard";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { EducationItem, EducationLink } from "@/types";
 
-const EDUCATION_LINK_TYPES = ["website", "linkedin", "twitter", "instagram", "facebook"] as const;
+const EDUCATION_LINK_TYPES = [
+  "website",
+  "linkedin",
+  "twitter",
+  "instagram",
+  "facebook",
+] as const;
 
 const EMPTY_FORM: Partial<EducationItem> = {
   institution: "",
@@ -38,7 +45,9 @@ export default function EducationPage() {
     (state) => state.persistedReducer.education,
   );
   const { addNotification } = useNotifications();
-  const [editing, setEditing] = useState<(EducationItem & { _id: string }) | null>(null);
+  const [editing, setEditing] = useState<
+    (EducationItem & { _id: string }) | null
+  >(null);
   const [showForm, setShowForm] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<EducationItem>>({});
@@ -114,11 +123,17 @@ export default function EducationPage() {
   };
 
   const removeCourse = (index: number) => {
-    setForm({ ...form, courses: (form.courses || []).filter((_, i) => i !== index) });
+    setForm({
+      ...form,
+      courses: (form.courses || []).filter((_, i) => i !== index),
+    });
   };
 
   const addLink = () => {
-    setForm({ ...form, links: [...(form.links || []), { type: "website", link: "" }] });
+    setForm({
+      ...form,
+      links: [...(form.links || []), { type: "website", link: "" }],
+    });
   };
 
   const updateLink = (index: number, partial: Partial<EducationLink>) => {
@@ -128,7 +143,10 @@ export default function EducationPage() {
   };
 
   const removeLink = (index: number) => {
-    setForm({ ...form, links: (form.links || []).filter((_, i) => i !== index) });
+    setForm({
+      ...form,
+      links: (form.links || []).filter((_, i) => i !== index),
+    });
   };
 
   if (loading) return <FormSkeleton />;
@@ -152,7 +170,9 @@ export default function EducationPage() {
               <Input
                 placeholder="University name"
                 value={form.institution || ""}
-                onChange={(e) => setForm({ ...form, institution: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, institution: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -168,7 +188,9 @@ export default function EducationPage() {
               <Input
                 placeholder="Nov 2021"
                 value={form.startDate || ""}
-                onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, startDate: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -202,7 +224,9 @@ export default function EducationPage() {
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               placeholder="What did you study? Key achievements..."
               value={form.description || ""}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
           </div>
 
@@ -229,7 +253,12 @@ export default function EducationPage() {
                 </div>
               ))}
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={addCourse}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addCourse}
+            >
               <Plus className="h-4 w-4 mr-1" /> Add Course
             </Button>
           </div>
@@ -243,10 +272,16 @@ export default function EducationPage() {
                   <select
                     className="h-10 rounded-md border border-input bg-background px-3 text-sm"
                     value={lk.type}
-                    onChange={(e) => updateLink(i, { type: e.target.value as EducationLink["type"] })}
+                    onChange={(e) =>
+                      updateLink(i, {
+                        type: e.target.value as EducationLink["type"],
+                      })
+                    }
                   >
                     {EDUCATION_LINK_TYPES.map((t) => (
-                      <option key={t} value={t}>{t}</option>
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
                     ))}
                   </select>
                   <Input
@@ -282,16 +317,23 @@ export default function EducationPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {data.map((item) => (
-          <EducationCard
-            key={item._id}
-            {...item}
-            onEdit={() => handleEdit(item)}
-            onDelete={() => setDeleteId(item._id)}
-          />
-        ))}
-      </div>
+      {data.length === 0 ? (
+        <EmptyState
+          title="No education entries yet"
+          description="Add your first education entry to get started."
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {data.map((item) => (
+            <EducationCard
+              key={item._id}
+              {...item}
+              onEdit={() => handleEdit(item)}
+              onDelete={() => setDeleteId(item._id)}
+            />
+          ))}
+        </div>
+      )}
 
       <ConfirmDialog
         open={!!deleteId}

@@ -6,7 +6,6 @@ const SchemaName = "PersonalInfo";
 const schema = new mongoose.Schema(
   {
     name: {
-      full: { type: String, required: true },
       first: { type: String, required: true },
       last: { type: String, required: true },
     },
@@ -21,7 +20,6 @@ const schema = new mongoose.Schema(
 export interface PersonalInfoDocument {
   _id: mongoose.Types.ObjectId;
   name: {
-    full: string;
     first: string;
     last: string;
   };

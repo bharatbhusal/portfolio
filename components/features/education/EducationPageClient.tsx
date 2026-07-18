@@ -26,6 +26,10 @@ export default function EducationPageClient({
         <EmptyState
           title="No education entries yet"
           description="Educational background will appear here once added from the admin dashboard."
+          action={{
+            label: "Add Education Entry",
+            onClick: () => (window.location.href = "/admin/education"),
+          }}
         />
       </div>
     );

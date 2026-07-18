@@ -26,6 +26,10 @@ export default function CareerPageClient({
         <EmptyState
           title="No career entries yet"
           description="Work experience will appear here once added from the admin dashboard."
+          action={{
+            label: "Add Career Entry",
+            onClick: () => (window.location.href = "/admin/career"),
+          }}
         />
       </div>
     );

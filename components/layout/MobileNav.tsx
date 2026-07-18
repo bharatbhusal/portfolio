@@ -22,10 +22,14 @@ interface MobileNavProps {
   isAuthenticated?: boolean;
 }
 
-const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: MobileNavProps) => {
+const MobileNav = ({
+  navItems,
+  pathname,
+  personalInfo,
+  isAuthenticated,
+}: MobileNavProps) => {
   const [open, setOpen] = React.useState(false);
   const [imageId, setImageId] = React.useState<string | null>(null);
-  const fullName = personalInfo?.name?.full || "Portfolio";
   const firstName = personalInfo?.name?.first || "P";
 
   React.useEffect(() => {
@@ -60,14 +64,20 @@ const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: Mobile
           {/* Profile card */}
           <div className="flex items-center gap-3 px-4 py-6 border-b">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={imageId ? `/api/image?id=${imageId}` : undefined} alt={fullName} className="object-cover" />
+              <AvatarImage
+                src={imageId ? `/api/image?id=${imageId}` : undefined}
+                alt={firstName}
+                className="object-cover"
+              />
               <AvatarFallback className="text-sm font-semibold">
                 {firstName.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{fullName}</p>
-              <p className="text-xs text-muted-foreground">{personalInfo?.title || ""}</p>
+              <p className="text-sm font-medium">{firstName}</p>
+              <p className="text-xs text-muted-foreground">
+                {personalInfo?.title || ""}
+              </p>
             </div>
           </div>
 
@@ -87,7 +97,7 @@ const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: Mobile
                     "relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200",
                     isActive
                       ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {isActive && (
@@ -98,7 +108,7 @@ const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: Mobile
                       "flex items-center justify-center w-8 h-8 rounded-lg transition-colors",
                       isActive
                         ? "bg-primary/10 text-primary"
-                        : "bg-muted/50 text-muted-foreground"
+                        : "bg-muted/50 text-muted-foreground",
                     )}
                   >
                     <item.icon className="h-4 w-4" />
@@ -116,7 +126,7 @@ const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: Mobile
                   "relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200",
                   pathname.startsWith("/admin")
                     ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {pathname.startsWith("/admin") && (
@@ -127,7 +137,7 @@ const MobileNav = ({ navItems, pathname, personalInfo, isAuthenticated }: Mobile
                     "flex items-center justify-center w-8 h-8 rounded-lg transition-colors",
                     pathname.startsWith("/admin")
                       ? "bg-primary/10 text-primary"
-                      : "bg-muted/50 text-muted-foreground"
+                      : "bg-muted/50 text-muted-foreground",
                   )}
                 >
                   <Shield className="h-4 w-4" />

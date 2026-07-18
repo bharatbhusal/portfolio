@@ -11,13 +11,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Home",
     description: info.bio || info.tagline || "Software Engineer Portfolio",
-    authors: [{ name: info.name.full }],
+    authors: [{ name: info.name.first }],
     openGraph: {
-      title: `${info.name.full} - ${info.title}`,
+      title: `${info.name.first} - ${info.title}`,
       description: info.bio || info.tagline || "",
     },
     twitter: {
-      title: `${info.name.full} - ${info.title}`,
+      title: `${info.name.first} - ${info.title}`,
       description: info.bio || info.tagline || "",
     },
   };

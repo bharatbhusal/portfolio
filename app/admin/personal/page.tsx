@@ -21,7 +21,7 @@ export default function PersonalInfoPage() {
   );
   const { addNotification } = useNotifications();
   const [form, setForm] = useState({
-    name: { full: "", first: "", last: "" },
+    name: { first: "", last: "" },
     title: "",
     tagline: "",
     bio: "",
@@ -57,7 +57,7 @@ export default function PersonalInfoPage() {
   useEffect(() => {
     if (data) {
       setForm({
-        name: data.name || { full: "", first: "", last: "" },
+        name: data.name || { first: "", last: "" },
         title: data.title || "",
         tagline: data.tagline || "",
         bio: data.bio || "",
@@ -118,7 +118,10 @@ export default function PersonalInfoPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Personal Info" subtitle="Update your personal details" />
+      <PageHeader
+        title="Personal Info"
+        subtitle="Update your personal details"
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
         {/* Left: Form */}
@@ -130,7 +133,10 @@ export default function PersonalInfoPage() {
                 placeholder="John"
                 value={form.name.first}
                 onChange={(e) =>
-                  setForm({ ...form, name: { ...form.name, first: e.target.value } })
+                  setForm({
+                    ...form,
+                    name: { ...form.name, first: e.target.value },
+                  })
                 }
               />
             </div>
@@ -140,7 +146,10 @@ export default function PersonalInfoPage() {
                 placeholder="Doe"
                 value={form.name.last}
                 onChange={(e) =>
-                  setForm({ ...form, name: { ...form.name, last: e.target.value } })
+                  setForm({
+                    ...form,
+                    name: { ...form.name, last: e.target.value },
+                  })
                 }
               />
             </div>

@@ -12,13 +12,20 @@ import { useNotifications } from "@/components/shared/NotificationProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import CareerCard from "@/components/features/career/CareerCard";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { FormSkeleton } from "@/components/skeletons/FormSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { CareerItem, CareerLink } from "@/types";
 
-const CAREER_LINK_TYPES = ["website", "twitter", "telegram", "game", "linkedin"] as const;
+const CAREER_LINK_TYPES = [
+  "website",
+  "twitter",
+  "telegram",
+  "game",
+  "linkedin",
+] as const;
 
 const EMPTY_FORM: Partial<CareerItem> = {
   company: "",
@@ -37,7 +44,9 @@ export default function CareerPage() {
     (state) => state.persistedReducer.career,
   );
   const { addNotification } = useNotifications();
-  const [editing, setEditing] = useState<(CareerItem & { _id: string }) | null>(null);
+  const [editing, setEditing] = useState<(CareerItem & { _id: string }) | null>(
+    null,
+  );
   const [showForm, setShowForm] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<CareerItem>>({});
@@ -49,7 +58,11 @@ export default function CareerPage() {
 
   const handleEdit = (item: CareerItem & { _id: string }) => {
     setEditing(item);
-    setForm({ ...item, links: item.links || [], achievements: item.achievements || [] });
+    setForm({
+      ...item,
+      links: item.links || [],
+      achievements: item.achievements || [],
+    });
     setShowForm(true);
   };
 
@@ -113,11 +126,17 @@ export default function CareerPage() {
   };
 
   const removeAchievement = (index: number) => {
-    setForm({ ...form, achievements: (form.achievements || []).filter((_, i) => i !== index) });
+    setForm({
+      ...form,
+      achievements: (form.achievements || []).filter((_, i) => i !== index),
+    });
   };
 
   const addLink = () => {
-    setForm({ ...form, links: [...(form.links || []), { type: "website", link: "" }] });
+    setForm({
+      ...form,
+      links: [...(form.links || []), { type: "website", link: "" }],
+    });
   };
 
   const updateLink = (index: number, partial: Partial<CareerLink>) => {
@@ -127,7 +146,10 @@ export default function CareerPage() {
   };
 
   const removeLink = (index: number) => {
-    setForm({ ...form, links: (form.links || []).filter((_, i) => i !== index) });
+    setForm({
+      ...form,
+      links: (form.links || []).filter((_, i) => i !== index),
+    });
   };
 
   if (loading) return <FormSkeleton />;
@@ -167,7 +189,9 @@ export default function CareerPage() {
               <Input
                 placeholder="Nov 2025"
                 value={form.startDate || ""}
-                onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, startDate: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -193,7 +217,9 @@ export default function CareerPage() {
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               placeholder="What does this company do? Your role..."
               value={form.description || ""}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
           </div>
 
@@ -220,7 +246,12 @@ export default function CareerPage() {
                 </div>
               ))}
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={addAchievement}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addAchievement}
+            >
               <Plus className="h-4 w-4 mr-1" /> Add Achievement
             </Button>
           </div>
@@ -234,10 +265,16 @@ export default function CareerPage() {
                   <select
                     className="h-10 rounded-md border border-input bg-background px-3 text-sm"
                     value={lk.type}
-                    onChange={(e) => updateLink(i, { type: e.target.value as CareerLink["type"] })}
+                    onChange={(e) =>
+                      updateLink(i, {
+                        type: e.target.value as CareerLink["type"],
+                      })
+                    }
                   >
                     {CAREER_LINK_TYPES.map((t) => (
-                      <option key={t} value={t}>{t}</option>
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
                     ))}
                   </select>
                   <Input
@@ -273,16 +310,23 @@ export default function CareerPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {data.map((item) => (
-          <CareerCard
-            key={item._id}
-            {...item}
-            onEdit={() => handleEdit(item)}
-            onDelete={() => setDeleteId(item._id)}
-          />
-        ))}
-      </div>
+      {data.length === 0 ? (
+        <EmptyState
+          title="No career entries yet"
+          description="Add your first career entry to get started."
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {data.map((item) => (
+            <CareerCard
+              key={item._id}
+              {...item}
+              onEdit={() => handleEdit(item)}
+              onDelete={() => setDeleteId(item._id)}
+            />
+          ))}
+        </div>
+      )}
 
       <ConfirmDialog
         open={!!deleteId}

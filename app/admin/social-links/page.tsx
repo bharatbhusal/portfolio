@@ -111,13 +111,21 @@ export default function SocialLinksPage() {
               className="flex flex-wrap items-center gap-4 p-4 rounded-xl border border-border/50 bg-card/50"
             >
               <div className="flex items-center gap-3 min-w-[120px]">
-                {Icon && <Icon className="h-5 w-5 text-muted-foreground shrink-0" />}
+                {Icon && (
+                  <Icon className="h-5 w-5 text-muted-foreground shrink-0" />
+                )}
                 <span className="font-medium text-sm">{platform?.label}</span>
               </div>
 
               <div className="flex-1 min-w-[160px]">
                 <Input
-                  placeholder={link.platform === "email" ? "your@email.com" : "username"}
+                  placeholder={
+                    link.platform === "email"
+                      ? "your@email.com"
+                      : link.platform === "phone"
+                        ? "your phone number"
+                        : "username"
+                  }
                   value={link.handle}
                   onChange={(e) => updateHandle(link.platform, e.target.value)}
                 />

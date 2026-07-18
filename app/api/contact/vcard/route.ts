@@ -49,7 +49,7 @@ function generateVCard(
   const vCard = [
     "BEGIN:VCARD",
     "VERSION:3.0",
-    `FN:${name.full}`,
+    `FN:${name.first} ${name.last}`,
     `N:${name.last};${name.first};;;`,
     `TITLE:${title}`,
     email ? `EMAIL;TYPE=INTERNET,Personal:${email}` : null,

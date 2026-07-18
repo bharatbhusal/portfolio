@@ -159,7 +159,8 @@ export async function postProcessResume(
 
   return {
     basics: {
-      name: personalInfo?.name?.full || "No Name",
+      name:
+        `${personalInfo?.name?.first} ${personalInfo?.name?.last}` || "No Name",
       email,
       phone: phone || undefined,
       url: url || undefined,

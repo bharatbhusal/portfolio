@@ -9,7 +9,9 @@ Follow these steps to customize the portfolio:
 ---
 
 ### Step 1: Environment Variables
+
 Create a `.env` (or `.env.local`) file in the root of the project to configure your GitHub integration.
+
 ```env
 # Your GitHub Username (Used to fetch repositories and streak details)
 GITHUB_USERNAME=yourusername
@@ -21,26 +23,28 @@ GITHUB_TOKEN=ghp_yourpersonaltokenhere
 ```
 
 ### Step 2: Personal Profile Photo
+
 Upload your profile photo via the admin dashboard at `/admin/image`. The image is stored in MongoDB and served via the API. The app uses "NN" initials as the default avatar when no image is uploaded.
 
 ### Step 3: Bio, Name & Contact Details
+
 Go to the admin dashboard at `/admin/personal` and update your personal information (name, title, bio, email, etc.). All data is stored in MongoDB.
-  name: {
-    first: "YourName",
-    last: "LastName",
-    full: "YourName LastName",
-  },
-  title: "Software Engineer",
-  email: "your.email@example.com",
-  social: {
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourprofile",
-    twitter: "https://twitter.com/yourhandle",
-    // ...
-  },
-  bio: "Brief developer tagline...",
+name: {
+first: "YourName",
+last: "LastName",
+},
+title: "Software Engineer",
+email: "your.email@example.com",
+social: {
+github: "https://github.com/yourusername",
+linkedin: "https://linkedin.com/in/yourprofile",
+twitter: "https://twitter.com/yourhandle",
+// ...
+},
+bio: "Brief developer tagline...",
 };
-```
+
+````
 
 ### Step 4: Career & Experience
 Open [data/careerData.ts](portfolio/data/careerData.ts) and replace the array with your employment history:
@@ -55,10 +59,12 @@ export const careerData = [
   },
   // ...
 ];
-```
+````
 
 ### Step 5: Education & Certifications
+
 Open [data/educationData.ts](portfolio/data/educationData.ts) and replace the array with your educational background:
+
 ```typescript
 export const educationData = [
   {
@@ -73,15 +79,19 @@ export const educationData = [
 ```
 
 ### Step 6: GitHub Repo Pinning
+
 To control which projects are highlighted at the top of your portfolio projects page:
+
 1. Go to your GitHub repository settings.
 2. In the **About** section, add the tag `"pin"` (case-insensitive) to your repository's **Topics**.
 3. The portfolio's listing page will automatically scan for the `"pin"` tag, move these repositories to the very top, highlight them with a special border, and hide the `"pin"` tag from the public topic badges.
 
 ### Step 7: Resume Builder
+
 The resume builder uses Groq LLM to generate ATS-optimized resumes from your data.
 
 #### Environment Variables
+
 ```env
 # MongoDB connection (required for resume storage and rate limiting)
 DATABASE_URL=mongodb+srv://<user>:<pass>@cluster.mongodb.net/portfolio?retryWrites=true
@@ -92,21 +102,26 @@ GROQ_API_KEY=gsk_yourgroqapikeyhere
 ```
 
 #### Rate Limits
-| Scope | Window | Storage |
-|-------|--------|---------|
-| Per-IP | 10min | MongoDB |
-| Service-wide | 2hr | In-memory (resets on server restart) |
-| Client cooldown | 10min | localStorage |
+
+| Scope           | Window | Storage                              |
+| --------------- | ------ | ------------------------------------ |
+| Per-IP          | 10min  | MongoDB                              |
+| Service-wide    | 2hr    | In-memory (resets on server restart) |
+| Client cooldown | 10min  | localStorage                         |
 
 #### Data Sources
+
 The builder pulls from existing data files:
+
 - `config/contact-info.ts` — name, email, phone, website, bio
 - `data/careerData.ts` — work experience
 - `data/educationData.ts` — education
 - GitHub repos — top 20 repos by stars, used for skills and projects
 
 #### Job Roles
+
 Edit `types/resume.ts` to customize available roles:
+
 ```typescript
 export type JobRole =
   | "Blockchain Developer"
