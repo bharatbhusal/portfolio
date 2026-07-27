@@ -58,10 +58,13 @@ export async function POST(req: NextRequest) {
 
     const { serviceCooldown, userCooldown } = getCooldownWindows();
 
-    return apiSuccess({
-      data: serialized,
-      cooldown: { service: serviceCooldown, user: userCooldown },
-    });
+    return apiSuccess(
+      {
+        ...serialized,
+        cooldown: { service: serviceCooldown, user: userCooldown },
+      },
+      "Resume generated successfully",
+    );
   } catch (error) {
     console.error("Resume generation failed:", error);
     return handleApiError(error);
