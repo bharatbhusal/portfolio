@@ -1,8 +1,4 @@
-export default function CareerLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function CareerLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen py-24 px-4 sm:px-6">
       <div className="text-center space-y-3 mb-12">

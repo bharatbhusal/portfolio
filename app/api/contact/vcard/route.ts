@@ -3,6 +3,7 @@ import { getPersonalInfo } from "@/models/personal-info";
 import { getSocialLinks } from "@/models/social-links";
 import { buildSocialUrl } from "@/types/social";
 import { handleApiError } from "@/lib/api-utils";
+import { connectDB } from "@/lib/mongodb";
 
 /**
  * vCard API Route
@@ -11,6 +12,7 @@ import { handleApiError } from "@/lib/api-utils";
  */
 
 export async function GET() {
+  await connectDB();
   const info = await getPersonalInfo();
   if (!info) {
     return handleApiError("No personal info found");

@@ -16,11 +16,11 @@ import {
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
 import type { JobRole } from "@/types/resume";
+import { connectDB } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
   try {
     const ip = extractIp(req.headers);
-
     const apiCheck = await checkApiRateLimit(ip);
     if (!apiCheck.allowed) {
       return apiError(
@@ -48,11 +48,7 @@ export async function POST(req: NextRequest) {
     const systemPrompt = buildSystemPrompt(role);
     const userPrompt = buildUserPrompt(ctx, role);
     const rawOutput = await generateResume(systemPrompt, userPrompt);
-    const resume = await postProcessResume(
-      rawOutput as unknown as Record<string, unknown>,
-      ctx,
-    );
-
+    const resume = await postProcessResume(rawOutput as unknown as Record<string, unknown>, ctx);
     const doc = await Resume.create({ ...resume, role });
     const serialized = { ...doc.toObject(), _id: doc._id.toString() };
 

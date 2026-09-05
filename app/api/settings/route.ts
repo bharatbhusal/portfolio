@@ -3,16 +3,15 @@ import { getAllSettings, setSetting } from "@/models/settings";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
 import { encrypt } from "@/lib/encryption";
+import { connectDB } from "@/lib/mongodb";
 
 export async function GET() {
   try {
+    await connectDB();
     const settings = await getAllSettings();
     const masked = settings.map((s) => ({
       key: s.key,
-      value:
-        s.key === "github_token" && s.value
-          ? "••••encrypted"
-          : s.value,
+      value: s.key === "github_token" && s.value ? "••••encrypted" : s.value,
     }));
     return apiSuccess(masked);
   } catch (error) {
@@ -37,6 +36,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const storedValue = key === "github_token" ? encrypt(value) : value;
+    await connectDB();
     await setSetting(key, storedValue);
     return apiSuccess(null);
   } catch (error) {

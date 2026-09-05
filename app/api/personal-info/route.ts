@@ -1,10 +1,12 @@
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
+import { connectDB } from "@/lib/mongodb";
 import { getPersonalInfo, updatePersonalInfo } from "@/services/personal-info";
 import { personalInfoSchema } from "@/validations/personal-info";
 
 export async function GET() {
   try {
+    await connectDB();
     const info = await getPersonalInfo();
     return apiSuccess(info);
   } catch (error) {
@@ -25,7 +27,7 @@ export async function PUT(request: Request) {
     }
 
     const data = result.data;
-
+    await connectDB();
     const updated = await updatePersonalInfo(data);
     return apiSuccess(updated, "Personal info updated");
   } catch (error) {

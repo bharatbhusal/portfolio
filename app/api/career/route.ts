@@ -3,6 +3,7 @@ import { ErrorCode } from "@/lib/errors";
 import type { CareerItem } from "@/types";
 import { getAllCareer, createCareer } from "@/services/career";
 import { careerSchema } from "@/validations/career";
+import { connectDB } from "@/lib/mongodb";
 
 // Form data may arrive with array fields serialized as JSON strings.
 // Coerce them back into arrays before Zod validation.
@@ -24,6 +25,7 @@ function coerceArrays(body: Record<string, unknown>) {
 
 export async function GET() {
   try {
+    await connectDB();
     const career = await getAllCareer();
     return apiSuccess(career);
   } catch (error) {
@@ -43,7 +45,7 @@ export async function POST(request: Request) {
         Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
-
+    await connectDB();
     const created = await createCareer(result.data as CareerItem);
     return apiSuccess(created, "Career created");
   } catch (error) {

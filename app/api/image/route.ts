@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-utils";
 import { ErrorCode } from "@/lib/errors";
 import { uploadImage, getProfileImageId, deleteImage, getImage } from "@/services/image";
+import { connectDB } from "@/lib/mongodb";
 
 export async function GET(request: NextRequest) {
   try {
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
     if (existingId) {
       await deleteImage(existingId);
     }
-
+    await connectDB();
     const id = await uploadImage(file, file.name);
     return apiSuccess({ id }, "Image uploaded");
   } catch (error) {

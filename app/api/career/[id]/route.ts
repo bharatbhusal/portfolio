@@ -3,6 +3,7 @@ import { ErrorCode } from "@/lib/errors";
 import type { CareerItem } from "@/types";
 import { getCareerById, updateCareer, deleteCareer } from "@/services/career";
 import { careerSchema } from "@/validations/career";
+import { connectDB } from "@/lib/mongodb";
 
 // Form data may arrive with array fields serialized as JSON strings.
 // Coerce them back into arrays before Zod validation.
@@ -22,12 +23,10 @@ function coerceArrays(body: Record<string, unknown>) {
   return out;
 }
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    await connectDB();
     const career = await getCareerById(id);
 
     if (!career) {
@@ -40,10 +39,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const body = await request.json();
@@ -56,7 +52,7 @@ export async function PUT(
         Object.values(result.error.flatten().fieldErrors).flat().join(", "),
       );
     }
-
+    await connectDB();
     const updated = await updateCareer(id, result.data as Partial<CareerItem>);
     if (!updated) {
       return apiError(ErrorCode.CAREER_NOT_FOUND, "Career not found", 404);
@@ -68,12 +64,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    await connectDB();
     const deleted = await deleteCareer(id);
 
     if (!deleted) {
